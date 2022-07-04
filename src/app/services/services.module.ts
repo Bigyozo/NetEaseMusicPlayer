@@ -8,7 +8,7 @@ export const API_CONFIG = new InjectionToken('ApiConfigToken');
   providers: [
     {
       provide: API_CONFIG,
-      useValue: 'http://localhost:3000/'
+      useValue: 'http://192.168.0.56:3000/'
     }
   ]
 })
