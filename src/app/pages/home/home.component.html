@@ -30,14 +30,14 @@
             <div class="navs">
               <h2>
                 <i></i>
-                <a>热门推荐</a>
+                <a>recommand</a>
               </h2>
               <nav>
                 <a *ngFor="let item of hotTags">{{ item.name }}</a>
               </nav>
             </div>
             <a
-              >更多
+              >more
               <i nz-icon type="arrow-right" theme="outline"> </i>
             </a>
           </div>
@@ -52,7 +52,23 @@
           </div>
         </div>
       </div>
-      <div class="right">right</div>
+      <div class="right">
+        <app-member-card></app-member-card>
+        <div class="settled-singer">
+          <div class="tit"><b>artists</b></div>
+          <div class="list">
+            <div class="card" *ngFor="let item of singerList">
+              <div class="pic">
+                <img [src]="item.picUrl" [alt]="item.name" />
+              </div>
+              <div class="txt">
+                <b class="ellipsis">{{ item.name }}</b>
+                <span>{{ item.albumSize }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
