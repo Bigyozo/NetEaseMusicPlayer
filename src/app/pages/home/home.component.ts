@@ -8,6 +8,7 @@ import {
   Singer,
   SongSheet
 } from 'src/app/services/data.types/common.types';
+import { SheetService } from 'src/app/services/sheet.service';
 
 @Component({
   selector: 'app-home',
@@ -25,7 +26,10 @@ export class HomeComponent implements OnInit {
   @ViewChild(NzCarouselComponent, { static: true })
   private nzCarousel: NzCarouselComponent;
 
-  constructor(private route: ActivatedRoute) {
+  constructor(
+    private route: ActivatedRoute,
+    private sheetService: SheetService
+  ) {
     this.route.data
       .pipe(map((res) => res.homeDatas))
       .subscribe(([banners, tags, songSheetList, singerList]) => {
@@ -44,5 +48,11 @@ export class HomeComponent implements OnInit {
 
   onChangeSlide(type: 'pre' | 'next') {
     this.nzCarousel[type]();
+  }
+
+  onPlaySheet(id: number) {
+    this.sheetService.playsheet(id).subscribe((res) => {
+      console.log('res:', res);
+    });
   }
 }

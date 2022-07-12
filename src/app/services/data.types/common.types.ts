@@ -10,11 +10,29 @@ export type HotTag = {
   position: number;
 };
 
+//单曲
+export type Song = {
+  id: number;
+  name: string;
+  url: string;
+  ar: Singer[];
+  al: { id: number; name: string; picUrl: string };
+  dt: number;
+};
+
+//播放地址
+export type SongUrl = {
+  id: number;
+  url: string;
+};
+
+//歌单
 export type SongSheet = {
   id: number;
   name: string;
   picUrl: string;
   playCount: number;
+  tracks: Song[];
 };
 
 export type Singer = {
