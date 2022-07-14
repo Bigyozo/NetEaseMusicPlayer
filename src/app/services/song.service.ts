@@ -24,11 +24,14 @@ export class SongService {
   getSongList(songs: Song | Song[]): Observable<Song[]> {
     const songArr = Array.isArray(songs) ? songs.slice() : [songs];
     const ids = songArr.map((item) => item.id).join(',');
-    return new Observable((observable) => {
-      this.getSongUrl(ids).subscribe((urls) => {
-        observable.next(this.generateSongList(songArr, urls));
-      });
-    });
+    return this.getSongUrl(ids).pipe(
+      map((urls) => this.generateSongList(songArr, urls))
+    );
+    // new Observable((observable) => {
+    //   this.getSongUrl(ids).subscribe((urls) => {
+    //     observable.next(this.generateSongList(songArr, urls));
+    //   });
+    // });
   }
 
   private generateSongList(songArr: Song[], urls: SongUrl[]): Song[] {
