@@ -9,6 +9,7 @@ import { ShareModule } from '../share/share.module';
 import ja from '@angular/common/locales/ja';
 import { registerLocaleData } from '@angular/common';
 import { NZ_I18N, ja_JP } from 'ng-zorro-antd';
+import { AppStoreModule } from '../store';
 
 registerLocaleData(ja);
 
@@ -21,7 +22,8 @@ registerLocaleData(ja);
     ServicesModule,
     PagesModule,
     ShareModule,
-    AppRoutingModule
+    AppRoutingModule,
+    AppStoreModule
   ],
   exports: [ShareModule, AppRoutingModule],
   providers: [{ provide: NZ_I18N, useValue: ja_JP }]
