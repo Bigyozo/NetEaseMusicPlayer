@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
 import { Song } from 'src/app/services/data.types/common.types';
 import { AppStoreModule } from 'src/app/store';
+import { SetCurrentIndex } from 'src/app/store/actions/player.action';
 import { PlayState } from 'src/app/store/reducers/player.reducer';
 import {
   getCurrentIndex,
@@ -29,6 +30,9 @@ export class WyPlayerComponent implements OnInit {
 
   duration: number;
   currentTime: number;
+
+  isPlaying = false;
+  songReady = false;
 
   @ViewChild('audio', { static: true }) private audio: ElementRef;
   private audioEl: HTMLAudioElement;
@@ -85,11 +89,61 @@ export class WyPlayerComponent implements OnInit {
     }
   }
 
+  //播放，暂停
+  onToggle() {
+    if (!this.currentSong) {
+      if (this.playList.length) {
+        this.store$.dispatch(SetCurrentIndex({ currentIndex: 0 }));
+        this.songReady = false;
+      }
+    } else {
+      if (this.songReady) {
+        this.isPlaying = !this.isPlaying;
+        if (this.isPlaying) {
+          this.audioEl.play();
+        } else {
+          this.audioEl.pause();
+        }
+      }
+    }
+  }
+
+  OnPrev(index: number) {
+    if (!this.songReady) return;
+    if (this.playList.length === 1) {
+      this.loop();
+    } else {
+      const newIndex = index < 0 ? this.playList.length - 1 : index;
+      this.updateIndex(newIndex);
+    }
+  }
+
+  OnNext(index: number) {
+    if (!this.songReady) return;
+    if (this.playList.length === 1) {
+      this.loop();
+    } else {
+      const newIndex = index >= this.playList.length ? 0 : index;
+      this.updateIndex(newIndex);
+    }
+  }
+
+  private loop() {
+    this.audioEl.currentTime = 0;
+    this.play();
+  }
+
+  private updateIndex(index: number) {
+    this.store$.dispatch(SetCurrentIndex({ currentIndex: index }));
+    this.songReady = false;
+  }
+
   ngOnInit() {
     this.audioEl = this.audio.nativeElement;
   }
 
   onCanplay() {
+    this.songReady = true;
     this.play();
   }
 
@@ -99,6 +153,7 @@ export class WyPlayerComponent implements OnInit {
 
   private play() {
     this.audioEl.play();
+    this.isPlaying = true;
   }
 
   get picUrl(): string {

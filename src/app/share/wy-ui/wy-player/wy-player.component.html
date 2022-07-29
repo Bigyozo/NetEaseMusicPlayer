@@ -5,8 +5,10 @@
   <div class="hand"></div>
   <div class="container">
     <div class="wrap">
-      <div class="bths">
-        <i class="prev"></i><i class="toggle"></i><i class="next"></i>
+      <div class="btns">
+        <i class="prev" (click)="OnPrev(currentIndex - 1)"></i>
+        <i class="toggle" [class.playing]="isPlaying" (click)="onToggle()"></i>
+        <i class="next" (click)="OnNext(currentIndex + 1)"></i>
       </div>
       <div class="head">
         <img [src]="picUrl" />
