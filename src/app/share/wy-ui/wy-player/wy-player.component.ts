@@ -1,5 +1,13 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import {
+  Component,
+  ElementRef,
+  Inject,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
+import { fromEvent, Subscription } from 'rxjs';
 import { Song } from 'src/app/services/data.types/common.types';
 import { AppStoreModule } from 'src/app/store';
 import { SetCurrentIndex } from 'src/app/store/actions/player.action';
@@ -19,8 +27,8 @@ import { PlayMode, StateArrType } from './player-types';
   styleUrls: ['./wy-player.component.less']
 })
 export class WyPlayerComponent implements OnInit {
-  sliderValue = 35;
-  bufferOffset = 60;
+  sliderValue = 0;
+  bufferOffset = 0;
 
   playMode: PlayMode;
   songList: Song[];
@@ -34,10 +42,23 @@ export class WyPlayerComponent implements OnInit {
   isPlaying = false;
   songReady = false;
 
+  volume = 60;
+
+  //是否显示音量面板
+  showVolumePanel = false;
+
+  //是否点击的是音量面板
+  selfClick = false;
+
+  private winClick: Subscription;
+
   @ViewChild('audio', { static: true }) private audio: ElementRef;
   private audioEl: HTMLAudioElement;
 
-  constructor(private store$: Store<AppStoreModule>) {
+  constructor(
+    private store$: Store<AppStoreModule>,
+    @Inject(DOCUMENT) private doc: Document
+  ) {
     const appstore$ = this.store$.pipe(
       select(createFeatureSelector<PlayState>('player'))
     );
@@ -138,6 +159,16 @@ export class WyPlayerComponent implements OnInit {
     this.songReady = false;
   }
 
+  OnPercentChange(per: number) {
+    if (this.currentSong) {
+      this.audioEl.currentTime = this.duration * (per / 100);
+    }
+  }
+
+  onVolumeChange(per: number) {
+    this.audioEl.volume = per / 100;
+  }
+
   ngOnInit() {
     this.audioEl = this.audio.nativeElement;
   }
@@ -149,6 +180,44 @@ export class WyPlayerComponent implements OnInit {
 
   onTimeUpdate(e: Event) {
     this.currentTime = (<HTMLAudioElement>e.target).currentTime;
+    this.sliderValue = (this.currentTime / this.duration) * 100;
+    const buffered = this.audioEl.buffered;
+    if (buffered.length && this.bufferOffset < 100) {
+      this.bufferOffset = (buffered.end(0) / this.duration) * 100;
+    }
+  }
+
+  //控制音量面板
+  toggleVolPanel(evt: MouseEvent) {
+    this.togglePanel();
+  }
+
+  togglePanel() {
+    this.showVolumePanel = !this.showVolumePanel;
+    if (this.showVolumePanel) {
+      this.bindDocumentClickListener();
+    } else {
+      this.unbindDocumentClickListener();
+    }
+  }
+
+  private bindDocumentClickListener() {
+    if (!this.winClick) {
+      this.winClick = fromEvent(this.doc, 'click').subscribe(() => {
+        if (!this.selfClick) {
+          this.showVolumePanel = false;
+          this.unbindDocumentClickListener();
+        }
+        this.selfClick = false;
+      });
+    }
+  }
+
+  private unbindDocumentClickListener() {
+    if (this.winClick) {
+      this.winClick.unsubscribe();
+      this.winClick = null;
+    }
   }
 
   private play() {

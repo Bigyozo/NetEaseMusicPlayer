@@ -4,11 +4,13 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  EventEmitter,
   forwardRef,
   Inject,
   Input,
   OnDestroy,
   OnInit,
+  Output,
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
@@ -56,6 +58,8 @@ export class WySliderComponent
   //缓冲条
   @Input() bufferOffset: SliderValue = 0;
   private slideDom: HTMLDivElement;
+
+  @Output() wyOnAfterChange = new EventEmitter<SliderValue>();
 
   @ViewChild('wySlider', { static: true }) private wySlider: ElementRef;
   //滑块是否在移动
@@ -192,6 +196,7 @@ export class WySliderComponent
   }
 
   private onDragEnd() {
+    this.wyOnAfterChange.emit(this.value);
     this.toggleDragMoving(false);
     this.cdr.markForCheck();
   }
