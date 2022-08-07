@@ -18,7 +18,11 @@
   <div class="bd">
     <img src="//music.163.com/api/img/blur/109951163826278397" class="imgbg" />
     <div class="msk"></div>
-    <div class="list-wrap">
+    <app-wy-scroll
+      class="list-wrap"
+      [data]="songList"
+      (onScrollEnd)="scrollY = $event"
+    >
       <ul>
         <li
           *ngFor="let item of songList; index as i"
@@ -46,6 +50,6 @@
         </li>
       </ul>
       <ul></ul>
-    </div>
+    </app-wy-scroll>
   </div>
 </div>

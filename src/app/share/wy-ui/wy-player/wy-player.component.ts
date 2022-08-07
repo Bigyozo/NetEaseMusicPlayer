@@ -53,7 +53,7 @@ export class WyPlayerComponent implements OnInit {
   isPlaying = false;
   songReady = false;
 
-  volume = 60;
+  volume = 40;
 
   //是否显示音量面板
   showVolumePanel = false;
