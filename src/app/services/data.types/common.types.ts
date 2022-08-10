@@ -41,3 +41,8 @@ export type Singer = {
   picUrl: string;
   albumSize: number;
 };
+
+export type Lyric = {
+  lrc: string;
+  tlyric: string;
+};

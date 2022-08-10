@@ -23,7 +23,7 @@ import {
   getPlayMode,
   getSongList
 } from 'src/app/store/selectors/play.selectors';
-import { shuffle } from 'src/app/utils/array';
+import { findIndex, shuffle } from 'src/app/utils/array';
 import { PlayMode, StateArrType } from './player-types';
 
 const modeTypes: PlayMode[] = [
@@ -120,7 +120,7 @@ export class WyPlayerComponent implements OnInit {
   }
 
   private updateCurrentIndex(list: Song[], currentSong: Song) {
-    const newIndex = list.findIndex((item) => item.id === currentSong.id);
+    const newIndex = findIndex(list, currentSong);
     this.store$.dispatch(SetCurrentIndex({ currentIndex: newIndex }));
   }
 
