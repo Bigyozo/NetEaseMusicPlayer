@@ -43,6 +43,6 @@ export type Singer = {
 };
 
 export type Lyric = {
-  lrc: string;
+  lyric: string;
   tlyric: string;
 };
