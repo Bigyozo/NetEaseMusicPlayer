@@ -1,29 +1,17 @@
-import { DOCUMENT } from '@angular/common';
-import {
-  Component,
-  ElementRef,
-  Inject,
-  OnInit,
-  ViewChild
-} from '@angular/core';
-import { createFeatureSelector, select, Store } from '@ngrx/store';
 import { fromEvent, Subscription } from 'rxjs';
 import { Song } from 'src/app/services/data.types/common.types';
 import { AppStoreModule } from 'src/app/store';
-import {
-  SetCurrentIndex,
-  SetPlayList,
-  SetPlayMode
-} from 'src/app/store/actions/player.action';
+import { SetCurrentIndex, SetPlayList, SetPlayMode } from 'src/app/store/actions/player.action';
 import { PlayState } from 'src/app/store/reducers/player.reducer';
 import {
-  getCurrentIndex,
-  getCurrentSong,
-  getPlayList,
-  getPlayMode,
-  getSongList
+    getCurrentIndex, getCurrentSong, getPlayList, getPlayMode, getSongList
 } from 'src/app/store/selectors/play.selectors';
 import { findIndex, shuffle } from 'src/app/utils/array';
+
+import { DOCUMENT } from '@angular/common';
+import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { createFeatureSelector, select, Store } from '@ngrx/store';
+
 import { PlayMode, StateArrType } from './player-types';
 
 const modeTypes: PlayMode[] = [
@@ -53,7 +41,7 @@ export class WyPlayerComponent implements OnInit {
   isPlaying = false;
   songReady = false;
 
-  volume = 40;
+  volume = 25;
 
   //是否显示音量面板
   showVolumePanel = false;
@@ -70,13 +58,8 @@ export class WyPlayerComponent implements OnInit {
   @ViewChild('audio', { static: true }) private audio: ElementRef;
   private audioEl: HTMLAudioElement;
 
-  constructor(
-    private store$: Store<AppStoreModule>,
-    @Inject(DOCUMENT) private doc: Document
-  ) {
-    const appstore$ = this.store$.pipe(
-      select(createFeatureSelector<PlayState>('player'))
-    );
+  constructor(private store$: Store<AppStoreModule>, @Inject(DOCUMENT) private doc: Document) {
+    const appstore$ = this.store$.pipe(select(createFeatureSelector<PlayState>('player')));
 
     const stateArr: StateArrType[] = [
       {
@@ -199,9 +182,7 @@ export class WyPlayerComponent implements OnInit {
   }
 
   changeMode() {
-    this.store$.dispatch(
-      SetPlayMode({ playMode: modeTypes[++this.modeCount % 3] })
-    );
+    this.store$.dispatch(SetPlayMode({ playMode: modeTypes[++this.modeCount % 3] }));
   }
 
   ngOnInit() {

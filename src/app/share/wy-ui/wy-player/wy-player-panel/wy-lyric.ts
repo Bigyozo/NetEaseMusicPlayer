@@ -1,4 +1,4 @@
-import { from, zip } from 'rxjs';
+import { from, Subject, timer, zip } from 'rxjs';
 import { skip } from 'rxjs/internal/operators';
 import { Lyric } from 'src/app/services/data.types/common.types';
 
@@ -13,10 +13,20 @@ interface LyricLine extends BaseLyricLine {
   time: number;
 }
 
+interface Handler extends BaseLyricLine {
+  lineNum: number;
+}
+
 export class WyLyric {
   private lrc: Lyric;
   lines: LyricLine[] = [];
 
+  private playing = false;
+  private curNum: number;
+  private startStamp: number;
+  public handler = new Subject<Handler>();
+  private timer: any;
+  private pauseStamp: number;
   constructor(lrc: Lyric) {
     this.lrc = lrc;
     this.init();
@@ -36,9 +46,7 @@ export class WyLyric {
 
   private generateTLyric() {
     const lines = this.lrc.lyric.split('\n');
-    const tlines = this.lrc.tlyric
-      .split('\n')
-      .filter((item) => timeExp.exec(item) != null);
+    const tlines = this.lrc.tlyric.split('\n').filter((item) => timeExp.exec(item) != null);
     const moreLine = lines.length - tlines.length;
     let tempArr = [];
     if (moreLine >= 0) {
@@ -75,14 +83,68 @@ export class WyLyric {
       if (txt) {
         let thirdResult = result[3] || '00';
         const len = thirdResult.length;
-        let _thirdResult =
-          len > 2 ? parseInt(thirdResult) : parseInt(thirdResult) * 10;
-        const time =
-          Number(result[1]) * 60 * 1000 +
-          Number(result[2]) * 1000 +
-          _thirdResult;
+        let _thirdResult = len > 2 ? parseInt(thirdResult) : parseInt(thirdResult) * 10;
+        const time = Number(result[1]) * 60 * 1000 + Number(result[2]) * 1000 + _thirdResult;
         this.lines.push({ txt, txtCn, time });
       }
     }
+  }
+
+  play(startTime = 0) {
+    if (!this.lines.length) return;
+    if (!this.playing) {
+      this.playing = true;
+    }
+    this.curNum = this.findCurNum(startTime);
+    this.startStamp = Date.now() - startTime;
+    // this.callHandler()
+    if (this.curNum < this.lines.length) {
+      clearTimeout(this.timer);
+      this.playReset();
+    }
+  }
+
+  private playReset() {
+    let line = this.lines[this.curNum];
+    const delay = line.time - (Date.now() - this.startStamp);
+    this.timer = setTimeout(() => {
+      this.callHandler(this.curNum++);
+      if (this.curNum < this.lines.length && this.playing) {
+        this.playReset();
+      }
+    }, delay);
+  }
+
+  private callHandler(i: number) {
+    this.handler.next({
+      txt: this.lines[i].txt,
+      txtCn: this.lines[i].txtCn,
+      lineNum: i
+    });
+  }
+
+  //歌词对应行数
+  private findCurNum(startTime: number): number {
+    const index = this.lines.findIndex((item) => startTime <= item.time);
+    return index === -1 ? this.lines.length - 1 : index;
+  }
+
+  togglePlay(playing: boolean) {
+    const now = Date.now();
+    this.playing = playing;
+    if (playing) {
+      const startTime = (this.pauseStamp || now) - (this.startStamp || now);
+      this.play(startTime);
+    } else {
+      this.stop();
+      this.pauseStamp = now;
+    }
+  }
+
+  private stop() {
+    if (this.playing) {
+      this.playing = false;
+    }
+    clearTimeout(this.timer);
   }
 }
