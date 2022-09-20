@@ -13,6 +13,7 @@ import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core'
 import { createFeatureSelector, select, Store } from '@ngrx/store';
 
 import { PlayMode, StateArrType } from './player-types';
+import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.component';
 
 const modeTypes: PlayMode[] = [
   { type: 'loop', label: 'loop' },
@@ -41,7 +42,7 @@ export class WyPlayerComponent implements OnInit {
   isPlaying = false;
   songReady = false;
 
-  volume = 25;
+  volume = 20;
 
   //是否显示音量面板
   showVolumePanel = false;
@@ -57,6 +58,8 @@ export class WyPlayerComponent implements OnInit {
 
   @ViewChild('audio', { static: true }) private audio: ElementRef;
   private audioEl: HTMLAudioElement;
+  @ViewChild(WyPlayerPanelComponent, { static: false })
+  private playerPanel: WyPlayerPanelComponent;
 
   constructor(private store$: Store<AppStoreModule>, @Inject(DOCUMENT) private doc: Document) {
     const appstore$ = this.store$.pipe(select(createFeatureSelector<PlayState>('player')));
@@ -164,6 +167,9 @@ export class WyPlayerComponent implements OnInit {
   private loop() {
     this.audioEl.currentTime = 0;
     this.play();
+    if (this.playerPanel) {
+      this.playerPanel.seekLyric(0);
+    }
   }
 
   private updateIndex(index: number) {
@@ -173,7 +179,11 @@ export class WyPlayerComponent implements OnInit {
 
   OnPercentChange(per: number) {
     if (this.currentSong) {
-      this.audioEl.currentTime = this.duration * (per / 100);
+      const currentTime = this.duration * (per / 100);
+      this.audioEl.currentTime = currentTime;
+      if (this.playerPanel) {
+        this.playerPanel.seekLyric(currentTime * 1000);
+      }
     }
   }
 

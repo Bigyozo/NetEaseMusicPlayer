@@ -32,7 +32,8 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
   @ViewChildren(WyScrollComponent)
   private wyScroll: QueryList<WyScrollComponent>;
   private lyric: WyLyric;
-  currentLineNum: number;
+  currentLineNum: number = 0;
+  lyricRefs: NodeList;
 
   constructor(private songService: SongService) {}
 
@@ -57,6 +58,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
           this.scrollToCurrent();
         }
       } else {
+        this.resetLyric();
       }
     }
 
@@ -74,10 +76,12 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
   }
 
   private updateLyric() {
+    this.resetLyric();
     this.songService.getLyric(this.currentSong.id).subscribe((res) => {
       this.lyric = new WyLyric(res);
       this.currentLyric = this.lyric.lines;
-      this.handleLyric();
+      const startLine = res.tlyric ? 1 : 2;
+      this.handleLyric(startLine);
       this.wyScroll.last.scrollTo(0, 0);
 
       if (this.playing) {
@@ -86,10 +90,38 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
     });
   }
 
-  private handleLyric() {
+  private resetLyric() {
+    if (this.lyric) {
+      this.lyric.stop();
+      this.lyric = null;
+      this.currentLyric = [];
+      this.currentLineNum = 0;
+      this.lyricRefs = null;
+    }
+  }
+
+  seekLyric(time: number) {
+    if (this.lyric) {
+      this.lyric.seek(time);
+    }
+  }
+
+  private handleLyric(startLine: number = 2) {
     this.lyric.handler.subscribe(({ lineNum }) => {
-      console.log(lineNum);
-      this.currentLineNum = lineNum;
+      if (!this.lyricRefs) {
+        this.lyricRefs = this.wyScroll.last.el.nativeElement.querySelectorAll('ul li');
+      }
+      if (this.lyricRefs.length) {
+        this.currentLineNum = lineNum;
+        if (lineNum > startLine) {
+          const targetLine = this.lyricRefs[lineNum - startLine];
+          if (targetLine) {
+            this.wyScroll.last.scrollToElement(targetLine, 300, false, false);
+          }
+        } else {
+          this.wyScroll.last.scrollTo(0, 0);
+        }
+      }
     });
   }
 

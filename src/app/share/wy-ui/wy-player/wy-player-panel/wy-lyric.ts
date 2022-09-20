@@ -1,4 +1,4 @@
-import { from, Subject, timer, zip } from 'rxjs';
+import { from, Subject, Subscription, timer, zip } from 'rxjs';
 import { skip } from 'rxjs/internal/operators';
 import { Lyric } from 'src/app/services/data.types/common.types';
 
@@ -25,7 +25,7 @@ export class WyLyric {
   private curNum: number;
   private startStamp: number;
   public handler = new Subject<Handler>();
-  private timer: any;
+  private timer$: Subscription;
   private pauseStamp: number;
   constructor(lrc: Lyric) {
     this.lrc = lrc;
@@ -90,16 +90,18 @@ export class WyLyric {
     }
   }
 
-  play(startTime = 0) {
+  play(startTime = 0, skip = false) {
     if (!this.lines.length) return;
     if (!this.playing) {
       this.playing = true;
     }
     this.curNum = this.findCurNum(startTime);
     this.startStamp = Date.now() - startTime;
-    // this.callHandler()
+    if (!skip) {
+      this.callHandler(this.curNum - 1);
+    }
     if (this.curNum < this.lines.length) {
-      clearTimeout(this.timer);
+      this.clearTimer();
       this.playReset();
     }
   }
@@ -107,20 +109,26 @@ export class WyLyric {
   private playReset() {
     let line = this.lines[this.curNum];
     const delay = line.time - (Date.now() - this.startStamp);
-    this.timer = setTimeout(() => {
+    this.timer$ = timer(delay).subscribe(() => {
       this.callHandler(this.curNum++);
       if (this.curNum < this.lines.length && this.playing) {
         this.playReset();
       }
-    }, delay);
+    });
   }
 
   private callHandler(i: number) {
-    this.handler.next({
-      txt: this.lines[i].txt,
-      txtCn: this.lines[i].txtCn,
-      lineNum: i
-    });
+    if (i > 0) {
+      this.handler.next({
+        txt: this.lines[i].txt,
+        txtCn: this.lines[i].txtCn,
+        lineNum: i
+      });
+    }
+  }
+
+  private clearTimer() {
+    this.timer$ && this.timer$.unsubscribe();
   }
 
   //歌词对应行数
@@ -134,17 +142,22 @@ export class WyLyric {
     this.playing = playing;
     if (playing) {
       const startTime = (this.pauseStamp || now) - (this.startStamp || now);
-      this.play(startTime);
+      //暂停重新点击播放不执行callHandler发射数据
+      this.play(startTime, true);
     } else {
       this.stop();
       this.pauseStamp = now;
     }
   }
 
-  private stop() {
+  public stop() {
     if (this.playing) {
       this.playing = false;
     }
-    clearTimeout(this.timer);
+    this.clearTimer();
+  }
+
+  seek(time: number) {
+    this.play(time);
   }
 }
