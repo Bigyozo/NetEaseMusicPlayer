@@ -1,3 +1,4 @@
+import { NzModalService } from 'ng-zorro-antd';
 import { fromEvent, Subscription } from 'rxjs';
 import { Song } from 'src/app/services/data.types/common.types';
 import { AppStoreModule } from 'src/app/store';
@@ -12,6 +13,8 @@ import { DOCUMENT } from '@angular/common';
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
 
+import { SetSongList } from '../../../store/actions/player.action';
+import { BatchActionsService } from '../../../store/batch-actions.service';
 import { PlayMode, StateArrType } from './player-types';
 import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.component';
 
@@ -61,7 +64,12 @@ export class WyPlayerComponent implements OnInit {
   @ViewChild(WyPlayerPanelComponent, { static: false })
   private playerPanel: WyPlayerPanelComponent;
 
-  constructor(private store$: Store<AppStoreModule>, @Inject(DOCUMENT) private doc: Document) {
+  constructor(
+    private store$: Store<AppStoreModule>,
+    @Inject(DOCUMENT) private doc: Document,
+    private nzModalService: NzModalService,
+    private batchActionsService: BatchActionsService
+  ) {
     const appstore$ = this.store$.pipe(select(createFeatureSelector<PlayState>('player')));
 
     const stateArr: StateArrType[] = [
@@ -276,5 +284,18 @@ export class WyPlayerComponent implements OnInit {
 
   onChangeSong(song: Song): void {
     this.updateCurrentIndex(this.playList, song);
+  }
+
+  onDeleteSong(song: Song) {
+    this.batchActionsService.deleteSong(song);
+  }
+
+  onClearSong() {
+    this.nzModalService.confirm({
+      nzTitle: '确认清空列表？',
+      nzOnOk: () => {
+        this.batchActionsService.clearSong();
+      }
+    });
   }
 }

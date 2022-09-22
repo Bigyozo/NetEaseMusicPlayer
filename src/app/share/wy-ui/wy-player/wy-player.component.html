@@ -44,11 +44,7 @@
       </div>
       <div class="ctrl">
         <i class="volume" title="volume" (click)="toggleVolPanel()"></i>
-        <i
-          [ngClass]="currentMode.type"
-          [title]="currentMode.label"
-          (click)="changeMode()"
-        ></i>
+        <i [ngClass]="currentMode.type" [title]="currentMode.label" (click)="changeMode()"></i>
         <p class="open" (click)="toggleListPanel()">
           <span></span>
         </p>
@@ -67,6 +63,8 @@
         [show]="showListPanel"
         (onClose)="showListPanel = false"
         (onChangeSong)="onChangeSong($event)"
+        (onDeleteSong)="onDeleteSong($event)"
+        (onClearSong)="onClearSong($event)"
       ></app-wy-player-panel>
     </div>
   </div>

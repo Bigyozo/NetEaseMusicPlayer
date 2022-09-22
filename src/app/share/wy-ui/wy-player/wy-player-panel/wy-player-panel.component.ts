@@ -26,6 +26,8 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
 
   @Output() onClose = new EventEmitter<void>();
   @Output() onChangeSong = new EventEmitter<Song>();
+  @Output() onDeleteSong = new EventEmitter<Song>();
+  @Output() onClearSong = new EventEmitter<void>();
 
   scrollY = 0;
   currentLyric: BaseLyricLine[];
@@ -47,7 +49,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
     }
 
     if (changes['songList']) {
-      this.currentIndex = 0;
+      this.updateCurrentIndex();
     }
 
     if (changes['currentSong']) {
@@ -73,6 +75,10 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
         });
       }
     }
+  }
+
+  private updateCurrentIndex() {
+    this.currentIndex = findIndex(this.songList, this.currentSong);
   }
 
   private updateLyric() {

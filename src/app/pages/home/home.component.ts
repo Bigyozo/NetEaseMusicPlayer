@@ -1,23 +1,15 @@
+import { NzCarouselComponent } from 'ng-zorro-antd';
+import { map } from 'rxjs/internal/operators';
+import { Banner, HotTag, Singer, SongSheet } from 'src/app/services/data.types/common.types';
+import { SheetService } from 'src/app/services/sheet.service';
+import { AppStoreModule } from 'src/app/store';
+import { PlayState } from 'src/app/store/reducers/player.reducer';
+
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
-import { NzCarouselComponent } from 'ng-zorro-antd';
-import { map } from 'rxjs/internal/operators';
-import {
-  Banner,
-  HotTag,
-  Singer,
-  SongSheet
-} from 'src/app/services/data.types/common.types';
-import { SheetService } from 'src/app/services/sheet.service';
-import { AppStoreModule } from 'src/app/store';
-import {
-  SetCurrentIndex,
-  SetPlayList,
-  SetSongList
-} from 'src/app/store/actions/player.action';
-import { PlayState } from 'src/app/store/reducers/player.reducer';
-import { findIndex, shuffle } from 'src/app/utils/array';
+
+import { BatchActionsService } from '../../store/batch-actions.service';
 
 @Component({
   selector: 'app-home',
@@ -32,15 +24,13 @@ export class HomeComponent implements OnInit {
   songSheetList: SongSheet[];
   singerList: Singer[];
 
-  private PlayState: PlayState;
-
   @ViewChild(NzCarouselComponent, { static: true })
   private nzCarousel: NzCarouselComponent;
 
   constructor(
     private route: ActivatedRoute,
     private sheetService: SheetService,
-    private store$: Store<AppStoreModule>
+    private batchActionsService: BatchActionsService
   ) {
     this.route.data
       .pipe(map((res) => res.homeDatas))
@@ -50,9 +40,6 @@ export class HomeComponent implements OnInit {
         this.songSheetList = songSheetList;
         this.singerList = singerList;
       });
-    this.store$
-      .pipe(select(createFeatureSelector<PlayState>('player')))
-      .subscribe((res) => (this.PlayState = res));
   }
 
   ngOnInit() {}
@@ -67,15 +54,7 @@ export class HomeComponent implements OnInit {
 
   onPlaySheet(id: number) {
     this.sheetService.playsheet(id).subscribe((list) => {
-      this.store$.dispatch(SetSongList({ songList: list }));
-      let trueIndex = 0;
-      let trueList = list.slice();
-      if (this.PlayState.playMode.type === 'random') {
-        trueList = shuffle(list || []);
-        trueIndex = findIndex(trueList, list[trueIndex]);
-      }
-      this.store$.dispatch(SetPlayList({ playList: trueList }));
-      this.store$.dispatch(SetCurrentIndex({ currentIndex: trueIndex }));
+      this.batchActionsService.selectPlayList({ list, index: 0 });
     });
   }
 }
