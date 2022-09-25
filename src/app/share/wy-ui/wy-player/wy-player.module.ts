@@ -1,15 +1,23 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { WyPlayerComponent } from './wy-player.component';
-import { WySliderModule } from '../wy-slider/wy-slider.module';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+
+import { ClickoutsideDirective } from '../../directives/clickoutside.directive';
 import { FormatTimePipe } from '../../pipes/format-time.pipe';
+import { WySliderModule } from '../wy-slider/wy-slider.module';
 import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.component';
+import { WyPlayerComponent } from './wy-player.component';
 import { WyScrollComponent } from './wy-scroll/wy-scroll.component';
 
 @NgModule({
-  declarations: [WyPlayerComponent, FormatTimePipe, WyPlayerPanelComponent, WyScrollComponent],
+  declarations: [
+    WyPlayerComponent,
+    FormatTimePipe,
+    WyPlayerPanelComponent,
+    WyScrollComponent,
+    ClickoutsideDirective
+  ],
   imports: [CommonModule, WySliderModule, FormsModule],
-  exports: [WyPlayerComponent, FormatTimePipe]
+  exports: [WyPlayerComponent, FormatTimePipe, ClickoutsideDirective]
 })
 export class WyPlayerModule {}

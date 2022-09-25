@@ -1,7 +1,10 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
+
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+
+import { ClickoutsideDirective } from './directives/clickoutside.directive';
 import { WyUiModule } from './wy-ui/wy-ui.module';
 
 @NgModule({

@@ -13,7 +13,6 @@ import { DOCUMENT } from '@angular/common';
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
 
-import { SetSongList } from '../../../store/actions/player.action';
 import { BatchActionsService } from '../../../store/batch-actions.service';
 import { PlayMode, StateArrType } from './player-types';
 import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.component';
@@ -45,19 +44,19 @@ export class WyPlayerComponent implements OnInit {
   isPlaying = false;
   songReady = false;
 
-  volume = 20;
+  volume = 10;
 
   //是否显示音量面板
   showVolumePanel = false;
   showListPanel = false;
-  //是否点击的是音量面板
-  selfClick = false;
+  //是否绑定Clickoutside
+  bindFlag = false;
 
   currentMode: PlayMode;
 
   modeCount = 0;
 
-  private winClick: Subscription;
+  //private winClick: Subscription;
 
   @ViewChild('audio', { static: true }) private audio: ElementRef;
   private audioEl: HTMLAudioElement;
@@ -244,32 +243,28 @@ export class WyPlayerComponent implements OnInit {
 
   togglePanel(type: string) {
     this[type] = !this[type];
-    if (this.showVolumePanel || this.showListPanel) {
-      this.bindDocumentClickListener();
-    } else {
-      this.unbindDocumentClickListener();
-    }
+    this.bindFlag = this.showVolumePanel || this.showListPanel;
   }
 
-  private bindDocumentClickListener() {
-    if (!this.winClick) {
-      this.winClick = fromEvent(this.doc, 'click').subscribe(() => {
-        if (!this.selfClick) {
-          this.showVolumePanel = false;
-          this.showListPanel = false;
-          this.unbindDocumentClickListener();
-        }
-        this.selfClick = false;
-      });
-    }
-  }
+  // private bindDocumentClickListener() {
+  //   if (!this.winClick) {
+  //     this.winClick = fromEvent(this.doc, 'click').subscribe(() => {
+  //       if (!this.selfClick) {
+  //         this.showVolumePanel = false;
+  //         this.showListPanel = false;
+  //         this.unbindDocumentClickListener();
+  //       }
+  //       this.selfClick = false;
+  //     });
+  //   }
+  // }
 
-  private unbindDocumentClickListener() {
-    if (this.winClick) {
-      this.winClick.unsubscribe();
-      this.winClick = null;
-    }
-  }
+  // private unbindDocumentClickListener() {
+  //   if (this.winClick) {
+  //     this.winClick.unsubscribe();
+  //     this.winClick = null;
+  //   }
+  // }
 
   private play() {
     this.audioEl.play();
@@ -297,5 +292,11 @@ export class WyPlayerComponent implements OnInit {
         this.batchActionsService.clearSong();
       }
     });
+  }
+
+  onClickOutside() {
+    this.showVolumePanel = false;
+    this.showListPanel = false;
+    this.bindFlag = false;
   }
 }
