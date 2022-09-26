@@ -8,7 +8,6 @@ import {
     ViewChildren
 } from '@angular/core';
 
-import { Lyric } from '../../../../services/data.types/common.types';
 import { WyScrollComponent } from '../wy-scroll/wy-scroll.component';
 import { BaseLyricLine, WyLyric } from './wy-lyric';
 
@@ -35,6 +34,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
   private wyScroll: QueryList<WyScrollComponent>;
   private lyric: WyLyric;
   currentLineNum: number = 0;
+  private startLine: number = 2;
   lyricRefs: NodeList;
 
   constructor(private songService: SongService) {}
@@ -72,6 +72,9 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
           if (this.currentSong) {
             this.scrollToCurrent(0);
           }
+          if (this.lyricRefs) {
+            this.scrollToCurrentLyric(0);
+          }
         });
       }
     }
@@ -86,8 +89,8 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
     this.songService.getLyric(this.currentSong.id).subscribe((res) => {
       this.lyric = new WyLyric(res);
       this.currentLyric = this.lyric.lines;
-      const startLine = res.tlyric ? 1 : 2;
-      this.handleLyric(startLine);
+      this.startLine = res.tlyric ? 1 : 2;
+      this.handleLyric();
       this.wyScroll.last.scrollTo(0, 0);
 
       if (this.playing) {
@@ -112,18 +115,15 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
     }
   }
 
-  private handleLyric(startLine: number = 2) {
+  private handleLyric() {
     this.lyric.handler.subscribe(({ lineNum }) => {
       if (!this.lyricRefs) {
         this.lyricRefs = this.wyScroll.last.el.nativeElement.querySelectorAll('ul li');
       }
       if (this.lyricRefs.length) {
         this.currentLineNum = lineNum;
-        if (lineNum > startLine) {
-          const targetLine = this.lyricRefs[lineNum - startLine];
-          if (targetLine) {
-            this.wyScroll.last.scrollToElement(targetLine, 300, false, false);
-          }
+        if (lineNum > this.startLine) {
+          this.scrollToCurrentLyric(300);
         } else {
           this.wyScroll.last.scrollTo(0, 0);
         }
@@ -142,6 +142,13 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
       ) {
         this.wyScroll.first.scrollToElement(currentLi, speed, false, false);
       }
+    }
+  }
+
+  private scrollToCurrentLyric(speed = 300) {
+    const targetLine = this.lyricRefs[this.currentLineNum - this.startLine];
+    if (targetLine) {
+      this.wyScroll.last.scrollToElement(targetLine, speed, false, false);
     }
   }
 }
