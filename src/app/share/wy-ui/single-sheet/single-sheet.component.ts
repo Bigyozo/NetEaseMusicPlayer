@@ -1,13 +1,8 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output
-} from '@angular/core';
-
 import { SongSheet } from 'src/app/services/data.types/common.types';
+
+import {
+    ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output
+} from '@angular/core';
 
 @Component({
   selector: 'app-single-sheet',
@@ -25,5 +20,9 @@ export class SingleSheetComponent implements OnInit {
 
   playsheet(id: number) {
     this.onPlay.emit(id);
+  }
+
+  get coverImg(): string {
+    return this.sheet.picUrl || this.sheet.coverImgUrl;
   }
 }

@@ -31,6 +31,7 @@ export type SongSheet = {
   id: number;
   name: string;
   picUrl: string;
+  coverImgUrl: string;
   playCount: number;
   tracks: Song[];
 };
@@ -45,4 +46,9 @@ export type Singer = {
 export type Lyric = {
   lyric: string;
   tlyric: string;
+};
+
+export type SheetList = {
+  playlists: SongSheet[];
+  total: number;
 };
