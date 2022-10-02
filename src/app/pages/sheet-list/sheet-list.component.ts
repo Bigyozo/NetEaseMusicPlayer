@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { SheetList } from '../../services/data.types/common.types';
 import { SheetParams, SheetService } from '../../services/sheet.service';
@@ -22,6 +22,7 @@ export class SheetListComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private sheetService: SheetService,
     private batchActionsService: BatchActionsService
   ) {
@@ -50,5 +51,9 @@ export class SheetListComponent implements OnInit {
   onPageChange(page: number) {
     this.listParams.offset = page;
     this.getList();
+  }
+
+  toInfo(id: number) {
+    this.router.navigate(['/sheetInfo', id]);
   }
 }
