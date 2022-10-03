@@ -1,3 +1,5 @@
+import { Subscription } from 'rxjs';
+
 export type Banner = {
   targetId: number;
   url: string;
@@ -33,6 +35,17 @@ export type SongSheet = {
   picUrl: string;
   coverImgUrl: string;
   playCount: number;
+  tags: String[];
+  createTime: number;
+  creator: {
+    nickname: string;
+    avatarUrl: string;
+  };
+  description: string;
+  subscribedCount: number;
+  shareCount: number;
+  commentCount: number;
+  Subscribed: boolean;
   tracks: Song[];
 };
 

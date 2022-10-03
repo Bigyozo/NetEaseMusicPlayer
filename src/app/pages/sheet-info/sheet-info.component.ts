@@ -1,4 +1,7 @@
+import { map } from 'rxjs/internal/operators';
+
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-sheet-info',
@@ -6,10 +9,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./sheet-info.component.less']
 })
 export class SheetInfoComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
+  constructor(private route: ActivatedRoute) {
+    this.route.data.pipe(map((res) => res.sheetInfo)).subscribe((res) => {
+      console.log(res);
+    });
   }
 
+  ngOnInit() {}
 }
