@@ -11,7 +11,7 @@ import { Song, SongSheet } from '../../services/data.types/common.types';
 import { SongService } from '../../services/song.service';
 import { BatchActionsService } from '../../store/batch-actions.service';
 import { AppStoreModule } from '../../store/index';
-import { getCurrentSong, getSongList } from '../../store/selectors/play.selectors';
+import { getCurrentSong } from '../../store/selectors/play.selectors';
 import { findIndex } from '../../utils/array';
 
 @Component({
