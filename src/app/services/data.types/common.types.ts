@@ -1,5 +1,3 @@
-import { Subscription } from 'rxjs';
-
 export type Banner = {
   targetId: number;
   url: string;
@@ -55,6 +53,11 @@ export type Singer = {
   name: string;
   picUrl: string;
   albumSize: number;
+};
+
+export type SingerDetail = {
+  artist: Singer;
+  hotSongs: Song[];
 };
 
 export type Lyric = {

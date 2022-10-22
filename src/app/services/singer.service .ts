@@ -1,9 +1,11 @@
-import { HttpClient } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { API_CONFIG, ServicesModule } from './services.module';
 import { map } from 'rxjs/internal/operators';
-import { Singer } from './data.types/common.types';
+
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Inject, Injectable } from '@angular/core';
+
+import { Singer, SingerDetail } from './data.types/common.types';
+import { API_CONFIG, ServicesModule } from './services.module';
 
 type SingerParams = {
   offset: string;
@@ -23,14 +25,25 @@ const defaultParams: SingerParams = {
   providedIn: ServicesModule
 })
 export class SingerService {
-  constructor(
-    private http: HttpClient,
-    @Inject(API_CONFIG) private uri: string
-  ) {}
+  constructor(private http: HttpClient, @Inject(API_CONFIG) private uri: string) {}
 
   getEnterSinger(args: SingerParams = defaultParams): Observable<Singer[]> {
     return this.http
       .get(this.uri + 'artist/list', { params: defaultParams })
+      .pipe(map((res: { artists: Singer[] }) => res.artists));
+  }
+
+  //获取歌手详情和热门歌曲
+  getSingerDetail(id: string): Observable<SingerDetail> {
+    const params = new HttpParams().set('id', id);
+    return this.http.get(this.uri + 'artists', { params }).pipe(map((res) => res as SingerDetail));
+  }
+
+  //获取相似歌手详情
+  getSimilarSinger(id: string): Observable<Singer[]> {
+    const params = new HttpParams().set('id', id);
+    return this.http
+      .get(this.uri + 'simi/artists', { params })
       .pipe(map((res: { artists: Singer[] }) => res.artists));
   }
 }
