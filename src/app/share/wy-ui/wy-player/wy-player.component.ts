@@ -11,6 +11,7 @@ import { findIndex, shuffle } from 'src/app/utils/array';
 
 import { DOCUMENT } from '@angular/common';
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
 
 import { BatchActionsService } from '../../../store/batch-actions.service';
@@ -67,7 +68,8 @@ export class WyPlayerComponent implements OnInit {
     private store$: Store<AppStoreModule>,
     @Inject(DOCUMENT) private doc: Document,
     private nzModalService: NzModalService,
-    private batchActionsService: BatchActionsService
+    private batchActionsService: BatchActionsService,
+    private router: Router
   ) {
     const appstore$ = this.store$.pipe(select(createFeatureSelector<PlayState>('player')));
 
@@ -298,5 +300,13 @@ export class WyPlayerComponent implements OnInit {
     this.showVolumePanel = false;
     this.showListPanel = false;
     this.bindFlag = false;
+  }
+
+  toInfo(path: [string, number]) {
+    if (path[1]) {
+      this.showVolumePanel = false;
+      this.showListPanel = false;
+      this.router.navigate(path);
+    }
   }
 }

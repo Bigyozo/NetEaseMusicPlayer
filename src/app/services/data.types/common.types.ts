@@ -51,6 +51,7 @@ export type SongSheet = {
 export type Singer = {
   id: number;
   name: string;
+  alias: string[];
   picUrl: string;
   albumSize: number;
 };

@@ -27,6 +27,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
   @Output() onChangeSong = new EventEmitter<Song>();
   @Output() onDeleteSong = new EventEmitter<Song>();
   @Output() onClearSong = new EventEmitter<void>();
+  @Output() onToInfo = new EventEmitter<[string, number]>();
 
   scrollY = 0;
   currentLyric: BaseLyricLine[];
@@ -152,5 +153,10 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
     if (targetLine) {
       this.wyScroll.last.scrollToElement(targetLine, speed, false, false);
     }
+  }
+
+  private toInfo(evt: MouseEvent, path: [string, number]) {
+    evt.stopPropagation();
+    this.onToInfo.emit(path);
   }
 }
