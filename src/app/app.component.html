@@ -12,14 +12,7 @@
           </ul>
         </div>
         <div class="right">
-          <div class="search">
-            <nz-input-group [nzSuffix]="suffixIconSearch">
-              <input type="text" nz-input placeholder="歌手" />
-            </nz-input-group>
-            <ng-template #suffixIconSearch>
-              <i nz-icon nzType="search"></i>
-            </ng-template>
-          </div>
+          <app-wy-search (onSearch)="onSearch($event)"></app-wy-search>
         </div>
         <div class="member">
           <div class="no-login">

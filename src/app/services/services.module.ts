@@ -9,7 +9,7 @@ export const API_CONFIG = new InjectionToken('ApiConfigToken');
   providers: [
     {
       provide: API_CONFIG,
-      useValue: 'http://192.168.0.56:3000/'
+      useValue: 'http://192.168.40.218:3000/'
     },
     {
       provide: Window,
