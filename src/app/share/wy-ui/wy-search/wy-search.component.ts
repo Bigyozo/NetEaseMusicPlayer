@@ -32,9 +32,7 @@ export class WySearchComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['searchResult'] && !changes['searchResult'].firstChange) {
-      if (!isEmptyObject(this.searchResult)) {
-        this.showOverlayPanel();
-      }
+      this.showOverlayPanel();
     }
   }
 
@@ -53,15 +51,16 @@ export class WySearchComponent implements OnInit, AfterViewInit, OnChanges {
       ])
       .withLockedPosition(true);
     this.overlayRef = this.overlay.create({
-      hasBackdrop: true,
+      //  hasBackdrop: true,
       positionStrategy: positionStrategy,
       scrollStrategy: this.overlay.scrollStrategies.reposition()
     });
     const panelPortal = new ComponentPortal(WySearchPanelComponent, this.viewContainerRef);
     const panelRef = this.overlayRef.attach(panelPortal);
-    this.overlayRef.backdropClick().subscribe(() => {
-      this.hideOverlayPanel();
-    });
+    panelRef.instance.searchResult = this.searchResult;
+    // this.overlayRef.backdropClick().subscribe(() => {
+    //   this.hideOverlayPanel();
+    // });
   }
 
   private hideOverlayPanel() {
@@ -84,5 +83,9 @@ export class WySearchComponent implements OnInit, AfterViewInit, OnChanges {
     if (this.searchResult && !isEmptyObject(this.searchResult)) {
       this.showOverlayPanel();
     }
+  }
+
+  onBlur() {
+    this.hideOverlayPanel();
   }
 }

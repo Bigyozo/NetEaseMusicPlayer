@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 import { SearchResult } from './services/data.types/common.types';
 import { SearchService } from './services/search.service';
+import { isEmptyObject } from './utils/tools';
 
 @Component({
   selector: 'app-root',
@@ -28,10 +29,24 @@ export class AppComponent {
   onSearch(keywords: string) {
     if (keywords) {
       this.searchService.search(keywords).subscribe((res) => {
-        this.searchResult = res;
+        this.searchResult = this.highlightKeyWord(keywords, res);
       });
     } else {
       this.searchResult = {};
     }
+  }
+
+  private highlightKeyWord(keywords: string, result: SearchResult): SearchResult {
+    if (!isEmptyObject(result)) {
+      const reg = new RegExp(keywords, 'ig');
+      ['artists', 'playlists', 'songs'].forEach((type) => {
+        if (result[type]) {
+          result[type].forEach((element) => {
+            element.name = element.name.replace(reg, '<span class="highlight">$&</span>');
+          });
+        }
+      });
+    }
+    return result;
   }
 }

@@ -74,4 +74,5 @@ export type SheetList = {
 export type SearchResult = {
   artists?: Singer[];
   songs?: Song[];
+  playlists?: SongSheet[];
 };
