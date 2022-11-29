@@ -9,6 +9,7 @@ import {
 } from 'src/app/store/selectors/play.selectors';
 import { findIndex, shuffle } from 'src/app/utils/array';
 
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { DOCUMENT } from '@angular/common';
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
@@ -27,9 +28,22 @@ const modeTypes: PlayMode[] = [
 @Component({
   selector: 'app-wy-player',
   templateUrl: './wy-player.component.html',
-  styleUrls: ['./wy-player.component.less']
+  styleUrls: ['./wy-player.component.less'],
+  animations: [
+    trigger('showHide', [
+      state('show', style({ bottom: 0 })),
+      state('hide', style({ bottom: -71 })),
+      transition('show=>hide', [animate('0.3s')]),
+      transition('hide=>show', [animate('0.1s')])
+    ])
+  ]
 })
 export class WyPlayerComponent implements OnInit {
+  showPlayer = 'hide';
+  isLocked = false;
+  //是否正在动画
+  isAnimating = false;
+
   sliderValue = 0;
   bufferOffset = 0;
 
@@ -307,6 +321,12 @@ export class WyPlayerComponent implements OnInit {
       this.showVolumePanel = false;
       this.showListPanel = false;
       this.router.navigate(path);
+    }
+  }
+
+  togglePlayer(type: string) {
+    if (!this.isLocked && !this.isAnimating) {
+      this.showPlayer = type;
     }
   }
 }
