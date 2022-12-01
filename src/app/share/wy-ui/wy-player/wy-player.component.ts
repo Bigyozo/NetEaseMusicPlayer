@@ -1,21 +1,25 @@
 import { NzModalService } from 'ng-zorro-antd';
-import { fromEvent, Subscription } from 'rxjs';
+import { timer } from 'rxjs';
 import { Song } from 'src/app/services/data.types/common.types';
 import { AppStoreModule } from 'src/app/store';
-import { SetCurrentIndex, SetPlayList, SetPlayMode } from 'src/app/store/actions/player.action';
+import {
+    SetCurrentAction, SetCurrentIndex, SetPlayList, SetPlayMode
+} from 'src/app/store/actions/player.action';
 import { PlayState } from 'src/app/store/reducers/player.reducer';
 import {
     getCurrentIndex, getCurrentSong, getPlayList, getPlayMode, getSongList
 } from 'src/app/store/selectors/play.selectors';
 import { findIndex, shuffle } from 'src/app/utils/array';
 
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
 import { DOCUMENT } from '@angular/common';
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
 
 import { BatchActionsService } from '../../../store/batch-actions.service';
+import { CurrentActions } from '../../../store/reducers/player.reducer';
+import { getCurrentAction } from '../../../store/selectors/play.selectors';
 import { PlayMode, StateArrType } from './player-types';
 import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.component';
 
@@ -25,6 +29,10 @@ const modeTypes: PlayMode[] = [
   { type: 'singleLoop', label: 'singleLoop' }
 ];
 
+enum TipTitles {
+  Add = '已添加到列表',
+  Play = '已开始播放'
+}
 @Component({
   selector: 'app-wy-player',
   templateUrl: './wy-player.component.html',
@@ -39,6 +47,10 @@ const modeTypes: PlayMode[] = [
   ]
 })
 export class WyPlayerComponent implements OnInit {
+  controlTooltip = {
+    title: '',
+    show: false
+  };
   showPlayer = 'hide';
   isLocked = false;
   //是否正在动画
@@ -107,12 +119,46 @@ export class WyPlayerComponent implements OnInit {
       {
         type: getCurrentSong,
         cb: (song) => this.watchCurrentSong(song)
+      },
+      {
+        type: getCurrentAction,
+        cb: (currentAction) => this.watchCurrentAction(currentAction)
       }
     ];
 
     stateArr.forEach((item) => {
       appstore$.pipe(select(item.type)).subscribe(item.cb);
     });
+  }
+
+  private watchCurrentAction(currentAction: CurrentActions) {
+    const title = TipTitles[CurrentActions[currentAction]];
+    if (title) {
+      this.controlTooltip.title = title;
+      if (this.showPlayer === 'hide') {
+        this.togglePlayer('show');
+      } else {
+        this.showToolTip();
+      }
+    }
+    this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Other }));
+  }
+
+  private showToolTip() {
+    this.controlTooltip.show = true;
+    timer(1500).subscribe(() => {
+      this.controlTooltip = {
+        title: '',
+        show: false
+      };
+    });
+  }
+
+  onAnimateDone(event: AnimationEvent) {
+    this.isAnimating = false;
+    if (event.toState === 'show' && this.controlTooltip.title) {
+      this.showToolTip();
+    }
   }
 
   private watchPlayMode(mode: PlayMode) {

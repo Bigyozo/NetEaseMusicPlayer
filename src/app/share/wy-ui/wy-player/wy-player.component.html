@@ -6,8 +6,8 @@
   (onClickOutside)="onClickOutside()"
   (mouseenter)="togglePlayer('show')"
   (mouseleave)="togglePlayer('hide')"
-  (@showHide.start)="animating = true"
-  (@showHide.done)="animating = false"
+  (@showHide.start)="isAnimating = true"
+  (@showHide.done)="onAnimateDone($event)"
 >
   <div class="lock" (click)="isLocked = !isLocked">
     <div class="left"><i [class.locked]="isLocked"></i></div>
@@ -57,7 +57,14 @@
       <div class="ctrl">
         <i class="volume" title="volume" (click)="toggleVolPanel()"></i>
         <i [ngClass]="currentMode.type" [title]="currentMode.label" (click)="changeMode()"></i>
-        <p class="open" (click)="toggleListPanel()">
+        <p
+          nz-tooltip
+          [nzTitle]="controlTooltip.title"
+          [nzVisible]="controlTooltip.show"
+          nzOverlayClassName="tip-bg"
+          class="open"
+          (click)="toggleListPanel()"
+        >
           <span></span>
         </p>
         <div class="control-vol" [hidden]="!showVolumePanel">

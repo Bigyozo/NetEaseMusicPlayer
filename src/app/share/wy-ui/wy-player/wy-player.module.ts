@@ -1,3 +1,5 @@
+import { NzToolTipModule } from 'ng-zorro-antd';
+
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -17,7 +19,7 @@ import { WyScrollComponent } from './wy-scroll/wy-scroll.component';
     WyScrollComponent,
     ClickoutsideDirective
   ],
-  imports: [CommonModule, WySliderModule, FormsModule],
+  imports: [CommonModule, WySliderModule, FormsModule, NzToolTipModule],
   exports: [WyPlayerComponent, FormatTimePipe, ClickoutsideDirective]
 })
 export class WyPlayerModule {}
