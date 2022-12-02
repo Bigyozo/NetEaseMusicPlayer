@@ -188,8 +188,8 @@ export class WyPlayerComponent implements OnInit {
   }
 
   private watchCurrentSong(song: Song) {
+    this.currentSong = song;
     if (song) {
-      this.currentSong = song;
       this.duration = song.dt / 1000;
     }
   }
@@ -231,6 +231,12 @@ export class WyPlayerComponent implements OnInit {
       const newIndex = index >= this.playList.length ? 0 : index;
       this.updateIndex(newIndex);
     }
+  }
+
+  //播放错误（无歌曲）
+  onError() {
+    this.isPlaying = false;
+    this.bufferOffset = 0;
   }
 
   private loop() {
@@ -356,10 +362,12 @@ export class WyPlayerComponent implements OnInit {
     });
   }
 
-  onClickOutside() {
-    this.showVolumePanel = false;
-    this.showListPanel = false;
-    this.bindFlag = false;
+  onClickOutside(target: HTMLElement) {
+    if (target.dataset.act !== 'delete') {
+      this.showVolumePanel = false;
+      this.showListPanel = false;
+      this.bindFlag = false;
+    }
   }
 
   toInfo(path: [string, number]) {

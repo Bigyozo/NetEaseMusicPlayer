@@ -3,7 +3,7 @@
   class="m-player"
   appClickoutside
   [bindFlag]="bindFlag"
-  (onClickOutside)="onClickOutside()"
+  (onClickOutside)="onClickOutside($event)"
   (mouseenter)="togglePlayer('show')"
   (mouseleave)="togglePlayer('hide')"
   (@showHide.start)="isAnimating = true"
@@ -50,7 +50,7 @@
           >
         </div>
       </div>
-      <div class="oper">
+      <div class="open">
         <i class="like" title="like"></i>
         <i class="share" title="share"></i>
       </div>
@@ -95,5 +95,6 @@
     (canplay)="onCanplay()"
     (timeupdate)="onTimeUpdate($event)"
     (ended)="onEnded()"
+    (error)="onError()"
   ></audio>
 </div>

@@ -1,14 +1,17 @@
+import { environment } from 'src/environments/environment';
+
 import { NgModule } from '@angular/core';
 import { StoreModule } from '@ngrx/store';
-import { playerReducer } from './reducers/player.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { environment } from 'src/environments/environment';
+
+import { memberReducer } from './reducers/member.reducer';
+import { playerReducer } from './reducers/player.reducer';
 
 @NgModule({
   declarations: [],
   imports: [
     StoreModule.forRoot(
-      { player: playerReducer },
+      { player: playerReducer, member: memberReducer },
       {
         runtimeChecks: {
           strictStateImmutability: true,
