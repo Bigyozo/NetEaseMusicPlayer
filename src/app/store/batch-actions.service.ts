@@ -5,21 +5,27 @@ import { createFeatureSelector, select, Store } from '@ngrx/store';
 
 import { Song } from '../services/data.types/common.types';
 import { findIndex, shuffle } from '../utils/array';
+import { SetModalType, SetModalVisible } from './actions/member.action';
 import {
     SetCurrentAction, SetCurrentIndex, SetPlayList, SetSongList
 } from './actions/player.action';
 import { AppStoreModule } from './index';
+import { MemberState, ModalTypes } from './reducers/member.reducer';
 
 @Injectable({
   providedIn: AppStoreModule
 })
 export class BatchActionsService {
   playState: PlayState;
+  memberState: MemberState;
 
   constructor(private store$: Store<AppStoreModule>) {
     this.store$
       .pipe(select(createFeatureSelector<PlayState>('player')))
       .subscribe((res) => (this.playState = res));
+    this.store$
+      .pipe(select(createFeatureSelector<MemberState>('member')))
+      .subscribe((res) => (this.memberState = res));
   }
 
   // 播放列表
@@ -102,5 +108,11 @@ export class BatchActionsService {
     this.store$.dispatch(SetPlayList({ playList: [] }));
     this.store$.dispatch(SetCurrentIndex({ currentIndex: -1 }));
     this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Clear }));
+  }
+
+  //会员弹窗显示隐藏/类型
+  controlModal(modalVisible = true, modalType = ModalTypes.Default) {
+    this.store$.dispatch(SetModalType({ modalType }));
+    this.store$.dispatch(SetModalVisible({ modalVisible }));
   }
 }
