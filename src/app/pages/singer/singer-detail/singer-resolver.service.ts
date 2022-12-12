@@ -4,7 +4,7 @@ import { SingerDetail, SongSheet } from 'src/app/services/data.types/common.type
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 
-import { SingerService } from '../../../services/singer.service ';
+import { SingerService } from '../../../services/singer.service';
 
 @Injectable()
 export class SingerResolverService implements Resolve<SingerDetail> {
