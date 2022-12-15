@@ -1,5 +1,11 @@
-<div class="m-layer" [style.visibility]="showModal ? 'visible' : 'hide'" #modalContainer>
-  <div class="zbar">
+<div
+  class="m-layer"
+  #modalContainer
+  [@showHide]="showModal"
+  cdkDrag
+  cdkDragBoundary=".cdk-overlay-container"
+>
+  <div class="zbar" cdkDragHandle>
     <div class="zttl f-thide">Title</div>
   </div>
   <ng-content></ng-content>
