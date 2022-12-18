@@ -33,7 +33,7 @@ import { getModalType, getModalVisible } from '../../../../store/selectors/membe
 export class WyLayerModalComponent implements OnInit, AfterViewInit {
   showModal = 'hide';
   private visable: boolean = false;
-  private currentModalType: ModalTypes = ModalTypes.Default;
+  currentModalType: ModalTypes = ModalTypes.Default;
   private overlayRef: OverlayRef;
   private scrollStrategy: BlockScrollStrategy;
   private overlayContainerEl: HTMLElement;
@@ -116,6 +116,7 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit {
   private watchModalType(type: ModalTypes) {
     if (this.currentModalType !== type) {
       this.currentModalType = type;
+      this.cdr.markForCheck();
     }
   }
 

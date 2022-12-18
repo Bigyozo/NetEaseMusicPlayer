@@ -2,6 +2,7 @@ import { NzCarouselComponent } from 'ng-zorro-antd';
 import { map } from 'rxjs/internal/operators';
 import { Banner, HotTag, Singer, SongSheet } from 'src/app/services/data.types/common.types';
 import { SheetService } from 'src/app/services/sheet.service';
+import { ModalTypes } from 'src/app/store/reducers/member.reducer';
 
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -61,6 +62,6 @@ export class HomeComponent implements OnInit {
   }
 
   openModal() {
-    this.batchActionsService.controlModal();
+    this.batchActionsService.controlModal(true, ModalTypes.Default);
   }
 }
