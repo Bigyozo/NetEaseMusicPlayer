@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 
 import { SearchResult } from './services/data.types/common.types';
 import { SearchService } from './services/search.service';
+import { LoginParams } from './share/wy-ui/wy-layer/wy-layer-login/wy-layer-login.component';
 import { SetModalType } from './store/actions/member.action';
 import { BatchActionsService } from './store/batch-actions.service';
 import { AppStoreModule } from './store/index';
@@ -66,5 +67,9 @@ export class AppComponent {
 
   openModal(type: ModalTypes) {
     this.batchActionsService.controlModal(true, type);
+  }
+
+  onLogin(params: LoginParams) {
+    console.log(params);
   }
 }
