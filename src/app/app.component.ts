@@ -1,9 +1,12 @@
+import { NzMessageService } from 'ng-zorro-antd';
 import { ModalTypes } from 'src/app/store/reducers/member.reducer';
 
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import { SearchResult } from './services/data.types/common.types';
+import { User } from './services/data.types/member.type';
+import { MemberService } from './services/member.service';
 import { SearchService } from './services/search.service';
 import { LoginParams } from './share/wy-ui/wy-layer/wy-layer-login/wy-layer-login.component';
 import { SetModalType } from './store/actions/member.action';
@@ -30,12 +33,22 @@ export class AppComponent {
   ];
 
   searchResult: SearchResult;
+  user: User;
 
   constructor(
     private searchService: SearchService,
     private store$: Store<AppStoreModule>,
-    private batchActionsService: BatchActionsService
-  ) {}
+    private batchActionsService: BatchActionsService,
+    private memberService: MemberService,
+    private messageService: NzMessageService
+  ) {
+    const userId = localStorage.getItem('wyUserID');
+    if (userId) {
+      this.memberService.getUserDetail(userId).subscribe((user) => {
+        this.user = user;
+      });
+    }
+  }
 
   onSearch(keywords: string) {
     if (keywords) {
@@ -71,5 +84,38 @@ export class AppComponent {
 
   onLogin(params: LoginParams) {
     console.log(params);
+    this.memberService.login(params).subscribe(
+      (user) => {
+        this.user = user;
+        this.batchActionsService.controlModal(false);
+        this.alertMessage('success', 'Login success');
+        localStorage.setItem('wyUserID', user.profile.userId.toString());
+        if (params.remember) {
+          localStorage.setItem('wyRememberLogin', JSON.stringify(params));
+        } else {
+          localStorage.removeItem('wyRememberLogin');
+        }
+      },
+      ({ error }) => {
+        this.alertMessage('error', error.message || 'Login fail');
+      }
+    );
+  }
+
+  onLogout() {
+    this.memberService.logout().subscribe(
+      () => {
+        this.user = null;
+        localStorage.removeItem('wyUserID');
+        this.alertMessage('success', 'Logout success');
+      },
+      ({ error }) => {
+        this.alertMessage('error', error.message || 'Logout fail');
+      }
+    );
+  }
+
+  private alertMessage(type: string, msg: string) {
+    this.messageService.create(type, msg);
   }
 }
