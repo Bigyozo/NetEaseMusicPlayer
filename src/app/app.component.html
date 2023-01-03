@@ -69,6 +69,7 @@
 <app-wy-layer-modal>
   <app-wy-layer-login
     name="login"
+    [wyRememberLogin]="wyRememberLogin"
     (onChangeModalType)="onChangeModalType($event)"
     (onLogin)="onLogin($event)"
   ></app-wy-layer-login>

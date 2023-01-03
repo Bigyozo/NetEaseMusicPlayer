@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { codeJson } from 'src/app/utils/base64';
+
+import {
+    ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output,
+    SimpleChanges
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 export type LoginParams = {
@@ -12,7 +17,8 @@ export type LoginParams = {
   styleUrls: ['./wy-layer-login.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class WyLayerLoginComponent implements OnInit {
+export class WyLayerLoginComponent implements OnInit, OnChanges {
+  @Input() wyRememberLogin: LoginParams;
   @Output() onChangeModalType = new EventEmitter<string | void>();
   @Output() onLogin = new EventEmitter<LoginParams>();
   formModel: FormGroup;
@@ -25,6 +31,30 @@ export class WyLayerLoginComponent implements OnInit {
   }
 
   ngOnInit() {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    const userLoginParams = changes['wyRememberLogin'];
+    if (userLoginParams) {
+      let phone = '';
+      let password = '';
+      let remember = false;
+      if (userLoginParams.currentValue) {
+        const value = codeJson(userLoginParams.currentValue, 'decode');
+        phone = value.phone;
+        password = value.password;
+        remember = value.remember;
+      }
+      this.setModel({ phone, password, remember });
+    }
+  }
+
+  private setModel({ phone, password, remember }) {
+    this.formModel = this.fb.group({
+      phone: [phone, [Validators.required, Validators.pattern(/^1\d{10}$/)]],
+      password: [password, [Validators.required, Validators.minLength(6)]],
+      remember: [remember]
+    });
+  }
 
   onSubmit() {
     const model = this.formModel;

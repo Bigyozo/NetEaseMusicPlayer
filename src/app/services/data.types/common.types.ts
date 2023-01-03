@@ -1,3 +1,11 @@
+export interface AnyJson {
+  [key: string]: any;
+}
+
+export interface SampleBack extends AnyJson {
+  code: number;
+}
+
 export type Banner = {
   targetId: number;
   url: string;

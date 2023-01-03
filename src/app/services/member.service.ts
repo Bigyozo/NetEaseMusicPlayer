@@ -6,8 +6,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 
 import { LoginParams } from '../share/wy-ui/wy-layer/wy-layer-login/wy-layer-login.component';
-import { Banner, HotTag, SongSheet } from './data.types/common.types';
-import { SampleBack, User } from './data.types/member.type';
+import { SampleBack } from './data.types/common.types';
+import { User } from './data.types/member.type';
 import { API_CONFIG, ServicesModule } from './services.module';
 
 @Injectable({

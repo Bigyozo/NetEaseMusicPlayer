@@ -45,8 +45,3 @@ export interface UserSheet {
   self: SongSheet[];
   subscribed: SongSheet[];
 }
-
-export type SampleBack = {
-  code: number;
-  [key: string]: any;
-};
