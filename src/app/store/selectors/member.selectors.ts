@@ -1,7 +1,6 @@
 import { createSelector } from '@ngrx/store';
 
 import { MemberState } from '../reducers/member.reducer';
-import { PlayState } from '../reducers/player.reducer';
 
 const selectMemberStates = (state: MemberState) => state;
 
@@ -13,3 +12,4 @@ export const getModalType = createSelector(
   selectMemberStates,
   (state: MemberState) => state.modalType
 );
+export const getUserId = createSelector(selectMemberStates, (state: MemberState) => state.userId);

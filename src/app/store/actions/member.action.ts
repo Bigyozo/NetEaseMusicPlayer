@@ -11,3 +11,5 @@ export const SetModalType = createAction(
   '[member] Set modal type',
   props<{ modalType: ModalTypes }>()
 );
+
+export const SetUserId = createAction('[member] Set user Id', props<{ userId: string }>());

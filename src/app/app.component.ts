@@ -8,9 +8,9 @@ import { SearchResult } from './services/data.types/common.types';
 import { User } from './services/data.types/member.type';
 import { MemberService } from './services/member.service';
 import { SearchService } from './services/search.service';
-import { StorgeService } from './services/storge.service';
+import { StorageService } from './services/storage.service';
 import { LoginParams } from './share/wy-ui/wy-layer/wy-layer-login/wy-layer-login.component';
-import { SetModalType } from './store/actions/member.action';
+import { SetModalType, SetUserId } from './store/actions/member.action';
 import { BatchActionsService } from './store/batch-actions.service';
 import { AppStoreModule } from './store/index';
 import { codeJson } from './utils/base64';
@@ -44,15 +44,16 @@ export class AppComponent {
     private batchActionsService: BatchActionsService,
     private memberService: MemberService,
     private messageService: NzMessageService,
-    private storgeService: StorgeService
+    private storgeService: StorageService
   ) {
-    const userId = this.storgeService.getStorge('wyUserID');
+    const userId = this.storgeService.getStorage('wyUserID');
     if (userId) {
       this.memberService.getUserDetail(userId).subscribe((user) => {
         this.user = user;
       });
+      this.store$.dispatch(SetUserId({ userId }));
     }
-    const wyRememberLogin = this.storgeService.getStorge('wyRememberLogin');
+    const wyRememberLogin = this.storgeService.getStorage('wyRememberLogin');
     if (wyRememberLogin) {
       this.wyRememberLogin = JSON.parse(wyRememberLogin);
     }
@@ -97,9 +98,10 @@ export class AppComponent {
         this.user = user;
         this.batchActionsService.controlModal(false);
         this.alertMessage('success', 'Login success');
-        this.storgeService.setStorge({ key: 'wyUserID', value: user.profile.userId });
+        this.storgeService.setStorage({ key: 'wyUserID', value: user.profile.userId });
+        this.store$.dispatch(SetUserId({ userId: user.profile.userId.toString() }));
         if (params.remember) {
-          this.storgeService.setStorge({
+          this.storgeService.setStorage({
             key: 'wyRememberLogin',
             value: JSON.stringify(codeJson(params))
           });
@@ -118,6 +120,7 @@ export class AppComponent {
       () => {
         this.user = null;
         this.storgeService.removeStorge('wyUserID');
+        this.store$.dispatch(SetUserId({ userId: '' }));
         this.alertMessage('success', 'Logout success');
       },
       ({ error }) => {

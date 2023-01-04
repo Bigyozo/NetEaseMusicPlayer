@@ -11,9 +11,18 @@ type HomeDataType = [Banner[], HotTag[], SongSheet[], Singer[]];
 
 @Injectable({ providedIn: 'root' })
 export class HomeResolverService implements Resolve<HomeDataType> {
-  constructor(private homeService: HomeService, private singerService: SingerService) {}
+  constructor(
+    private homeService: HomeService,
+    private singerService: SingerService // private memberService: MemberService,
+  ) // private storgeService: StorgeService
+  {}
 
   resolve(): Observable<HomeDataType> {
+    // const userId = this.storgeService.getStorge('wyUserId');
+    // let detail$ = of(null);
+    // if (userId) {
+    //   detail$ = this.memberService.getUserDetail(userId);
+    // }
     return forkJoin([
       this.homeService.getBanners(),
       this.homeService.getHotTags(),

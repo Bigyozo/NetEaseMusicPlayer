@@ -1,13 +1,18 @@
 import { NzCarouselComponent } from 'ng-zorro-antd';
 import { map } from 'rxjs/internal/operators';
 import { Banner, HotTag, Singer, SongSheet } from 'src/app/services/data.types/common.types';
+import { User } from 'src/app/services/data.types/member.type';
+import { MemberService } from 'src/app/services/member.service';
 import { SheetService } from 'src/app/services/sheet.service';
-import { ModalTypes } from 'src/app/store/reducers/member.reducer';
+import { MemberState, ModalTypes } from 'src/app/store/reducers/member.reducer';
 
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { createFeatureSelector, select, Store } from '@ngrx/store';
 
 import { BatchActionsService } from '../../store/batch-actions.service';
+import { AppStoreModule } from '../../store/index';
+import { getUserId } from '../../store/selectors/member.selectors';
 
 @Component({
   selector: 'app-home',
@@ -21,6 +26,7 @@ export class HomeComponent implements OnInit {
   hotTags: HotTag[];
   songSheetList: SongSheet[];
   singerList: Singer[];
+  user: User;
 
   @ViewChild(NzCarouselComponent, { static: true })
   private nzCarousel: NzCarouselComponent;
@@ -29,7 +35,9 @@ export class HomeComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private sheetService: SheetService,
-    private batchActionsService: BatchActionsService
+    private batchActionsService: BatchActionsService,
+    private store$: Store<AppStoreModule>,
+    private memberService: MemberService
   ) {
     this.route.data
       .pipe(map((res) => res.homeDatas))
@@ -39,6 +47,22 @@ export class HomeComponent implements OnInit {
         this.songSheetList = songSheetList;
         this.singerList = singerList;
       });
+
+    this.store$
+      .pipe(select(createFeatureSelector<MemberState>('member')), select(getUserId))
+      .subscribe((userId) => {
+        if (userId) {
+          this.getUserDetail(userId);
+        } else {
+          this.user = null;
+        }
+      });
+  }
+
+  private getUserDetail(userId: string) {
+    this.memberService.getUserDetail(userId).subscribe((user) => {
+      this.user = user;
+    });
   }
 
   ngOnInit() {}
