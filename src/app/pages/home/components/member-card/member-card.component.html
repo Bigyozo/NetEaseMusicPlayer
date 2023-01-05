@@ -3,8 +3,39 @@
     <p>Login in NetEase Music</p>
     <button nz-button class="btn" (click)="openModal.emit()">Login In</button>
   </div>
-</div>
+  <ng-template #logined>
+    <div class="n-myinfo">
+      <div class="f-cb clearfix">
+        <div class="head">
+          <img [src]="user.profile.avatarUrl" [alt]="user.profile.nickname" />
+        </div>
+        <div class="info">
+          <h4>
+            <a class="nm ellipsis">{{ user.profile.nickname }}</a>
+          </h4>
+          <p class="lv">
+            <span class="u-lv u-icn2"> {{ user.level }}<i class="lvright u-icn2"></i> </span>
+          </p>
+          <div class="btnwrap f-pr">
+            <button nz-button nzType="primary" nzBlock (click)="onSignin()">签到</button>
+          </div>
+        </div>
+      </div>
 
-<ng-template #logined>
-  <p>has logined</p>
-</ng-template>
+      <ul class="dny clearfix">
+        <li class="fst">
+          <strong class="ellipsis">{{ user.profile.eventCount }}</strong>
+          <span>动态</span>
+        </li>
+        <li>
+          <strong class="ellipsis">{{ user.profile.follows }}</strong>
+          <span>关注</span>
+        </li>
+        <li class="lst">
+          <strong class="ellipsis">{{ user.profile.followeds }}</strong>
+          <span>粉丝数</span>
+        </li>
+      </ul>
+    </div>
+  </ng-template>
+</div>
