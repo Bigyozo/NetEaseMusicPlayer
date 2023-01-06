@@ -109,7 +109,7 @@ export class AppComponent {
           this.storgeService.removeStorge('wyRememberLogin');
         }
       },
-      ({ error }) => {
+      (error) => {
         this.alertMessage('error', error.message || 'Login fail');
       }
     );
@@ -123,7 +123,7 @@ export class AppComponent {
         this.store$.dispatch(SetUserId({ userId: '' }));
         this.alertMessage('success', 'Logout success');
       },
-      ({ error }) => {
+      (error) => {
         this.alertMessage('error', error.message || 'Logout fail');
       }
     );
