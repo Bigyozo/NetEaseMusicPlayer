@@ -52,7 +52,7 @@ export type SongSheet = {
   subscribedCount: number;
   shareCount: number;
   commentCount: number;
-  Subscribed: boolean;
+  subscribed: boolean;
   tracks: Song[];
 };
 
