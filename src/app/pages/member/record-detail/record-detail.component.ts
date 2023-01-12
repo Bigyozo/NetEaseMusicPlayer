@@ -2,12 +2,13 @@ import { NzMessageService } from 'ng-zorro-antd';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/internal/operators';
 import { Song } from 'src/app/services/data.types/common.types';
-import { RecordVal, User, UserSheet } from 'src/app/services/data.types/member.type';
+import { RecordVal, User } from 'src/app/services/data.types/member.type';
 import { MemberService, RecordType } from 'src/app/services/member.service';
 import { SheetService } from 'src/app/services/sheet.service';
 import { SongService } from 'src/app/services/song.service';
 import { AppStoreModule } from 'src/app/store';
 import { BatchActionsService } from 'src/app/store/batch-actions.service';
+import { PlayState } from 'src/app/store/reducers/player.reducer';
 import { getCurrentSong } from 'src/app/store/selectors/play.selectors';
 import { findIndex } from 'src/app/utils/array';
 
@@ -17,18 +18,21 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
 
-import { PlayState } from '../../../store/reducers/player.reducer';
-
 @Component({
-  selector: 'app-center',
-  templateUrl: './center.component.html',
-  styleUrls: ['./center.component.less'],
+  selector: 'app-record-detail',
+  templateUrl: './record-detail.component.html',
+  styles: [
+    `
+      .record-detail .page-wrap {
+        padding: 40px;
+      }
+    `
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CenterComponent implements OnInit, OnDestroy {
+export class RecordDetailComponent implements OnInit, OnDestroy {
   user: User;
   records: RecordVal[];
-  userSheet: UserSheet;
   recordType = RecordType.weekData;
   private currentSong: Song;
   currentIndex = -1;
@@ -44,13 +48,14 @@ export class CenterComponent implements OnInit, OnDestroy {
     private store$: Store<AppStoreModule>,
     private cdr: ChangeDetectorRef
   ) {
-    this.route.data.pipe(map((res) => res.user)).subscribe(([user, userRecord, userSheet]) => {
+    this.route.data.pipe(map((res) => res.user)).subscribe(([user, userRecord]) => {
       this.user = user;
-      this.records = userRecord.slice(0, 10);
-      this.userSheet = userSheet;
+      this.records = userRecord;
       this.listenCurrentSong();
     });
   }
+
+  ngOnInit() {}
 
   ngOnDestroy(): void {
     this.destory$.next();
@@ -76,8 +81,6 @@ export class CenterComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnInit() {}
-
   onPlaySheet(id: number) {
     this.sheetService.playsheet(id).subscribe((list) => {
       this.batchActionsService.selectPlayList({ list, index: 0 });
@@ -90,7 +93,7 @@ export class CenterComponent implements OnInit, OnDestroy {
       this.memberService
         .getUserRecord(this.user.profile.userId.toString(), type)
         .subscribe((records) => {
-          this.records = records.slice(0, 10);
+          this.records = records;
           this.cdr.markForCheck();
         });
     }
