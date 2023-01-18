@@ -11,7 +11,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
 
-import { SingerDetail, Song } from '../../../services/data.types/common.types';
+import { Singer, SingerDetail, Song } from '../../../services/data.types/common.types';
 import { getCurrentSong } from '../../../store/selectors/play.selectors';
 
 @Component({
@@ -24,6 +24,8 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
   currentSong: Song;
   currentIndex = -1;
   private destroy$ = new Subject<void>();
+  simiSingers: Singer[];
+
   constructor(
     private route: ActivatedRoute,
     private store$: Store<AppStoreModule>,
@@ -31,8 +33,9 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
     private batchActionsService: BatchActionsService,
     private nzMessageService: NzMessageService
   ) {
-    this.route.data.pipe(map((res) => res.singerDetail)).subscribe((detail) => {
+    this.route.data.pipe(map((res) => res.singerDetail)).subscribe(([detail, simiSingers]) => {
       this.singerDetail = detail;
+      this.simiSingers = simiSingers;
       this.listenCurrent();
     });
   }

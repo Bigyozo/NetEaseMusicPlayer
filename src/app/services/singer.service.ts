@@ -1,5 +1,5 @@
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/internal/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/internal/operators';
 
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
@@ -42,8 +42,12 @@ export class SingerService {
   //获取相似歌手详情
   getSimilarSinger(id: string): Observable<Singer[]> {
     const params = new HttpParams().set('id', id);
-    return this.http
-      .get(this.uri + 'simi/artists', { params })
-      .pipe(map((res: { artists: Singer[] }) => res.artists));
+    return this.http.get(this.uri + 'simi/artist', { params }).pipe(
+      map((res: { artists: Singer[] }) => res.artists),
+      catchError((err) => {
+        console.log(err);
+        return of([]);
+      })
+    );
   }
 }
