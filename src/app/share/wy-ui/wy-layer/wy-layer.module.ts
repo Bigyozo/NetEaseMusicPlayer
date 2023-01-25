@@ -9,11 +9,17 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { WyLayerDefaultComponent } from './wy-layer-default/wy-layer-default.component';
-import { WyLayerLoginComponent } from './wy-layer-login/wy-layer-login.component';
+import { WyLayerEmailLoginComponent } from './wy-layer-emailLogin/wy-layer-emailLogin.component';
 import { WyLayerModalComponent } from './wy-layer-modal/wy-layer-modal.component';
+import { WyLayerPhoneLoginComponent } from './wy-layer-phoneLogin/wy-layer-phoneLogin.component';
 
 @NgModule({
-  declarations: [WyLayerModalComponent, WyLayerDefaultComponent, WyLayerLoginComponent],
+  declarations: [
+    WyLayerModalComponent,
+    WyLayerDefaultComponent,
+    WyLayerPhoneLoginComponent,
+    WyLayerEmailLoginComponent
+  ],
   imports: [
     CommonModule,
     NzButtonModule,
@@ -28,6 +34,11 @@ import { WyLayerModalComponent } from './wy-layer-modal/wy-layer-modal.component
     NzFormModule,
     FormsModule
   ],
-  exports: [WyLayerModalComponent, WyLayerDefaultComponent, WyLayerLoginComponent]
+  exports: [
+    WyLayerModalComponent,
+    WyLayerDefaultComponent,
+    WyLayerPhoneLoginComponent,
+    WyLayerEmailLoginComponent
+  ]
 })
 export class WyLayerModule {}

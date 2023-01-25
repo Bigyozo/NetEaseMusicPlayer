@@ -45,3 +45,15 @@ export interface UserSheet {
   self: SongSheet[];
   subscribed: SongSheet[];
 }
+
+export type PhoneLoginParams = {
+  phone: number;
+  password: string;
+  remember: boolean;
+};
+
+export type EmailLoginParams = {
+  email: string;
+  password: string;
+  remember: boolean;
+};

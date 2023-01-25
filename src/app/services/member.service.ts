@@ -5,9 +5,10 @@ import { map } from 'rxjs/internal/operators';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 
-import { LoginParams } from '../share/wy-ui/wy-layer/wy-layer-login/wy-layer-login.component';
 import { SampleBack, SongSheet } from './data.types/common.types';
-import { RecordVal, Signin, User, UserRecord, UserSheet } from './data.types/member.type';
+import {
+    EmailLoginParams, PhoneLoginParams, RecordVal, Signin, User, UserRecord, UserSheet
+} from './data.types/member.type';
 import { API_CONFIG, ServicesModule } from './services.module';
 
 export enum RecordType {
@@ -21,9 +22,14 @@ export enum RecordType {
 export class MemberService {
   constructor(private http: HttpClient, @Inject(API_CONFIG) private uri: string) {}
 
-  login(formValue: LoginParams): Observable<User> {
+  phoneLogin(formValue: PhoneLoginParams): Observable<User> {
     const params = new HttpParams({ fromString: queryString.stringify(formValue) });
     return this.http.get(this.uri + 'login/cellphone', { params }).pipe(map((res) => res as User));
+  }
+
+  emailLogin(formValue: EmailLoginParams): Observable<User> {
+    const params = new HttpParams({ fromString: queryString.stringify(formValue) });
+    return this.http.get(this.uri + 'login', { params }).pipe(map((res) => res as User));
   }
 
   getUserDetail(uid: string): Observable<User> {

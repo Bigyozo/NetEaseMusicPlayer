@@ -5,11 +5,10 @@ import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import { SearchResult } from './services/data.types/common.types';
-import { User } from './services/data.types/member.type';
+import { EmailLoginParams, PhoneLoginParams, User } from './services/data.types/member.type';
 import { MemberService } from './services/member.service';
 import { SearchService } from './services/search.service';
 import { StorageService } from './services/storage.service';
-import { LoginParams } from './share/wy-ui/wy-layer/wy-layer-login/wy-layer-login.component';
 import { SetModalType, SetUserId } from './store/actions/member.action';
 import { BatchActionsService } from './store/batch-actions.service';
 import { AppStoreModule } from './store/index';
@@ -36,7 +35,8 @@ export class AppComponent {
 
   searchResult: SearchResult;
   user: User;
-  wyRememberLogin: LoginParams;
+  wyRememberPhoneLogin: PhoneLoginParams;
+  wyRememberEmailLogin: EmailLoginParams;
 
   constructor(
     private searchService: SearchService,
@@ -53,9 +53,13 @@ export class AppComponent {
       });
       this.store$.dispatch(SetUserId({ userId }));
     }
-    const wyRememberLogin = this.storgeService.getStorage('wyRememberLogin');
-    if (wyRememberLogin) {
-      this.wyRememberLogin = JSON.parse(wyRememberLogin);
+    const wyRememberPhoneLogin = this.storgeService.getStorage('wyRememberPhoneLogin');
+    if (wyRememberPhoneLogin) {
+      this.wyRememberPhoneLogin = JSON.parse(wyRememberPhoneLogin);
+    }
+    const wyRememberEmailLogin = this.storgeService.getStorage('wyRememberEmailLogin');
+    if (wyRememberEmailLogin) {
+      this.wyRememberEmailLogin = JSON.parse(wyRememberEmailLogin);
     }
   }
 
@@ -91,9 +95,9 @@ export class AppComponent {
     this.batchActionsService.controlModal(true, type);
   }
 
-  onLogin(params: LoginParams) {
+  onPhoneLogin(params: PhoneLoginParams) {
     console.log(params);
-    this.memberService.login(params).subscribe(
+    this.memberService.phoneLogin(params).subscribe(
       (user) => {
         this.user = user;
         this.batchActionsService.controlModal(false);
@@ -102,11 +106,35 @@ export class AppComponent {
         this.store$.dispatch(SetUserId({ userId: user.profile.userId.toString() }));
         if (params.remember) {
           this.storgeService.setStorage({
-            key: 'wyRememberLogin',
+            key: 'wyRememberPhoneLogin',
             value: JSON.stringify(codeJson(params))
           });
         } else {
-          this.storgeService.removeStorge('wyRememberLogin');
+          this.storgeService.removeStorge('wyRememberPhoneLogin');
+        }
+      },
+      (error) => {
+        this.alertMessage('error', error.message || 'Login fail');
+      }
+    );
+  }
+
+  onEmailLogin(params: EmailLoginParams) {
+    console.log(params);
+    this.memberService.emailLogin(params).subscribe(
+      (user) => {
+        this.user = user;
+        this.batchActionsService.controlModal(false);
+        this.alertMessage('success', 'Login success');
+        this.storgeService.setStorage({ key: 'wyUserID', value: user.profile.userId });
+        this.store$.dispatch(SetUserId({ userId: user.profile.userId.toString() }));
+        if (params.remember) {
+          this.storgeService.setStorage({
+            key: 'wyRememberEmailLogin',
+            value: JSON.stringify(codeJson(params))
+          });
+        } else {
+          this.storgeService.removeStorge('wyRememberEmailLogin');
         }
       },
       (error) => {

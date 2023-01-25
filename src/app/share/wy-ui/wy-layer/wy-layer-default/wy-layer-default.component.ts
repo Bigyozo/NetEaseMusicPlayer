@@ -12,12 +12,20 @@ import { ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output } from
           <div class="methods">
             <button
               nz-button
-              nzType="primary"
               nzSize="large"
               nzBlock
               (click)="onChangeModalType.emit('loginByPhone')"
             >
               手机号登陆
+            </button>
+            <button
+              nz-button
+              nzType="primary"
+              nzSize="large"
+              nzBlock
+              (click)="onChangeModalType.emit('loginByEmail')"
+            >
+              邮箱登陆
             </button>
             <button nz-button nzSize="large" nzBlock (click)="onChangeModalType.emit('register')">
               注册

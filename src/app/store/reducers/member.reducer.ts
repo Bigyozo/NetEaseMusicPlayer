@@ -5,6 +5,7 @@ import { SetModalType, SetModalVisible, SetUserId } from '../actions/member.acti
 export enum ModalTypes {
   Register = 'register',
   LogingByPhone = 'loginByPhone',
+  LogingByEmail = 'loginByEmail',
   Share = 'share',
   Like = 'like',
   Default = 'default'

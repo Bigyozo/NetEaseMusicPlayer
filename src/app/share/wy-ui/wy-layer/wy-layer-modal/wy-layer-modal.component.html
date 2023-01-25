@@ -10,7 +10,10 @@
   </div>
   <ng-container [ngSwitch]="currentModalType">
     <ng-container *ngSwitchCase="'loginByPhone'">
-      <ng-content select="[name=login]"></ng-content>
+      <ng-content select="[name=phoneLogin]"></ng-content>
+    </ng-container>
+    <ng-container *ngSwitchCase="'loginByEmail'">
+      <ng-content select="[name=emailLogin]"></ng-content>
     </ng-container>
     <ng-container *ngSwitchCase="'register'">
       <ng-content select="[name=register]"></ng-content>

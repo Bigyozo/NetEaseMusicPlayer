@@ -1,3 +1,4 @@
+import { PhoneLoginParams } from 'src/app/services/data.types/member.type';
 import { codeJson } from 'src/app/utils/base64';
 
 import {
@@ -6,21 +7,16 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-export type LoginParams = {
-  phone: number;
-  password: string;
-  remember: boolean;
-};
 @Component({
-  selector: 'app-wy-layer-login',
-  templateUrl: './wy-layer-login.component.html',
-  styleUrls: ['./wy-layer-login.component.less'],
+  selector: 'app-wy-layer-phoneLogin',
+  templateUrl: './wy-layer-phoneLogin.component.html',
+  styleUrls: ['./wy-layer-phoneLogin.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class WyLayerLoginComponent implements OnInit, OnChanges {
-  @Input() wyRememberLogin: LoginParams;
+export class WyLayerPhoneLoginComponent implements OnInit, OnChanges {
+  @Input() wyRememberLogin: PhoneLoginParams;
   @Output() onChangeModalType = new EventEmitter<string | void>();
-  @Output() onLogin = new EventEmitter<LoginParams>();
+  @Output() onLogin = new EventEmitter<PhoneLoginParams>();
   formModel: FormGroup;
   constructor(private fb: FormBuilder) {
     this.formModel = this.fb.group({
