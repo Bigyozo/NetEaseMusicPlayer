@@ -72,7 +72,7 @@
 </div>
 
 <app-wy-player></app-wy-player>
-<app-wy-layer-modal>
+<app-wy-layer-modal (onLoadMySheets)="onLoadMySheets()">
   <app-wy-layer-phoneLogin
     name="phoneLogin"
     [wyRememberLogin]="wyRememberPhoneLogin"
@@ -85,5 +85,6 @@
     (onChangeModalType)="onChangeModalType($event)"
     (onLogin)="onEmailLogin($event)"
   ></app-wy-layer-emailLogin>
+  <app-wy-layer-like name="like" [mySheets]="mySheets"></app-wy-layer-like>
   <app-wy-layer-default (onChangeModalType)="onChangeModalType($event)"></app-wy-layer-default>
 </app-wy-layer-modal>

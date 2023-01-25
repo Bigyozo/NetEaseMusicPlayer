@@ -1,6 +1,7 @@
 import { NzMessageService } from 'ng-zorro-antd';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { map, takeUntil } from 'rxjs/internal/operators';
+import { ModalTypes } from 'src/app/store/reducers/member.reducer';
 import { PlayState } from 'src/app/store/reducers/player.reducer';
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
@@ -126,5 +127,9 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
         this.batchActionsService.insertSongs(list);
       }
     });
+  }
+
+  onLikeSong(id: string) {
+    this.batchActionsService.controlModal(true, ModalTypes.Like);
   }
 }

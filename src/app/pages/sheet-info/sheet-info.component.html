@@ -26,7 +26,7 @@
                 sheetInfo.creator?.nickname
               }}</a>
             </span>
-            <span class="time s-fcd">{{ sheetInfo.createTime | date: 'yyyy-MM-dd' }}创建</span>
+            <span class="time s-fcd">{{ sheetInfo.createTime | date : 'yyyy-MM-dd' }}创建</span>
           </div>
 
           <div class="btns">
@@ -112,7 +112,7 @@
               <span>{{ item.dt / 1000 | formatTime }}</span>
               <p class="icons">
                 <i class="ico add" title="添加" (click)="onAddSong(item)"></i>
-                <i class="ico like" title="收藏"></i>
+                <i class="ico like" title="收藏" (click)="onLikeSong(item.id.toString())"></i>
                 <i class="ico share" title="分享"></i>
               </p>
             </td>

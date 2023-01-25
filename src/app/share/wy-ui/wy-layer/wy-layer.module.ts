@@ -10,6 +10,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { WyLayerDefaultComponent } from './wy-layer-default/wy-layer-default.component';
 import { WyLayerEmailLoginComponent } from './wy-layer-emailLogin/wy-layer-emailLogin.component';
+import { WyLayerLikeComponent } from './wy-layer-like/wy-layer-like.component';
 import { WyLayerModalComponent } from './wy-layer-modal/wy-layer-modal.component';
 import { WyLayerPhoneLoginComponent } from './wy-layer-phoneLogin/wy-layer-phoneLogin.component';
 
@@ -18,7 +19,8 @@ import { WyLayerPhoneLoginComponent } from './wy-layer-phoneLogin/wy-layer-phone
     WyLayerModalComponent,
     WyLayerDefaultComponent,
     WyLayerPhoneLoginComponent,
-    WyLayerEmailLoginComponent
+    WyLayerEmailLoginComponent,
+    WyLayerLikeComponent
   ],
   imports: [
     CommonModule,
@@ -38,7 +40,8 @@ import { WyLayerPhoneLoginComponent } from './wy-layer-phoneLogin/wy-layer-phone
     WyLayerModalComponent,
     WyLayerDefaultComponent,
     WyLayerPhoneLoginComponent,
-    WyLayerEmailLoginComponent
+    WyLayerEmailLoginComponent,
+    WyLayerLikeComponent
   ]
 })
 export class WyLayerModule {}

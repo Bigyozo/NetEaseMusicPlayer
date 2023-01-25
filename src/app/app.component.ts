@@ -4,12 +4,12 @@ import { ModalTypes } from 'src/app/store/reducers/member.reducer';
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 
-import { SearchResult } from './services/data.types/common.types';
+import { SearchResult, SongSheet } from './services/data.types/common.types';
 import { EmailLoginParams, PhoneLoginParams, User } from './services/data.types/member.type';
 import { MemberService } from './services/member.service';
 import { SearchService } from './services/search.service';
 import { StorageService } from './services/storage.service';
-import { SetModalType, SetUserId } from './store/actions/member.action';
+import { SetModalType, SetModalVisible, SetUserId } from './store/actions/member.action';
 import { BatchActionsService } from './store/batch-actions.service';
 import { AppStoreModule } from './store/index';
 import { codeJson } from './utils/base64';
@@ -37,6 +37,7 @@ export class AppComponent {
   user: User;
   wyRememberPhoneLogin: PhoneLoginParams;
   wyRememberEmailLogin: EmailLoginParams;
+  mySheets: SongSheet[];
 
   constructor(
     private searchService: SearchService,
@@ -159,5 +160,19 @@ export class AppComponent {
 
   private alertMessage(type: string, msg: string) {
     this.messageService.create(type, msg);
+  }
+
+  //获取当前用户的歌单
+  onLoadMySheets() {
+    if (this.user) {
+      this.memberService
+        .getUserSheets(this.user.profile.userId.toString())
+        .subscribe((userSheet) => {
+          this.mySheets = userSheet.self;
+          this.store$.dispatch(SetModalVisible({ modalVisible: true }));
+        });
+    } else {
+      this.openModal(ModalTypes.Default);
+    }
   }
 }

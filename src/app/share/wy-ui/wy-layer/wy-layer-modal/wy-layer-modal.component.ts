@@ -8,8 +8,8 @@ import {
 } from '@angular/cdk/overlay';
 import { DOCUMENT } from '@angular/common';
 import {
-    AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, Input,
-    OnInit, Renderer2, ViewChild
+    AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter,
+    Inject, Input, OnInit, Output, Renderer2, ViewChild
 } from '@angular/core';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
 
@@ -38,6 +38,8 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit {
   private scrollStrategy: BlockScrollStrategy;
   private overlayContainerEl: HTMLElement;
   @ViewChild('modalContainer', { static: false }) private modalRef: ElementRef;
+  @Output()
+  onLoadMySheets = new EventEmitter<void>();
   private resizeHandler: () => void;
 
   constructor(
@@ -115,6 +117,9 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit {
 
   private watchModalType(type: ModalTypes) {
     if (this.currentModalType !== type) {
+      if (type === ModalTypes.Like) {
+        this.onLoadMySheets.emit();
+      }
       this.currentModalType = type;
       this.cdr.markForCheck();
     }
