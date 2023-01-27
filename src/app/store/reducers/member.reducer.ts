@@ -1,6 +1,6 @@
 import { Action, createReducer, on } from '@ngrx/store';
 
-import { SetModalType, SetModalVisible, SetUserId } from '../actions/member.action';
+import { SetLikeId, SetModalType, SetModalVisible, SetUserId } from '../actions/member.action';
 
 export enum ModalTypes {
   Register = 'register',
@@ -15,19 +15,22 @@ export type MemberState = {
   modalVisible: boolean;
   modalType: ModalTypes;
   userId: string;
+  likeId: string;
 };
 
 export const initialState: MemberState = {
   modalVisible: false,
   modalType: ModalTypes.Default,
-  userId: ''
+  userId: '',
+  likeId: ''
 };
 
 const reducer = createReducer(
   initialState,
   on(SetModalVisible, (state, { modalVisible }) => ({ ...state, modalVisible })),
   on(SetModalType, (state, { modalType }) => ({ ...state, modalType })),
-  on(SetUserId, (state, { userId }) => ({ ...state, userId }))
+  on(SetUserId, (state, { userId }) => ({ ...state, userId })),
+  on(SetLikeId, (state, { likeId }) => ({ ...state, likeId }))
 );
 
 export function memberReducer(state: MemberState, action: Action) {

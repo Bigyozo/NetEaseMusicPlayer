@@ -5,7 +5,7 @@ import { createFeatureSelector, select, Store } from '@ngrx/store';
 
 import { Song } from '../services/data.types/common.types';
 import { findIndex, shuffle } from '../utils/array';
-import { SetModalType, SetModalVisible } from './actions/member.action';
+import { SetLikeId, SetModalType, SetModalVisible } from './actions/member.action';
 import {
     SetCurrentAction, SetCurrentIndex, SetPlayList, SetSongList
 } from './actions/player.action';
@@ -121,5 +121,6 @@ export class BatchActionsService {
   //收藏歌曲
   likeSong(id: string) {
     this.store$.dispatch(SetModalType({ modalType: ModalTypes.Like }));
+    this.store$.dispatch(SetLikeId({ likeId: id }));
   }
 }

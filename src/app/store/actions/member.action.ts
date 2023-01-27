@@ -13,3 +13,4 @@ export const SetModalType = createAction(
 );
 
 export const SetUserId = createAction('[member] Set user Id', props<{ userId: string }>());
+export const SetLikeId = createAction('[member] Set like Id', props<{ likeId: string }>());
