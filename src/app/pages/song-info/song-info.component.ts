@@ -70,7 +70,9 @@ export class SongInfoComponent implements OnInit {
 
   onShareSong() {}
 
-  onLikeSong() {}
+  onLikeSong(id: string) {
+    this.batchActionsService.likeSong(id);
+  }
 
   onAddSong(song: Song, isPlay: boolean = false) {
     if (!this.currentSong || this.currentSong.id !== song.id) {

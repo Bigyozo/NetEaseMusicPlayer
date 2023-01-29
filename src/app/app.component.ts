@@ -1,19 +1,25 @@
 import { NzMessageService } from 'ng-zorro-antd';
-import { ModalTypes } from 'src/app/store/reducers/member.reducer';
+import { MemberState, ModalTypes } from 'src/app/store/reducers/member.reducer';
 
 import { Component } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { createFeatureSelector, select, Store } from '@ngrx/store';
 
 import { SearchResult, SongSheet } from './services/data.types/common.types';
 import { EmailLoginParams, PhoneLoginParams, User } from './services/data.types/member.type';
-import { MemberService } from './services/member.service';
+import { LikeSongParams, MemberService } from './services/member.service';
 import { SearchService } from './services/search.service';
 import { StorageService } from './services/storage.service';
 import { SetModalType, SetModalVisible, SetUserId } from './store/actions/member.action';
 import { BatchActionsService } from './store/batch-actions.service';
 import { AppStoreModule } from './store/index';
+import { getLikeId, getModalType, getModalVisible } from './store/selectors/member.selectors';
 import { codeJson } from './utils/base64';
 import { isEmptyObject } from './utils/tools';
+
+type StateArrType = {
+  type: any;
+  cb: (param: any) => void;
+};
 
 @Component({
   selector: 'app-root',
@@ -39,6 +45,12 @@ export class AppComponent {
   wyRememberEmailLogin: EmailLoginParams;
   mySheets: SongSheet[];
 
+  //被收藏歌曲ID
+  likeId: string;
+  //弹框显示
+  visable: boolean;
+  currentModalType: ModalTypes = ModalTypes.Default;
+
   constructor(
     private searchService: SearchService,
     private store$: Store<AppStoreModule>,
@@ -61,6 +73,50 @@ export class AppComponent {
     const wyRememberEmailLogin = this.storgeService.getStorage('wyRememberEmailLogin');
     if (wyRememberEmailLogin) {
       this.wyRememberEmailLogin = JSON.parse(wyRememberEmailLogin);
+    }
+    this.listenStates();
+  }
+
+  private listenStates() {
+    const appStore$ = this.store$.pipe(select(createFeatureSelector<MemberState>('member')));
+    const stateArr: StateArrType[] = [
+      {
+        type: getLikeId,
+        cb: (id) => this.watchLikeId(id)
+      },
+      {
+        type: getModalVisible,
+        cb: (visible) => this.watchModalVisible(visible)
+      },
+      {
+        type: getModalType,
+        cb: (type) => this.watchModalType(type)
+      }
+    ];
+
+    stateArr.forEach((item) => {
+      appStore$.pipe(select(item.type)).subscribe(item.cb);
+    });
+  }
+
+  private watchLikeId(id: any) {
+    if (id) {
+      this.likeId = id;
+    }
+  }
+
+  private watchModalType(type: ModalTypes) {
+    if (this.currentModalType !== type) {
+      if (type === ModalTypes.Like) {
+        this.onLoadMySheets();
+      }
+      this.currentModalType = type;
+    }
+  }
+
+  private watchModalVisible(visible: boolean) {
+    if (this.visable !== visible) {
+      this.visable = visible;
     }
   }
 
@@ -158,10 +214,6 @@ export class AppComponent {
     );
   }
 
-  private alertMessage(type: string, msg: string) {
-    this.messageService.create(type, msg);
-  }
-
   //获取当前用户的歌单
   onLoadMySheets() {
     if (this.user) {
@@ -174,5 +226,14 @@ export class AppComponent {
     } else {
       this.openModal(ModalTypes.Default);
     }
+  }
+
+  //收藏歌曲
+  onLikeSong(args: LikeSongParams) {
+    console.log('LikeSongParams', args);
+  }
+
+  private alertMessage(type: string, msg: string) {
+    this.messageService.create(type, msg);
   }
 }

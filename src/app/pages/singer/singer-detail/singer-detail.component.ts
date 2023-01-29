@@ -90,7 +90,9 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  onLikeSong() {}
+  onLikeSong(id: string) {
+    this.batchActionsService.likeSong(id);
+  }
 
   onShareSong() {}
 }

@@ -92,7 +92,6 @@ export class WyPlayerComponent implements OnInit {
 
   constructor(
     private store$: Store<AppStoreModule>,
-    @Inject(DOCUMENT) private doc: Document,
     private nzModalService: NzModalService,
     private batchActionsService: BatchActionsService,
     private router: Router
