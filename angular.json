@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "BlogWithMusicPlayer": {
+    "MyMusicPlayer": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -36,7 +36,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/BlogWithMusicPlayer",
+            "outputPath": "www",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -51,9 +51,7 @@
                 "output": "/assets/"
               }
             ],
-            "styles": [
-              "src/assets/styles/index.less"
-            ],
+            "styles": ["src/assets/styles/index.less"],
             "scripts": []
           },
           "configurations": {
@@ -85,24 +83,37 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "BlogWithMusicPlayer:build"
+            "browserTarget": "MyMusicPlayer:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "BlogWithMusicPlayer:build:production"
+              "browserTarget": "MyMusicPlayer:build:production"
+            },
+            "development": {
+              "browserTarget": "MyMusicPlayer:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "BlogWithMusicPlayer:build"
+            "browserTarget": "MyMusicPlayer:build"
           }
         },
         "test": {
@@ -112,43 +123,32 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/assets/styles/index.less"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": ["src/assets/styles/index.less"],
             "scripts": []
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "tsconfig.app.json",
-              "tsconfig.spec.json",
-              "e2e/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "tsConfig": ["tsconfig.app.json", "tsconfig.spec.json", "e2e/tsconfig.json"],
+            "exclude": ["**/node_modules/**"]
           }
         },
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "BlogWithMusicPlayer:serve"
+            "devServerTarget": "MyMusicPlayer:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "BlogWithMusicPlayer:serve:production"
+              "devServerTarget": "MyMusicPlayer:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "BlogWithMusicPlayer"
+  "defaultProject": "MyMusicPlayer"
 }
