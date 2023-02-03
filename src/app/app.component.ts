@@ -48,7 +48,7 @@ export class AppComponent {
   //被收藏歌曲ID
   likeId: string;
   //弹框显示
-  visable: boolean;
+  visible: boolean;
   currentModalType: ModalTypes = ModalTypes.Default;
 
   constructor(
@@ -115,8 +115,8 @@ export class AppComponent {
   }
 
   private watchModalVisible(visible: boolean) {
-    if (this.visable !== visible) {
-      this.visable = visible;
+    if (this.visible !== visible) {
+      this.visible = visible;
     }
   }
 
@@ -230,7 +230,26 @@ export class AppComponent {
 
   //收藏歌曲
   onLikeSong(args: LikeSongParams) {
-    console.log('LikeSongParams', args);
+    this.memberService.likeSong(args).subscribe(
+      () => {
+        this.batchActionsService.controlModal(false);
+        this.alertMessage('success', '收藏成功');
+      },
+      (error) => {
+        this.alertMessage('error', error.msg || '收藏失败');
+      }
+    );
+  }
+
+  onCreateSheet(sheetName: string) {
+    this.memberService.createSheet(sheetName).subscribe(
+      (pid) => {
+        this.onLikeSong({ pid, tracks: this.likeId });
+      },
+      (error) => {
+        this.alertMessage('error', error.msg || '新建失败');
+      }
+    );
   }
 
   private alertMessage(type: string, msg: string) {

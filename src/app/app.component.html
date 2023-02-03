@@ -72,7 +72,7 @@
 </div>
 
 <app-wy-player></app-wy-player>
-<app-wy-layer-modal [visable]="visable" [currentModalType]="currentModalType">
+<app-wy-layer-modal [visible]="visible" [currentModalType]="currentModalType">
   <app-wy-layer-phoneLogin
     name="phoneLogin"
     [wyRememberLogin]="wyRememberPhoneLogin"
@@ -88,7 +88,9 @@
   <app-wy-layer-like
     name="like"
     [likeId]="likeId"
+    [visible]="visible"
     [mySheets]="mySheets"
+    (onCreateSheet)="onCreateSheet($event)"
     (onLikeSong)="onLikeSong($event)"
   ></app-wy-layer-like>
   <app-wy-layer-default (onChangeModalType)="onChangeModalType($event)"></app-wy-layer-default>

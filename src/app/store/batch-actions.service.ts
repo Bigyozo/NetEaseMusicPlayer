@@ -1,3 +1,4 @@
+import { timer } from 'rxjs';
 import { CurrentActions, PlayState } from 'src/app/store/reducers/player.reducer';
 
 import { Injectable } from '@angular/core';
@@ -116,6 +117,11 @@ export class BatchActionsService {
       this.store$.dispatch(SetModalType({ modalType }));
     }
     this.store$.dispatch(SetModalVisible({ modalVisible }));
+    if (!modalVisible) {
+      timer(500).subscribe(() => {
+        this.store$.dispatch(SetModalType({ modalType: ModalTypes.Default }));
+      });
+    }
   }
 
   //收藏歌曲

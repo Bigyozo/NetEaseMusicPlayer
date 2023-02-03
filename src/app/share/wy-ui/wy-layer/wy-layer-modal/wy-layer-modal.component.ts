@@ -30,7 +30,7 @@ import { BatchActionsService } from '../../../../store/batch-actions.service';
 export class WyLayerModalComponent implements OnInit, AfterViewInit, OnChanges {
   showModal = 'hide';
   @Input()
-  visable: boolean = false;
+  visible: boolean = false;
   @Input()
   currentModalType: ModalTypes = ModalTypes.Default;
   private overlayRef: OverlayRef;
@@ -55,8 +55,8 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['visable'] && !changes['visable'].firstChange) {
-      this.handleVisibleChange(this.visable);
+    if (changes['visible'] && !changes['visible'].firstChange) {
+      this.handleVisibleChange(this.visible);
     }
   }
 

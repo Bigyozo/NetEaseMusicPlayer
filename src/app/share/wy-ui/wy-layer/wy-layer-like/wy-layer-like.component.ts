@@ -1,3 +1,4 @@
+import { timer } from 'rxjs';
 import { SongSheet } from 'src/app/services/data.types/common.types';
 import { LikeSongParams } from 'src/app/services/member.service';
 import { AppStoreModule } from 'src/app/store';
@@ -8,6 +9,7 @@ import {
     ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output,
     SimpleChanges
 } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
 
 @Component({
@@ -21,17 +23,29 @@ export class WyLayerLikeComponent implements OnInit, OnChanges {
   mySheets: SongSheet[];
   @Input()
   likeId: string;
+  @Input()
+  visible: boolean;
   @Output()
   onLikeSong = new EventEmitter<LikeSongParams>();
+  @Output()
+  onCreateSheet = new EventEmitter<string>();
 
-  constructor() {}
+  formModel: FormGroup;
+
+  creating: boolean = false;
+  constructor(private fb: FormBuilder) {
+    this.formModel = this.fb.group({
+      sheetName: ['', [Validators.required]]
+    });
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['mySheets']) {
-      console.log('mysheet', changes['mySheets']);
-    }
-    if (changes['likeId']) {
-      console.log('likeId', changes['likeId']);
+    if (changes['visible']) {
+      if (!this.visible) {
+        timer(500).subscribe(() => {
+          this.creating = false;
+        });
+      }
     }
   }
 
@@ -39,5 +53,9 @@ export class WyLayerLikeComponent implements OnInit, OnChanges {
 
   onLike(pid: string) {
     this.onLikeSong.emit({ pid, tracks: this.likeId });
+  }
+
+  onSubmit() {
+    this.onCreateSheet.emit(this.formModel.get('sheetName').value);
   }
 }
