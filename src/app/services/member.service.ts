@@ -84,11 +84,31 @@ export class MemberService {
       .pipe(map((res: SampleBack) => res.code));
   }
 
+  //收藏歌单
+  likeSheet(id: string, t = 1): Observable<number> {
+    const params = new HttpParams({
+      fromString: queryString.stringify({ id, t })
+    });
+    return this.http
+      .get(this.uri + 'playlist/subscribe', { params })
+      .pipe(map((res: SampleBack) => res.code));
+  }
+
   //新建歌单
   createSheet(name: string): Observable<string> {
     const params = new HttpParams({ fromString: queryString.stringify({ name }) });
     return this.http
       .get(this.uri + 'playlist/create', { params })
       .pipe(map((res: SampleBack) => res.id.toString()));
+  }
+
+  //分享
+  shareResource(id: string, msg: string, type = 'song'): Observable<number> {
+    const params = new HttpParams({
+      fromString: queryString.stringify({ id, msg, type })
+    });
+    return this.http
+      .get(this.uri + 'share/resource', { params })
+      .pipe(map((res: SampleBack) => res.code));
   }
 }

@@ -1,5 +1,5 @@
 import { NzMessageService } from 'ng-zorro-antd';
-import { MemberState, ModalTypes } from 'src/app/store/reducers/member.reducer';
+import { MemberState, ModalTypes, ShareInfo } from 'src/app/store/reducers/member.reducer';
 
 import { Component } from '@angular/core';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
@@ -12,7 +12,9 @@ import { StorageService } from './services/storage.service';
 import { SetModalType, SetModalVisible, SetUserId } from './store/actions/member.action';
 import { BatchActionsService } from './store/batch-actions.service';
 import { AppStoreModule } from './store/index';
-import { getLikeId, getModalType, getModalVisible } from './store/selectors/member.selectors';
+import {
+    getLikeId, getModalType, getModalVisible, getShareInfo
+} from './store/selectors/member.selectors';
 import { codeJson } from './utils/base64';
 import { isEmptyObject } from './utils/tools';
 
@@ -50,6 +52,7 @@ export class AppComponent {
   //弹框显示
   visible: boolean;
   currentModalType: ModalTypes = ModalTypes.Default;
+  shareInfo: ShareInfo;
 
   constructor(
     private searchService: SearchService,
@@ -91,12 +94,22 @@ export class AppComponent {
       {
         type: getModalType,
         cb: (type) => this.watchModalType(type)
+      },
+      {
+        type: getShareInfo,
+        cb: (info) => this.watchShareInfo(info)
       }
     ];
 
     stateArr.forEach((item) => {
       appStore$.pipe(select(item.type)).subscribe(item.cb);
     });
+  }
+
+  private watchShareInfo(info: ShareInfo): void {
+    if (info) {
+      this.shareInfo = info;
+    }
   }
 
   private watchLikeId(id: any) {

@@ -1,14 +1,15 @@
 import { NzMessageService } from 'ng-zorro-antd';
-import { Observable, Subject, Subscription } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/internal/operators';
-import { ModalTypes } from 'src/app/store/reducers/member.reducer';
+import { SetShareInfo } from 'src/app/store/actions/member.action';
 import { PlayState } from 'src/app/store/reducers/player.reducer';
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
 
-import { Song, SongSheet } from '../../services/data.types/common.types';
+import { Singer, Song, SongSheet } from '../../services/data.types/common.types';
+import { MemberService } from '../../services/member.service';
 import { SongService } from '../../services/song.service';
 import { BatchActionsService } from '../../store/batch-actions.service';
 import { AppStoreModule } from '../../store/index';
@@ -35,15 +36,15 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
   };
 
   currentSong: Song;
-  private appStore$: Observable<AppStoreModule>;
   private destroy$ = new Subject<void>();
-  private currentIndex: number = -1;
+  currentIndex: number = -1;
 
   constructor(
     private route: ActivatedRoute,
     private store$: Store<AppStoreModule>,
     private songService: SongService,
     private batchActionsService: BatchActionsService,
+    private memberService: MemberService,
     private nzMessageService: NzMessageService
   ) {
     this.route.data.pipe(map((res) => res.sheetInfo)).subscribe((res) => {
@@ -115,7 +116,7 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
         if (list.length) {
           this.batchActionsService.insertSong(list[0], isPlay);
         } else {
-          this.nzMessageService.create('warning', '无URL');
+          this.alertMessage('warning', '无URL');
         }
       });
     }
@@ -131,5 +132,40 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
 
   onLikeSong(id: string) {
     this.batchActionsService.likeSong(id);
+  }
+
+  onLikeSheet(id: string) {
+    this.memberService.likeSheet(id).subscribe(
+      () => {
+        this.alertMessage('success', '收藏成功');
+      },
+      (error) => {
+        this.alertMessage('error', error.message || 'subscribe fail');
+      }
+    );
+  }
+
+  shareResource(resource: Song | SongSheet, type = 'song') {
+    let txt = '';
+    if (type === 'playlist') {
+      txt = this.makeTxt('歌单', resource.name, (<SongSheet>resource).creator.nickname);
+    } else {
+      txt = this.makeTxt('歌曲', resource.name, (<Song>resource).ar);
+    }
+    this.store$.dispatch(SetShareInfo({ info: { id: resource.id.toString(), type, txt } }));
+  }
+
+  private makeTxt(type: string, name: string, makeBy: string | Singer[]): string {
+    let makeByStr = '';
+    if (Array.isArray(makeBy)) {
+      makeByStr = makeBy.map((item) => item.name).join('/');
+    } else {
+      makeByStr = makeBy;
+    }
+    return `${type}: ${name} -- ${makeByStr}`;
+  }
+
+  private alertMessage(type: string, msg: string) {
+    this.nzMessageService.create(type, msg);
   }
 }

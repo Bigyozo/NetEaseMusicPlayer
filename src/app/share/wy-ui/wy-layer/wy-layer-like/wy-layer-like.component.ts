@@ -43,6 +43,7 @@ export class WyLayerLikeComponent implements OnInit, OnChanges {
     if (changes['visible']) {
       if (!this.visible) {
         timer(500).subscribe(() => {
+          this.formModel.get('sheetName').reset();
           this.creating = false;
         });
       }
