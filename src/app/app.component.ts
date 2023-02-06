@@ -13,7 +13,10 @@ import { SetModalType, SetModalVisible, SetUserId } from './store/actions/member
 import { BatchActionsService } from './store/batch-actions.service';
 import { AppStoreModule } from './store/index';
 import {
-    getLikeId, getModalType, getModalVisible, getShareInfo
+  getLikeId,
+  getModalType,
+  getModalVisible,
+  getShareInfo
 } from './store/selectors/member.selectors';
 import { codeJson } from './utils/base64';
 import { isEmptyObject } from './utils/tools';
@@ -109,6 +112,7 @@ export class AppComponent {
   private watchShareInfo(info: ShareInfo): void {
     if (info) {
       this.shareInfo = info;
+      this.openModal(ModalTypes.Share);
     }
   }
 
@@ -161,8 +165,8 @@ export class AppComponent {
     this.store$.dispatch(SetModalType({ modalType: type }));
   }
 
-  openModal(type: ModalTypes) {
-    this.batchActionsService.controlModal(true, type);
+  openModal(type: ModalTypes, isOpen = true) {
+    this.batchActionsService.controlModal(isOpen, type);
   }
 
   onPhoneLogin(params: PhoneLoginParams) {
@@ -263,6 +267,10 @@ export class AppComponent {
         this.alertMessage('error', error.msg || '新建失败');
       }
     );
+  }
+
+  onCancel() {
+    this.openModal(ModalTypes.Share, false);
   }
 
   private alertMessage(type: string, msg: string) {

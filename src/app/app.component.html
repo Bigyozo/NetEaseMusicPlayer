@@ -93,5 +93,7 @@
     (onCreateSheet)="onCreateSheet($event)"
     (onLikeSong)="onLikeSong($event)"
   ></app-wy-layer-like>
+  <app-wy-layer-share name="share" [shareInfo]="shareInfo" (onCancel)="onCancel()">
+  </app-wy-layer-share>
   <app-wy-layer-default (onChangeModalType)="onChangeModalType($event)"></app-wy-layer-default>
 </app-wy-layer-modal>
