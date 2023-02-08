@@ -1,7 +1,8 @@
 import { NzModalService } from 'ng-zorro-antd';
 import { timer } from 'rxjs';
-import { Song } from 'src/app/services/data.types/common.types';
+import { Singer, Song } from 'src/app/services/data.types/common.types';
 import { AppStoreModule } from 'src/app/store';
+import { SetShareInfo } from 'src/app/store/actions/member.action';
 import {
     SetCurrentAction, SetCurrentIndex, SetPlayList, SetPlayMode
 } from 'src/app/store/actions/player.action';
@@ -12,8 +13,7 @@ import {
 import { findIndex, shuffle } from 'src/app/utils/array';
 
 import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
-import { DOCUMENT } from '@angular/common';
-import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
 
@@ -71,7 +71,7 @@ export class WyPlayerComponent implements OnInit {
   isPlaying = false;
   songReady = false;
 
-  volume = 10;
+  volume = 7;
 
   //是否显示音量面板
   showVolumePanel = false;
@@ -381,5 +381,19 @@ export class WyPlayerComponent implements OnInit {
     if (!this.isLocked && !this.isAnimating) {
       this.showPlayer = type;
     }
+  }
+
+  onLikeSong(id: string) {
+    this.batchActionsService.likeSong(id);
+  }
+
+  onShareSong(resource: Song, type = 'song') {
+    const txt = this.makeTxt('歌曲', resource.name, resource.ar);
+    this.store$.dispatch(SetShareInfo({ info: { id: resource.id.toString(), type, txt } }));
+  }
+
+  private makeTxt(type: string, name: string, makeBy: Singer[]): string {
+    const makeByStr = makeBy.map((item) => item.name).join('/');
+    return `${type}: ${name} -- ${makeByStr}`;
   }
 }

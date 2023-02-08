@@ -6,17 +6,14 @@ import { createFeatureSelector, select, Store } from '@ngrx/store';
 
 import { SearchResult, SongSheet } from './services/data.types/common.types';
 import { EmailLoginParams, PhoneLoginParams, User } from './services/data.types/member.type';
-import { LikeSongParams, MemberService } from './services/member.service';
+import { LikeSongParams, MemberService, ShareParams } from './services/member.service';
 import { SearchService } from './services/search.service';
 import { StorageService } from './services/storage.service';
 import { SetModalType, SetModalVisible, SetUserId } from './store/actions/member.action';
 import { BatchActionsService } from './store/batch-actions.service';
 import { AppStoreModule } from './store/index';
 import {
-  getLikeId,
-  getModalType,
-  getModalVisible,
-  getShareInfo
+    getLikeId, getModalType, getModalVisible, getShareInfo
 } from './store/selectors/member.selectors';
 import { codeJson } from './utils/base64';
 import { isEmptyObject } from './utils/tools';
@@ -269,8 +266,20 @@ export class AppComponent {
     );
   }
 
-  onCancel() {
+  onCancelShare() {
     this.openModal(ModalTypes.Share, false);
+  }
+
+  onShare(args: ShareParams) {
+    this.memberService.shareResource(args).subscribe(
+      () => {
+        this.openModal(ModalTypes.Share, false);
+        this.alertMessage('success', '分享成功');
+      },
+      (error) => {
+        this.alertMessage('error', error.msg || '分享失败');
+      }
+    );
   }
 
   private alertMessage(type: string, msg: string) {

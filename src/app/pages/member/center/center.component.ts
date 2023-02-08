@@ -1,12 +1,13 @@
 import { NzMessageService } from 'ng-zorro-antd';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/internal/operators';
-import { Song } from 'src/app/services/data.types/common.types';
+import { Singer, Song } from 'src/app/services/data.types/common.types';
 import { RecordVal, User, UserSheet } from 'src/app/services/data.types/member.type';
 import { MemberService, RecordType } from 'src/app/services/member.service';
 import { SheetService } from 'src/app/services/sheet.service';
 import { SongService } from 'src/app/services/song.service';
 import { AppStoreModule } from 'src/app/store';
+import { SetShareInfo } from 'src/app/store/actions/member.action';
 import { BatchActionsService } from 'src/app/store/batch-actions.service';
 import { getCurrentSong } from 'src/app/store/selectors/play.selectors';
 import { findIndex } from 'src/app/utils/array';
@@ -106,5 +107,19 @@ export class CenterComponent implements OnInit, OnDestroy {
         }
       });
     }
+  }
+
+  onShareSong(resource: Song, type = 'song') {
+    const txt = this.makeTxt('歌曲', resource.name, resource.ar);
+    this.store$.dispatch(SetShareInfo({ info: { id: resource.id.toString(), type, txt } }));
+  }
+
+  private makeTxt(type: string, name: string, makeBy: Singer[]): string {
+    const makeByStr = makeBy.map((item) => item.name).join('/');
+    return `${type}: ${name} -- ${makeByStr}`;
+  }
+
+  onLikeSong(id: string) {
+    this.batchActionsService.likeSong(id);
   }
 }
