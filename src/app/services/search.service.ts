@@ -4,7 +4,7 @@ import { map } from 'rxjs/internal/operators';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 
-import { Lyric, SearchResult, Song, SongUrl } from './data.types/common.types';
+import { SearchResult } from './data.types/common.types';
 import { API_CONFIG, ServicesModule } from './services.module';
 
 @Injectable({

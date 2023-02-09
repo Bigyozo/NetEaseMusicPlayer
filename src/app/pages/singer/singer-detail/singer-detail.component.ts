@@ -13,6 +13,7 @@ import { ActivatedRoute } from '@angular/router';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
 
 import { Singer, SingerDetail, Song } from '../../../services/data.types/common.types';
+import { MemberService } from '../../../services/member.service';
 import { getCurrentSong } from '../../../store/selectors/play.selectors';
 
 @Component({
@@ -26,13 +27,15 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
   currentIndex = -1;
   private destroy$ = new Subject<void>();
   simiSingers: Singer[];
+  hasLiked = false;
 
   constructor(
     private route: ActivatedRoute,
     private store$: Store<AppStoreModule>,
     private songService: SongService,
     private batchActionsService: BatchActionsService,
-    private nzMessageService: NzMessageService
+    private nzMessageService: NzMessageService,
+    private memberService: MemberService
   ) {
     this.route.data.pipe(map((res) => res.singerDetail)).subscribe(([detail, simiSingers]) => {
       this.singerDetail = detail;
@@ -65,8 +68,6 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  onLikeSinger() {}
-
   onAddSongs(songs: Song[], isPlay = false) {
     this.songService.getSongList(songs).subscribe((list) => {
       if (list.length) {
@@ -93,6 +94,34 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
 
   onLikeSong(id: string) {
     this.batchActionsService.likeSong(id);
+  }
+
+  //批量收藏
+  onLikeSongs(songs: Song[]) {
+    const ids = songs.map((item) => item.id).join(',');
+    this.onLikeSong(ids);
+  }
+
+  onLikeSinger(id: string) {
+    let typeInfo = {
+      type: 1,
+      msg: '收藏'
+    };
+    if (this.hasLiked) {
+      typeInfo = {
+        type: 2,
+        msg: '取消收藏'
+      };
+    }
+    this.memberService.likeSinger(id, typeInfo.type).subscribe(
+      () => {
+        this.hasLiked = !this.hasLiked;
+        this.nzMessageService.create('success', typeInfo.msg + '成功');
+      },
+      (error) => {
+        this.nzMessageService.create('error', error.msg || typeInfo.msg + '失败');
+      }
+    );
   }
 
   onShareSong(resource: Song, type = 'song') {

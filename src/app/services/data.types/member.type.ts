@@ -10,6 +10,7 @@ export interface User {
   //用户等级
   level?: number;
   listenSongs?: number;
+  cookie: string;
   profile: {
     userId: number;
     nickname: string;
