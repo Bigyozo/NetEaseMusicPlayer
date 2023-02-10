@@ -38,6 +38,6 @@
 </div>
 
 <div class="m-footer clearfix">
-  <a>< 其他登陆方式</a>
+  <a (click)="onChangeModalType.emit('default')">&lt; 其他登陆方式</a>
   <a (click)="onChangeModalType.emit('register')">没有账号？开始注册</a>
 </div>

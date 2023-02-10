@@ -28,6 +28,14 @@ import { BatchActionsService } from '../../../../store/batch-actions.service';
   ]
 })
 export class WyLayerModalComponent implements OnInit, AfterViewInit, OnChanges {
+  modalTitle = {
+    register: '注册',
+    loginByPhone: '手机登陆',
+    loginByEmail: '邮箱登陆',
+    like: '收藏',
+    share: '分享',
+    default: ''
+  };
   showModal = 'hide';
   @Input()
   visible: boolean = false;

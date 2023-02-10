@@ -16,6 +16,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class WyLayerEmailLoginComponent implements OnInit, OnChanges {
   @Input() wyRememberLogin: EmailLoginParams;
   @Output() onChangeModalType = new EventEmitter<string | void>();
+  @Input() visible: boolean = false;
   @Output() onLogin = new EventEmitter<PhoneLoginParams>();
   formModel: FormGroup;
   constructor(private fb: FormBuilder) {
@@ -30,6 +31,7 @@ export class WyLayerEmailLoginComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     const userLoginParams = changes['wyRememberLogin'];
+    const visible = changes['visible'];
     if (userLoginParams) {
       let email = '';
       let password = '';
@@ -41,6 +43,9 @@ export class WyLayerEmailLoginComponent implements OnInit, OnChanges {
         remember = value.remember;
       }
       this.setModel({ email, password, remember });
+    }
+    if (visible && !visible.firstChange) {
+      this.formModel.markAllAsTouched();
     }
   }
 

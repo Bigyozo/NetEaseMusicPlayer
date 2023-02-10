@@ -75,12 +75,14 @@
 <app-wy-layer-modal [visible]="visible" [currentModalType]="currentModalType">
   <app-wy-layer-phoneLogin
     name="phoneLogin"
+    [visible]="visible"
     [wyRememberLogin]="wyRememberPhoneLogin"
     (onChangeModalType)="onChangeModalType($event)"
     (onLogin)="onPhoneLogin($event)"
   ></app-wy-layer-phoneLogin>
   <app-wy-layer-emailLogin
     name="emailLogin"
+    [visible]="visible"
     [wyRememberLogin]="wyRememberEmailLogin"
     (onChangeModalType)="onChangeModalType($event)"
     (onLogin)="onEmailLogin($event)"
@@ -95,10 +97,17 @@
   ></app-wy-layer-like>
   <app-wy-layer-share
     name="share"
+    [visible]="visible"
     [shareInfo]="shareInfo"
     (onCancel)="onCancelShare()"
     (onShare)="onShare($event)"
   >
   </app-wy-layer-share>
+  <app-wy-layer-register
+    name="register"
+    [visible]="visible"
+    (onChangeModalType)="onChangeModalType($event)"
+  >
+  </app-wy-layer-register>
   <app-wy-layer-default (onChangeModalType)="onChangeModalType($event)"></app-wy-layer-default>
 </app-wy-layer-modal>

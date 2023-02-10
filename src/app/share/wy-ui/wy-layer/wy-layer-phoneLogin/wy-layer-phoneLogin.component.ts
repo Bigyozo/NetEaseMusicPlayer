@@ -17,6 +17,7 @@ export class WyLayerPhoneLoginComponent implements OnInit, OnChanges {
   @Input() wyRememberLogin: PhoneLoginParams;
   @Output() onChangeModalType = new EventEmitter<string | void>();
   @Output() onLogin = new EventEmitter<PhoneLoginParams>();
+  @Input() visible: boolean = false;
   formModel: FormGroup;
   constructor(private fb: FormBuilder) {
     this.formModel = this.fb.group({
@@ -30,6 +31,7 @@ export class WyLayerPhoneLoginComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     const userLoginParams = changes['wyRememberLogin'];
+    const visible = changes['visible'];
     if (userLoginParams) {
       let phone = '';
       let password = '';
@@ -41,6 +43,9 @@ export class WyLayerPhoneLoginComponent implements OnInit, OnChanges {
         remember = value.remember;
       }
       this.setModel({ phone, password, remember });
+      if (visible && !visible.firstChange) {
+        this.formModel.markAllAsTouched();
+      }
     }
   }
 

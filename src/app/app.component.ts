@@ -108,8 +108,12 @@ export class AppComponent {
 
   private watchShareInfo(info: ShareInfo): void {
     if (info) {
-      this.shareInfo = info;
-      this.openModal(ModalTypes.Share);
+      if (this.user) {
+        this.shareInfo = info;
+        this.openModal(ModalTypes.Share);
+      } else {
+        this.openModal(ModalTypes.Default);
+      }
     }
   }
 
@@ -167,7 +171,6 @@ export class AppComponent {
   }
 
   onPhoneLogin(params: PhoneLoginParams) {
-    console.log(params);
     this.memberService.phoneLogin(params).subscribe(
       (user) => {
         this.user = user;
@@ -191,7 +194,6 @@ export class AppComponent {
   }
 
   onEmailLogin(params: EmailLoginParams) {
-    console.log(params);
     this.memberService.emailLogin(params).subscribe(
       (user) => {
         this.user = user;
@@ -220,6 +222,7 @@ export class AppComponent {
       () => {
         this.user = null;
         this.storgeService.removeStorge('wyUserID');
+        this.storgeService.removeStorge('cookie');
         this.store$.dispatch(SetUserId({ userId: '' }));
         this.alertMessage('success', 'Logout success');
       },
