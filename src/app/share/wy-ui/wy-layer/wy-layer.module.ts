@@ -15,6 +15,7 @@ import { WyLayerModalComponent } from './wy-layer-modal/wy-layer-modal.component
 import { WyLayerPhoneLoginComponent } from './wy-layer-phoneLogin/wy-layer-phoneLogin.component';
 import { WyLayerShareComponent } from './wy-layer-share/wy-layer-share.component';
 import { WyLayerRegisterComponent } from './wy-layer-register/wy-layer-register.component';
+import { WyCheckCodeComponent } from './wy-check-code/wy-check-code.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { WyLayerRegisterComponent } from './wy-layer-register/wy-layer-register.
     WyLayerEmailLoginComponent,
     WyLayerLikeComponent,
     WyLayerShareComponent,
-    WyLayerRegisterComponent
+    WyLayerRegisterComponent,
+    WyCheckCodeComponent
   ],
   imports: [
     CommonModule,
@@ -47,7 +49,8 @@ import { WyLayerRegisterComponent } from './wy-layer-register/wy-layer-register.
     WyLayerEmailLoginComponent,
     WyLayerLikeComponent,
     WyLayerShareComponent,
-    WyLayerRegisterComponent
+    WyLayerRegisterComponent,
+    WyCheckCodeComponent
   ]
 })
 export class WyLayerModule {}
