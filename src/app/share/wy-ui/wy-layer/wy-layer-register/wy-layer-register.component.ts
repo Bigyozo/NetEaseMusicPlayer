@@ -3,8 +3,14 @@ import { interval } from 'rxjs';
 import { take } from 'rxjs/internal/operators';
 
 import {
-    ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output,
-    SimpleChanges
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -19,7 +25,7 @@ import { MemberService } from '../../../../services/member.service';
 export class WyLayerRegisterComponent implements OnInit, OnChanges {
   @Input() visible: boolean = false;
   @Output() onChangeModalType = new EventEmitter<string | void>();
-  showCode: boolean = false;
+  showCode: boolean = true;
   formModel: FormGroup;
   timing: number;
   constructor(
