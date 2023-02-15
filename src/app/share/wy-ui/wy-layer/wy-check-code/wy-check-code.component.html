@@ -9,13 +9,16 @@
     <p class="s-fc4">我们会给您发送短信验证码</p>
   </div>
   <div class="form">
-    <form nz-form nzLayout="vertical">
+    <form nz-form nzLayout="vertical" [formGroup]="formModel" (ngSubmit)="onSubmit()">
       <nz-form-item>
         <nz-form-control>
           <app-wy-code formControlName="code"></app-wy-code>
           <div class="send clearfix">
-            <span class="err">验证码不正确</span>
-            <span class="txt">60s</span>
+            <span class="err" [hidden]="!showErrorTip">验证码不正确</span>
+            <span class="txt" *ngIf="!showRepeatBtn; else repeatBtn">{{ timing }}s</span>
+            <ng-template #repeatBtn>
+              <span class="txt repeat" (click)="onRepeatSendCode.emit()">重新发送</span>
+            </ng-template>
           </div>
         </nz-form-control>
       </nz-form-item>

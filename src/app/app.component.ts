@@ -286,6 +286,11 @@ export class AppComponent {
     );
   }
 
+  //注册账号
+  onRegister(phone: string) {
+    this.alertMessage('error', '暂时不支持注册');
+  }
+
   private alertMessage(type: string, msg: string) {
     this.messageService.create(type, msg);
   }
