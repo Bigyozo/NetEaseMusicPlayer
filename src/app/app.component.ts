@@ -1,7 +1,11 @@
 import { NzMessageService } from 'ng-zorro-antd';
+import { interval, Observable } from 'rxjs';
+import { filter, map, mergeMap, takeUntil } from 'rxjs/internal/operators';
 import { MemberState, ModalTypes, ShareInfo } from 'src/app/store/reducers/member.reducer';
 
 import { Component } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
 
 import { SearchResult, SongSheet } from './services/data.types/common.types';
@@ -51,8 +55,13 @@ export class AppComponent {
   likeId: string;
   //弹框显示
   visible: boolean;
+  //弹窗loading
+  showSpin: boolean = false;
   currentModalType: ModalTypes = ModalTypes.Default;
   shareInfo: ShareInfo;
+  routeTitle = '';
+  loadPercent = 0;
+  private navEnd: Observable<NavigationEnd>;
 
   constructor(
     private searchService: SearchService,
@@ -60,7 +69,10 @@ export class AppComponent {
     private batchActionsService: BatchActionsService,
     private memberService: MemberService,
     private messageService: NzMessageService,
-    private storgeService: StorageService
+    private storgeService: StorageService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private titleSerivce: Title
   ) {
     const userId = this.storgeService.getStorage('wyUserID');
     if (userId) {
@@ -78,6 +90,44 @@ export class AppComponent {
       this.wyRememberEmailLogin = JSON.parse(wyRememberEmailLogin);
     }
     this.listenStates();
+
+    this.router.events.pipe(filter((evt) => evt instanceof NavigationStart)).subscribe(() => {
+      this.loadPercent = 0;
+      this.setTitle();
+    });
+    this.navEnd = this.router.events.pipe(
+      filter((evt) => evt instanceof NavigationEnd)
+    ) as Observable<NavigationEnd>;
+    this.setLoadIngBar();
+  }
+
+  private setTitle() {
+    this.navEnd
+      .pipe(
+        map(() => this.activatedRoute),
+        map((route: ActivatedRoute) => {
+          while (route.firstChild) {
+            route = route.firstChild;
+          }
+          return route;
+        }),
+        mergeMap((route) => route.data)
+      )
+      .subscribe((data) => {
+        this.routeTitle = data['title'];
+        this.titleSerivce.setTitle(this.routeTitle);
+      });
+  }
+
+  private setLoadIngBar() {
+    interval(50)
+      .pipe(takeUntil(this.navEnd))
+      .subscribe(() => {
+        this.loadPercent = Math.max(95, ++this.loadPercent);
+      });
+    this.navEnd.subscribe(() => {
+      this.loadPercent = 100;
+    });
   }
 
   private listenStates() {
@@ -171,6 +221,7 @@ export class AppComponent {
   }
 
   onPhoneLogin(params: PhoneLoginParams) {
+    this.showSpin = true;
     this.memberService.phoneLogin(params).subscribe(
       (user) => {
         this.user = user;
@@ -184,16 +235,19 @@ export class AppComponent {
             value: JSON.stringify(codeJson(params))
           });
         } else {
+          this.showSpin = false;
           this.storgeService.removeStorge('wyRememberPhoneLogin');
         }
       },
       (error) => {
+        this.showSpin = false;
         this.alertMessage('error', error.message || 'Login fail');
       }
     );
   }
 
   onEmailLogin(params: EmailLoginParams) {
+    this.showSpin = true;
     this.memberService.emailLogin(params).subscribe(
       (user) => {
         this.user = user;
@@ -208,10 +262,12 @@ export class AppComponent {
             value: JSON.stringify(codeJson(params))
           });
         } else {
+          this.showSpin = false;
           this.storgeService.removeStorge('wyRememberEmailLogin');
         }
       },
       (error) => {
+        this.showSpin = false;
         this.alertMessage('error', error.message || 'Login fail');
       }
     );

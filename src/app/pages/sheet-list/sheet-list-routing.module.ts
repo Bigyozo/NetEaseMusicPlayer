@@ -7,7 +7,7 @@ const routes: Routes = [
   {
     path: 'sheet',
     component: SheetListComponent,
-    data: { title: 'Song Sheet List' }
+    data: { title: '歌单列表' }
   }
 ];
 

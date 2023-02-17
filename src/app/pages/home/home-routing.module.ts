@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
+
 import { HomeResolverService } from './home-resolve.service';
 import { HomeComponent } from './home.component';
 
@@ -7,7 +8,7 @@ const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
-    data: { title: 'Find' },
+    data: { title: '主页' },
     resolve: { homeDatas: HomeResolverService }
   }
 ];

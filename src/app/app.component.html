@@ -1,4 +1,11 @@
 <div id="app">
+  <nz-progress
+    *ngIf="loadPercent < 100"
+    nzStrokeWidth="5"
+    [nzShowInfo]="false"
+    nzStatus="active"
+    [nzPercent]="loadPercent"
+  ></nz-progress>
   <nz-layout class="layout">
     <nz-header class="header">
       <div class="wrap">
@@ -72,7 +79,7 @@
 </div>
 
 <app-wy-player></app-wy-player>
-<app-wy-layer-modal [visible]="visible" [currentModalType]="currentModalType">
+<app-wy-layer-modal [visible]="visible" [showSpin]="showSpin" [currentModalType]="currentModalType">
   <app-wy-layer-phoneLogin
     name="phoneLogin"
     [visible]="visible"

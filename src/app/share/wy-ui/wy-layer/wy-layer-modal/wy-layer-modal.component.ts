@@ -40,6 +40,8 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit, OnChanges {
   @Input()
   visible: boolean = false;
   @Input()
+  showSpin: boolean = false;
+  @Input()
   currentModalType: ModalTypes = ModalTypes.Default;
   private overlayRef: OverlayRef;
   private scrollStrategy: BlockScrollStrategy;
