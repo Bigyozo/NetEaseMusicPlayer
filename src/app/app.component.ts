@@ -3,7 +3,8 @@ import { interval, Observable } from 'rxjs';
 import { filter, map, mergeMap, takeUntil } from 'rxjs/internal/operators';
 import { MemberState, ModalTypes, ShareInfo } from 'src/app/store/reducers/member.reducer';
 
-import { Component } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Component, Inject } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
@@ -17,7 +18,10 @@ import { SetModalType, SetModalVisible, SetUserId } from './store/actions/member
 import { BatchActionsService } from './store/batch-actions.service';
 import { AppStoreModule } from './store/index';
 import {
-    getLikeId, getModalType, getModalVisible, getShareInfo
+  getLikeId,
+  getModalType,
+  getModalVisible,
+  getShareInfo
 } from './store/selectors/member.selectors';
 import { codeJson } from './utils/base64';
 import { isEmptyObject } from './utils/tools';
@@ -72,7 +76,8 @@ export class AppComponent {
     private storgeService: StorageService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private titleSerivce: Title
+    private titleSerivce: Title,
+    @Inject(DOCUMENT) private doc: Document
   ) {
     const userId = this.storgeService.getStorage('wyUserID');
     if (userId) {
@@ -120,13 +125,14 @@ export class AppComponent {
   }
 
   private setLoadIngBar() {
-    interval(50)
+    interval(100)
       .pipe(takeUntil(this.navEnd))
       .subscribe(() => {
         this.loadPercent = Math.max(95, ++this.loadPercent);
       });
     this.navEnd.subscribe(() => {
       this.loadPercent = 100;
+      //  this.doc.documentElement.scrollTop = 0;
     });
   }
 

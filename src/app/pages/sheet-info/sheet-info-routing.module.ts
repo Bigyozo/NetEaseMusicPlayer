@@ -6,7 +6,7 @@ import { SheetInfoComponent } from './sheet-info.component';
 
 const routes: Routes = [
   {
-    path: 'sheetInfo/:id',
+    path: '',
     component: SheetInfoComponent,
     data: { title: '歌单详情' },
     resolve: { sheetInfo: SheetInfoResolverService }

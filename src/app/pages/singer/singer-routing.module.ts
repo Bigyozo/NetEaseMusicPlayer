@@ -6,7 +6,7 @@ import { SingerResolverService } from './singer-detail/singer-resolver.service';
 
 const routes: Routes = [
   {
-    path: 'singer/:id',
+    path: '',
     component: SingerDetailComponent,
     data: { title: '歌手详情' },
     resolve: { singerDetail: SingerResolverService }

@@ -8,6 +8,7 @@
         </div>
         <div class="cover-img">
           <img
+            appImgDefault
             class="full-height"
             [src]="singerDetail.artist.picUrl"
             [alt]="singerDetail.artist.name"
@@ -97,7 +98,7 @@
       <ul class="clearfix">
         <li *ngFor="let item of simiSingers" [routerLink]="['/singer', item.id]">
           <div class="pic">
-            <img [src]="item.picUrl" [alt]="item.name" />
+            <img appImgDefault [src]="item.picUrl" [alt]="item.name" />
           </div>
           <p class="ellipsis">{{ item.name }}</p>
         </li>

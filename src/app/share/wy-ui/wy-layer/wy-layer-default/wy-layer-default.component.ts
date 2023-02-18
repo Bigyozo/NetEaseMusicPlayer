@@ -7,7 +7,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output } from
       <div class="select-log">
         <div class="mid-wrap">
           <div class="pic">
-            <img src="../../../../../assets/images/platform.png" />
+            <img appImgDefault src="../../../../../assets/images/platform.png" />
           </div>
           <div class="methods">
             <button

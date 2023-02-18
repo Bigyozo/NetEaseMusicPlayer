@@ -12,7 +12,7 @@
     >
       <div class="carousel-item" nz-carousel-content *ngFor="let item of banners">
         <a [href]="item.url" target="_blank" class="banner-item">
-          <img [src]="item.imageUrl" />
+          <img appImgDefault [src]="item.imageUrl" />
         </a>
       </div>
     </nz-carousel>
@@ -58,11 +58,11 @@
       <div class="right">
         <app-member-card [user]="user" (openModal)="openModal()"></app-member-card>
         <div class="settled-singer">
-          <div class="tit"><b>artists</b></div>
+          <div class="tit"><b>歌手</b></div>
           <div class="list">
             <div class="card" *ngFor="let item of singerList" [routerLink]="['/singer', item.id]">
               <div class="pic">
-                <img [src]="item.picUrl" [alt]="item.name" />
+                <img appImgDefault [src]="item.picUrl" [alt]="item.name" />
               </div>
               <div class="txt">
                 <b class="ellipsis">{{ item.name }}</b>

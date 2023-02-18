@@ -6,7 +6,7 @@ import { SongInfoComponent } from './song-info.component';
 
 const routes: Routes = [
   {
-    path: 'songInfo/:id',
+    path: '',
     component: SongInfoComponent,
     data: { title: '歌曲详情' },
     resolve: { songInfo: SongInfoResolverService }
