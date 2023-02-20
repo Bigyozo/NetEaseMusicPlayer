@@ -107,7 +107,7 @@ export class WyLayerRegisterComponent implements OnInit, OnChanges {
     this.memberService.checkExist(Number(phone)).subscribe((res) => {
       if (Exist[res] === '存在') {
         this.messageService.error('账号已存在，可直接登陆');
-        this.changeType(ModalTypes.LogingByPhone);
+        this.changeType(ModalTypes.LoginByPhone);
       } else {
         this.onRegister.emit(phone);
       }

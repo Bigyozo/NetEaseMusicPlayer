@@ -46,7 +46,7 @@
               class="btn like"
               nz-button
               [disabled]="sheetInfo.subscribed"
-              (click)="onLikeSheet(sheetInfo.id)"
+              (click)="onLikeSheet(sheetInfo.id.toString())"
             >
               <span>收藏</span>({{ sheetInfo.subscribedCount }})
             </button>

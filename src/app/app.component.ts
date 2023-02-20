@@ -18,10 +18,7 @@ import { SetModalType, SetModalVisible, SetUserId } from './store/actions/member
 import { BatchActionsService } from './store/batch-actions.service';
 import { AppStoreModule } from './store/index';
 import {
-  getLikeId,
-  getModalType,
-  getModalVisible,
-  getShareInfo
+    getLikeId, getModalType, getModalVisible, getShareInfo
 } from './store/selectors/member.selectors';
 import { codeJson } from './utils/base64';
 import { isEmptyObject } from './utils/tools';
@@ -351,6 +348,16 @@ export class AppComponent {
   // 注册账号
   onRegister(phone: string) {
     this.alertMessage('error', '暂时不支持注册');
+  }
+
+  openModalByMenu(type: 'loginByPhone' | 'loginByEmail' | 'register') {
+    if (type === 'loginByPhone') {
+      this.openModal(ModalTypes.LoginByPhone);
+    } else if (type === 'loginByEmail') {
+      this.openModal(ModalTypes.LoginByEmail);
+    } else {
+      this.openModal(ModalTypes.Register);
+    }
   }
 
   private alertMessage(type: string, msg: string) {

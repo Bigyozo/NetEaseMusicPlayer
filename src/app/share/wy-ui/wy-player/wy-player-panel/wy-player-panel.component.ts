@@ -4,15 +4,8 @@ import { SongService } from 'src/app/services/song.service';
 import { findIndex } from 'src/app/utils/array';
 
 import {
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  QueryList,
-  SimpleChanges,
-  ViewChildren
+    Component, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges,
+    ViewChildren
 } from '@angular/core';
 
 import { WyScrollComponent } from '../wy-scroll/wy-scroll.component';
@@ -164,7 +157,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
     }
   }
 
-  private toInfo(evt: MouseEvent, path: [string, number]) {
+  toInfo(evt: MouseEvent, path: [string, number]) {
     evt.stopPropagation();
     this.onToInfo.emit(path);
   }

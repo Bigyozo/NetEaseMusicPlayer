@@ -6,8 +6,8 @@ import {
 
 export enum ModalTypes {
   Register = 'register',
-  LogingByPhone = 'loginByPhone',
-  LogingByEmail = 'loginByEmail',
+  LoginByPhone = 'loginByPhone',
+  LoginByEmail = 'loginByEmail',
   Share = 'share',
   Like = 'like',
   Default = 'default'
