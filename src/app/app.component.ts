@@ -260,7 +260,7 @@ export class AppComponent {
         this.batchActionsService.controlModal(false);
         this.alertMessage('success', 'Login success');
         this.storgeService.setStorage({ key: 'wyUserID', value: user.profile.userId });
-        this.storgeService.setStorage({ key: 'cookie', value: user.cookie });
+        //  this.storgeService.setStorage({ key: 'cookie', value: user.cookie });
         this.store$.dispatch(SetUserId({ userId: user.profile.userId.toString() }));
         if (params.remember) {
           this.storgeService.setStorage({
@@ -284,7 +284,7 @@ export class AppComponent {
       () => {
         this.user = null;
         this.storgeService.removeStorge('wyUserID');
-        this.storgeService.removeStorge('cookie');
+        //  this.storgeService.removeStorge('cookie');
         this.store$.dispatch(SetUserId({ userId: '' }));
         this.alertMessage('success', 'Logout success');
       },

@@ -12,7 +12,7 @@ export const WINDOW = new InjectionToken('WindowToken');
   providers: [
     {
       provide: API_CONFIG,
-      useValue: 'http://192.168.40.218:3000/'
+      useValue: '/api/'
     },
     {
       provide: WINDOW,

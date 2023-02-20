@@ -8,7 +8,10 @@ import { Song } from '../services/data.types/common.types';
 import { findIndex, shuffle } from '../utils/array';
 import { SetLikeId, SetModalType, SetModalVisible } from './actions/member.action';
 import {
-    SetCurrentAction, SetCurrentIndex, SetPlayList, SetSongList
+  SetCurrentAction,
+  SetCurrentIndex,
+  SetPlayList,
+  SetSongList
 } from './actions/player.action';
 import { AppStoreModule } from './index';
 import { MemberState, ModalTypes } from './reducers/member.reducer';
@@ -46,7 +49,7 @@ export class BatchActionsService {
   // 添加歌曲
   insertSong(song: Song, isPlay: boolean) {
     const songList = this.playState.songList.slice();
-    const playList = this.playState.playList.slice();
+    let playList = this.playState.playList.slice();
     let insertIndex = this.playState.currentIndex;
     const pIndex = findIndex(playList, song);
     if (pIndex > -1) {
@@ -55,9 +58,13 @@ export class BatchActionsService {
       }
     } else {
       songList.push(song);
-      playList.push(song);
       if (isPlay) {
         insertIndex = songList.length - 1;
+      }
+      if (this.playState.playMode.type === 'random') {
+        playList = shuffle(songList);
+      } else {
+        playList.push(song);
       }
       this.store$.dispatch(SetSongList({ songList }));
       this.store$.dispatch(SetPlayList({ playList }));
@@ -70,18 +77,21 @@ export class BatchActionsService {
     }
   }
 
+  // 添加多首歌曲
   insertSongs(songs: Song[]) {
-    const songList = this.playState.songList.slice();
-    const playList = this.playState.playList.slice();
-    songs.forEach((element) => {
-      const pIndex = findIndex(playList, element);
-      if (pIndex === -1) {
-        songList.push(element);
-        playList.push(element);
+    let songList = this.playState.songList.slice();
+    let playList = this.playState.playList.slice();
+    const validSongs = songs.filter((item) => findIndex(playList, item) === -1);
+    if (validSongs.length) {
+      songList = songList.concat(validSongs);
+      let songPlayList = validSongs.slice();
+      playList = playList.concat(songPlayList);
+      if (this.playState.playMode.type === 'random') {
+        playList = shuffle(songList);
       }
-    });
-    this.store$.dispatch(SetSongList({ songList }));
-    this.store$.dispatch(SetPlayList({ playList }));
+      this.store$.dispatch(SetSongList({ songList }));
+      this.store$.dispatch(SetPlayList({ playList }));
+    }
     this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Add }));
   }
 
