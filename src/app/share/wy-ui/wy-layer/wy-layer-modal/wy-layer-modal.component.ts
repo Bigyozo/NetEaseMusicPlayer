@@ -38,9 +38,9 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit, OnChanges {
   };
   showModal = 'hide';
   @Input()
-  visible: boolean = false;
+  visible = false;
   @Input()
-  showSpin: boolean = false;
+  showSpin = false;
   @Input()
   currentModalType: ModalTypes = ModalTypes.Default;
   private overlayRef: OverlayRef;
@@ -65,7 +65,7 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['visible'] && !changes['visible'].firstChange) {
+    if (changes.visible && !changes.visible.firstChange) {
       this.handleVisibleChange(this.visible);
     }
   }

@@ -23,12 +23,12 @@ enum Exist {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WyLayerRegisterComponent implements OnInit, OnChanges {
-  @Input() visible: boolean = false;
+  @Input() visible = false;
   @Output() onChangeModalType = new EventEmitter<string>();
-  showCode: boolean = false;
+  showCode = false;
   formModel: FormGroup;
   timing: number;
-  codePass: boolean = false;
+  codePass = false;
   @Output()
   onRegister = new EventEmitter<string>();
   constructor(
@@ -44,7 +44,7 @@ export class WyLayerRegisterComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    const visible = changes['visible'];
+    const visible = changes.visible;
     if (visible && !visible.firstChange) {
       if (!this.visible) {
         this.showCode = false;

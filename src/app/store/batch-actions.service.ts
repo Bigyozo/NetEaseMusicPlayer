@@ -43,7 +43,7 @@ export class BatchActionsService {
     this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Play }));
   }
 
-  //添加歌曲
+  // 添加歌曲
   insertSong(song: Song, isPlay: boolean) {
     const songList = this.playState.songList.slice();
     const playList = this.playState.playList.slice();
@@ -85,7 +85,7 @@ export class BatchActionsService {
     this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Add }));
   }
 
-  //删除歌曲
+  // 删除歌曲
   deleteSong(song: Song) {
     const songList = this.playState.songList.slice();
     const playList = this.playState.playList.slice();
@@ -103,7 +103,7 @@ export class BatchActionsService {
     this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Delete }));
   }
 
-  //清空歌曲列表
+  // 清空歌曲列表
   clearSong() {
     this.store$.dispatch(SetSongList({ songList: [] }));
     this.store$.dispatch(SetPlayList({ playList: [] }));
@@ -111,7 +111,7 @@ export class BatchActionsService {
     this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Clear }));
   }
 
-  //会员弹窗显示隐藏/类型
+  // 会员弹窗显示隐藏/类型
   controlModal(modalVisible = true, modalType?: ModalTypes) {
     if (modalType) {
       this.store$.dispatch(SetModalType({ modalType }));
@@ -124,7 +124,7 @@ export class BatchActionsService {
     }
   }
 
-  //收藏歌曲
+  // 收藏歌曲
   likeSong(id: string) {
     this.store$.dispatch(SetModalType({ modalType: ModalTypes.Like }));
     this.store$.dispatch(SetLikeId({ likeId: id }));

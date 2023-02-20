@@ -32,7 +32,7 @@ export class WyLayerLikeComponent implements OnInit, OnChanges {
 
   formModel: FormGroup;
 
-  creating: boolean = false;
+  creating = false;
   constructor(private fb: FormBuilder) {
     this.formModel = this.fb.group({
       sheetName: ['', [Validators.required]]
@@ -40,7 +40,7 @@ export class WyLayerLikeComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['visible']) {
+    if (changes.visible) {
       if (!this.visible) {
         timer(500).subscribe(() => {
           this.formModel.get('sheetName').reset();

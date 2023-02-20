@@ -6,8 +6,7 @@ import { AnyJson } from './data.types/common.types';
   providedIn: 'root'
 })
 export class StorageService {
-  constructor() //@Inject(WINDOW) private win: Window
-  {}
+  constructor() {}
 
   getStorage(key: string, type = 'local'): string {
     return window[type + 'Storage'].getItem(key);

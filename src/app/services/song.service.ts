@@ -34,7 +34,7 @@ export class SongService {
   private generateSongList(songArr: Song[], urls: SongUrl[]): Song[] {
     const result = [];
     songArr.forEach((song) => {
-      let url = urls.find((url) => url.id === song.id).url;
+      const url = urls.find((url) => url.id === song.id).url;
       if (url) {
         result.push({ ...song, url });
       }

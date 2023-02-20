@@ -15,15 +15,15 @@ export enum CurrentActions {
   Other
 }
 
-export type PlayState = {
+export interface PlayState {
   isPlaying: boolean;
   playMode: PlayMode;
   songList: Song[];
   playList: Song[];
   currentIndex: number;
-  //当前操作
+  // 当前操作
   currentAction: CurrentActions;
-};
+}
 
 export const initialState: PlayState = {
   isPlaying: false,

@@ -40,7 +40,7 @@ export class WyLyric {
     this.generateLyric();
   }
   private generateLyric() {
-    let lines = this.lrc.lyric.split('\n');
+    const lines = this.lrc.lyric.split('\n');
     lines.forEach((line) => this.lineProcess(line));
   }
 
@@ -81,9 +81,9 @@ export class WyLyric {
       const txt = line.replace(timeExp, '').trim();
       const txtCn = tline ? tline.replace(timeExp, '').trim() : '';
       if (txt) {
-        let thirdResult = result[3] || '00';
+        const thirdResult = result[3] || '00';
         const len = thirdResult.length;
-        let _thirdResult = len > 2 ? parseInt(thirdResult) : parseInt(thirdResult) * 10;
+        const _thirdResult = len > 2 ? parseInt(thirdResult) : parseInt(thirdResult) * 10;
         const time = Number(result[1]) * 60 * 1000 + Number(result[2]) * 1000 + _thirdResult;
         this.lines.push({ txt, txtCn, time });
       }
@@ -91,7 +91,7 @@ export class WyLyric {
   }
 
   play(startTime = 0, skip = false) {
-    if (!this.lines.length) return;
+    if (!this.lines.length) { return; }
     if (!this.playing) {
       this.playing = true;
     }
@@ -107,7 +107,7 @@ export class WyLyric {
   }
 
   private playReset() {
-    let line = this.lines[this.curNum];
+    const line = this.lines[this.curNum];
     const delay = line.time - (Date.now() - this.startStamp);
     this.timer$ = timer(delay).subscribe(() => {
       this.callHandler(this.curNum++);
@@ -131,7 +131,7 @@ export class WyLyric {
     this.timer$ && this.timer$.unsubscribe();
   }
 
-  //歌词对应行数
+  // 歌词对应行数
   private findCurNum(startTime: number): number {
     const index = this.lines.findIndex((item) => startTime <= item.time);
     return index === -1 ? this.lines.length - 1 : index;
@@ -142,7 +142,7 @@ export class WyLyric {
     this.playing = playing;
     if (playing) {
       const startTime = (this.pauseStamp || now) - (this.startStamp || now);
-      //暂停重新点击播放不执行callHandler发射数据
+      // 暂停重新点击播放不执行callHandler发射数据
       this.play(startTime, true);
     } else {
       this.stop();

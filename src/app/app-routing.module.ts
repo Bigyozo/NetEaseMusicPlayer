@@ -39,7 +39,7 @@ const routes: Routes = [
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, {
-      //滚动条置顶
+      // 滚动条置顶
       scrollPositionRestoration: 'enabled'
     })
   ],

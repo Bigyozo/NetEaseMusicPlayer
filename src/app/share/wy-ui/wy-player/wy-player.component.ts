@@ -53,7 +53,7 @@ export class WyPlayerComponent implements OnInit {
   };
   showPlayer = 'hide';
   isLocked = false;
-  //是否正在动画
+  // 是否正在动画
   isAnimating = false;
 
   sliderValue = 0;
@@ -73,17 +73,17 @@ export class WyPlayerComponent implements OnInit {
 
   volume = 7;
 
-  //是否显示音量面板
+  // 是否显示音量面板
   showVolumePanel = false;
   showListPanel = false;
-  //是否绑定Clickoutside
+  // 是否绑定Clickoutside
   bindFlag = false;
 
   currentMode: PlayMode;
 
   modeCount = 0;
 
-  //private winClick: Subscription;
+  // private winClick: Subscription;
 
   @ViewChild('audio', { static: true }) private audio: ElementRef;
   private audioEl: HTMLAudioElement;
@@ -193,7 +193,7 @@ export class WyPlayerComponent implements OnInit {
     }
   }
 
-  //播放，暂停
+  // 播放，暂停
   onToggle() {
     if (!this.currentSong) {
       if (this.playList.length) {
@@ -213,7 +213,7 @@ export class WyPlayerComponent implements OnInit {
   }
 
   OnPrev(index: number) {
-    if (!this.songReady) return;
+    if (!this.songReady) { return; }
     if (this.playList.length === 1) {
       this.loop();
     } else {
@@ -223,7 +223,7 @@ export class WyPlayerComponent implements OnInit {
   }
 
   OnNext(index: number) {
-    if (!this.songReady) return;
+    if (!this.songReady) { return; }
     if (this.playList.length === 1) {
       this.loop();
     } else {
@@ -232,7 +232,7 @@ export class WyPlayerComponent implements OnInit {
     }
   }
 
-  //播放错误（无歌曲）
+  // 播放错误（无歌曲）
   onError() {
     this.isPlaying = false;
     this.bufferOffset = 0;
@@ -288,7 +288,7 @@ export class WyPlayerComponent implements OnInit {
   }
 
   onTimeUpdate(e: Event) {
-    this.currentTime = (<HTMLAudioElement>e.target).currentTime;
+    this.currentTime = (e.target as HTMLAudioElement).currentTime;
     this.sliderValue = (this.currentTime / this.duration) * 100;
     const buffered = this.audioEl.buffered;
     if (buffered.length && this.bufferOffset < 100) {
@@ -296,12 +296,12 @@ export class WyPlayerComponent implements OnInit {
     }
   }
 
-  //控制音量面板
+  // 控制音量面板
   toggleVolPanel() {
     this.togglePanel('showVolumePanel');
   }
 
-  //控制音量面板
+  // 控制音量面板
   toggleListPanel() {
     if (this.songList.length) {
       this.togglePanel('showListPanel');

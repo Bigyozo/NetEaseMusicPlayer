@@ -13,19 +13,19 @@ export enum ModalTypes {
   Default = 'default'
 }
 
-export type ShareInfo = {
+export interface ShareInfo {
   id: string;
   type: string;
   txt: string;
-};
+}
 
-export type MemberState = {
+export interface MemberState {
   modalVisible: boolean;
   modalType: ModalTypes;
   userId: string;
   likeId: string;
   shareInfo?: ShareInfo;
-};
+}
 
 export const initialState: MemberState = {
   modalVisible: false,

@@ -26,10 +26,10 @@ import {
 import { codeJson } from './utils/base64';
 import { isEmptyObject } from './utils/tools';
 
-type StateArrType = {
+interface StateArrType {
   type: any;
   cb: (param: any) => void;
-};
+}
 
 @Component({
   selector: 'app-root',
@@ -55,12 +55,12 @@ export class AppComponent {
   wyRememberEmailLogin: EmailLoginParams;
   mySheets: SongSheet[];
 
-  //被收藏歌曲ID
+  // 被收藏歌曲ID
   likeId: string;
-  //弹框显示
+  // 弹框显示
   visible: boolean;
-  //弹窗loading
-  showSpin: boolean = false;
+  // 弹窗loading
+  showSpin = false;
   currentModalType: ModalTypes = ModalTypes.Default;
   shareInfo: ShareInfo;
   routeTitle = '';
@@ -119,7 +119,7 @@ export class AppComponent {
         mergeMap((route) => route.data)
       )
       .subscribe((data) => {
-        this.routeTitle = data['title'];
+        this.routeTitle = data.title;
         this.titleSerivce.setTitle(this.routeTitle);
       });
   }
@@ -294,7 +294,7 @@ export class AppComponent {
     );
   }
 
-  //获取当前用户的歌单
+  // 获取当前用户的歌单
   onLoadMySheets() {
     if (this.user) {
       this.memberService
@@ -308,7 +308,7 @@ export class AppComponent {
     }
   }
 
-  //收藏歌曲
+  // 收藏歌曲
   onLikeSong(args: LikeSongParams) {
     this.memberService.likeSong(args).subscribe(
       () => {
@@ -348,7 +348,7 @@ export class AppComponent {
     );
   }
 
-  //注册账号
+  // 注册账号
   onRegister(phone: string) {
     this.alertMessage('error', '暂时不支持注册');
   }

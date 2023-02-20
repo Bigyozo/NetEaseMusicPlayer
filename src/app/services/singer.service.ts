@@ -33,13 +33,13 @@ export class SingerService {
       .pipe(map((res: { artists: Singer[] }) => res.artists));
   }
 
-  //获取歌手详情和热门歌曲
+  // 获取歌手详情和热门歌曲
   getSingerDetail(id: string): Observable<SingerDetail> {
     const params = new HttpParams().set('id', id);
     return this.http.get(this.uri + 'artists', { params }).pipe(map((res) => res as SingerDetail));
   }
 
-  //获取相似歌手详情
+  // 获取相似歌手详情
   getSimilarSinger(id: string): Observable<Singer[]> {
     const params = new HttpParams().set('id', id);
     return this.http.get(this.uri + 'simi/artist', { params }).pipe(

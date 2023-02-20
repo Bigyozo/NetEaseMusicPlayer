@@ -47,26 +47,25 @@ import { SliderEventObserverConfig, SliderValue } from './wy-slider-types';
   ]
 })
 export class WySliderComponent
-  implements OnInit, OnDestroy, ControlValueAccessor
-{
-  //滑块是否垂直
+  implements OnInit, OnDestroy, ControlValueAccessor {
+  // 滑块是否垂直
   @Input() wyVertical = false;
-  //滑块起点
+  // 滑块起点
   @Input() wyMin = 0;
-  //滑块终点
+  // 滑块终点
   @Input() wyMax = 100;
-  //缓冲条
+  // 缓冲条
   @Input() bufferOffset: SliderValue = 0;
   private slideDom: HTMLDivElement;
 
   @Output() wyOnAfterChange = new EventEmitter<SliderValue>();
 
   @ViewChild('wySlider', { static: true }) private wySlider: ElementRef;
-  //滑块是否在移动
+  // 滑块是否在移动
   private isDragging = false;
-  //父组件计算的滑块位置
+  // 父组件计算的滑块位置
   value: SliderValue = null;
-  //传给子组件的滑块位置
+  // 传给子组件的滑块位置
   offset: SliderValue = null;
 
   constructor(
@@ -74,11 +73,11 @@ export class WySliderComponent
     private cdr: ChangeDetectorRef
   ) {}
 
-  //订阅事件流
+  // 订阅事件流
   private dragStart$: Observable<number>;
   private dragMove$: Observable<number>;
   private dragEnd$: Observable<Event>;
-  //订阅事件对象，用于解绑
+  // 订阅事件对象，用于解绑
   private dragStart_: Subscription | null;
   private dragMove_: Subscription | null;
   private dragEnd_: Subscription | null;
@@ -124,16 +123,16 @@ export class WySliderComponent
         map((position: number) => this.findClosestValue(position))
       );
     });
-    //手机端PC端事件合并
+    // 手机端PC端事件合并
     this.dragStart$ = merge(mouse.startPlucked$, touch.startPlucked$);
     this.dragMove$ = merge(mouse.moveResolved$, touch.moveResolved$);
     this.dragEnd$ = merge(mouse.end$, touch.end$);
   }
 
   private findClosestValue(position: number): number {
-    //获取滑块总长
+    // 获取滑块总长
     const sliderLength = this.getSliderLength();
-    //滑块（左上）端点位置
+    // 滑块（左上）端点位置
     const sliderStart = this.getSliderStartPosition();
     const ratio = limitNumberRange(
       (position - sliderStart) / sliderLength,
@@ -166,7 +165,7 @@ export class WySliderComponent
     }
   }
 
-  //解绑事件
+  // 解绑事件
   private unSubscribeDrag(events: string[] = ['start', 'move', 'end']) {
     if (inArray(events, 'start') && this.dragStart_) {
       this.dragStart_.unsubscribe();
@@ -190,7 +189,7 @@ export class WySliderComponent
   private onDragMove(value: number) {
     if (this.isDragging) {
       this.setValue(value);
-      //手动变更检测
+      // 手动变更检测
       this.cdr.markForCheck();
     }
   }
@@ -212,7 +211,7 @@ export class WySliderComponent
 
   private setValue(value: SliderValue, needCheck = false) {
     if (needCheck) {
-      if (this.isDragging) return;
+      if (this.isDragging) { return; }
       this.value = this.formatValue(value);
       this.updateTrackAndHandles();
     }

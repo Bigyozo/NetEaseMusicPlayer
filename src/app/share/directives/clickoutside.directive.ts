@@ -17,7 +17,7 @@ export class ClickoutsideDirective implements OnChanges {
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['bindFlag'] && !changes['bindFlag'].firstChange) {
+    if (changes.bindFlag && !changes.bindFlag.firstChange) {
       if (this.bindFlag) {
         this.handleClick = this.rd.listen(this.doc, 'click', (evt) => {
           const target = evt.target;

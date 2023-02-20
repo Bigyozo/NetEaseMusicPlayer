@@ -22,7 +22,7 @@ export class WySliderHandleComponent implements OnInit, OnChanges {
   ngOnInit() {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['wyOffset']) {
+    if (changes.wyOffset) {
       this.style[this.wyVertical ? 'bottom' : 'left'] = this.wyOffset + '%';
     }
   }

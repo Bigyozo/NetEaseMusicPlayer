@@ -49,10 +49,10 @@ export class WyCheckCodeComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['timing']) {
+    if (changes.timing) {
       this.showRepeatBtn = this.timing <= 0;
     }
-    if (changes['codePass'] && !changes['codePass'].firstChange) {
+    if (changes.codePass && !changes.codePass.firstChange) {
       this.showErrorTip = !this.codePass;
     }
   }
@@ -60,7 +60,7 @@ export class WyCheckCodeComponent implements OnInit, OnChanges {
   ngOnInit() {}
 
   onSubmit() {
-    //注册
+    // 注册
     if (this.formModel.valid && this.codePass) {
       this.onCheckExist.emit();
     }

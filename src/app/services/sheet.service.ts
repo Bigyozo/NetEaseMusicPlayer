@@ -9,12 +9,12 @@ import { SheetList, Song, SongSheet } from './data.types/common.types';
 import { API_CONFIG, ServicesModule } from './services.module';
 import { SongService } from './song.service';
 
-export type SheetParams = {
+export interface SheetParams {
   offset: number;
   limit: number;
   order: 'hot' | 'highquality';
   cat: string;
-};
+}
 
 @Injectable({
   providedIn: ServicesModule
@@ -26,7 +26,7 @@ export class SheetService {
     private songService: SongService
   ) {}
 
-  //获取歌单列表
+  // 获取歌单列表
   getSheets(args: SheetParams): Observable<SheetList> {
     const params = new HttpParams({ fromString: queryString.stringify(args) });
     return this.http

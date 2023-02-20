@@ -13,7 +13,7 @@ import { MemberService } from '../../../../services/member.service';
 })
 export class MemberCardComponent implements OnInit {
   tipTitle = '';
-  showTip: boolean = false;
+  showTip = false;
   @Input() user: User;
   @Output() openModal = new EventEmitter<void>();
 

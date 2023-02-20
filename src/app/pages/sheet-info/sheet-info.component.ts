@@ -37,7 +37,7 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
 
   currentSong: Song;
   private destroy$ = new Subject<void>();
-  currentIndex: number = -1;
+  currentIndex = -1;
 
   constructor(
     private route: ActivatedRoute,
@@ -148,9 +148,9 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
   shareResource(resource: Song | SongSheet, type = 'song') {
     let txt = '';
     if (type === 'playlist') {
-      txt = this.makeTxt('歌单', resource.name, (<SongSheet>resource).creator.nickname);
+      txt = this.makeTxt('歌单', resource.name, (resource as SongSheet).creator.nickname);
     } else {
-      txt = this.makeTxt('歌曲', resource.name, (<Song>resource).ar);
+      txt = this.makeTxt('歌曲', resource.name, (resource as Song).ar);
     }
     this.store$.dispatch(SetShareInfo({ info: { id: resource.id.toString(), type, txt } }));
   }

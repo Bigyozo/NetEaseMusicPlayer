@@ -16,16 +16,16 @@ export enum RecordType {
   weekData
 }
 
-export type LikeSongParams = {
+export interface LikeSongParams {
   pid: string;
   tracks: string;
-};
+}
 
-export type ShareParams = {
+export interface ShareParams {
   id: string;
   msg: string;
   type: string;
-};
+}
 
 @Injectable({
   providedIn: ServicesModule
@@ -52,13 +52,13 @@ export class MemberService {
     return this.http.get(this.uri + 'logout').pipe(map((res) => res as SampleBack));
   }
 
-  //签到
+  // 签到
   signin(): Observable<Signin> {
     const params = new HttpParams({ fromString: queryString.stringify({ type: 1 }) });
     return this.http.get(this.uri + 'daily_signin', { params }).pipe(map((res) => res as Signin));
   }
 
-  //听歌记录
+  // 听歌记录
   getUserRecord(uid: string, type = RecordType.weekData): Observable<RecordVal[]> {
     const params = new HttpParams({ fromString: queryString.stringify({ uid, type }) });
     return this.http
@@ -66,7 +66,7 @@ export class MemberService {
       .pipe(map((res: UserRecord) => res[RecordType[type]]));
   }
 
-  //用户歌单
+  // 用户歌单
   getUserSheets(uid: string): Observable<UserSheet> {
     const params = new HttpParams({ fromString: queryString.stringify({ uid }) });
     return this.http.get(this.uri + 'user/playlist', { params }).pipe(
@@ -80,7 +80,7 @@ export class MemberService {
     );
   }
 
-  //收藏歌曲
+  // 收藏歌曲
   likeSong({ pid, tracks }: LikeSongParams) {
     const params = new HttpParams({
       fromString: queryString.stringify({ pid, tracks, op: 'add' })
@@ -90,7 +90,7 @@ export class MemberService {
       .pipe(map((res: SampleBack) => res.code));
   }
 
-  //收藏歌单
+  // 收藏歌单
   likeSheet(id: string, t = 1): Observable<number> {
     const params = new HttpParams({
       fromString: queryString.stringify({ id, t })
@@ -100,7 +100,7 @@ export class MemberService {
       .pipe(map((res: SampleBack) => res.code));
   }
 
-  //收藏歌手
+  // 收藏歌手
   likeSinger(id: string, t = 1): Observable<number> {
     const params = new HttpParams({
       fromString: queryString.stringify({ id, t })
@@ -110,7 +110,7 @@ export class MemberService {
       .pipe(map((res: SampleBack) => res.code));
   }
 
-  //新建歌单
+  // 新建歌单
   createSheet(name: string): Observable<string> {
     const params = new HttpParams({ fromString: queryString.stringify({ name }) });
     return this.http
@@ -118,7 +118,7 @@ export class MemberService {
       .pipe(map((res: SampleBack) => res.id.toString()));
   }
 
-  //分享
+  // 分享
   shareResource({ id, msg, type }: ShareParams): Observable<number> {
     const params = new HttpParams({
       fromString: queryString.stringify({ id, msg, type })
@@ -128,7 +128,7 @@ export class MemberService {
       .pipe(map((res: SampleBack) => res.code));
   }
 
-  //发送验证码
+  // 发送验证码
   sendCode(phone: number): Observable<number> {
     const params = new HttpParams({ fromString: queryString.stringify({ phone }) });
     return this.http
@@ -136,7 +136,7 @@ export class MemberService {
       .pipe(map((res: SampleBack) => res.code));
   }
 
-  //验证验证码
+  // 验证验证码
   checkCode(phone: number, captcha: number): Observable<number> {
     const params = new HttpParams({ fromString: queryString.stringify({ phone, captcha }) });
     return this.http
@@ -144,7 +144,7 @@ export class MemberService {
       .pipe(map((res: SampleBack) => res.code));
   }
 
-  //是否已注册
+  // 是否已注册
   checkExist(phone: number): Observable<number> {
     const params = new HttpParams({ fromString: queryString.stringify({ phone }) });
     return this.http

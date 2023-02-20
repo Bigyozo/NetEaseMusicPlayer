@@ -7,17 +7,17 @@ export interface Signin {
 }
 
 export interface User {
-  //用户等级
+  // 用户等级
   level?: number;
   listenSongs?: number;
   cookie: string;
   profile: {
     userId: number;
     nickname: string;
-    //头像
+    // 头像
     avatarUrl: string;
     backgroundUrl: string;
-    //个人简介
+    // 个人简介
     signature: string;
     // 性别
     gender: number;
@@ -47,14 +47,14 @@ export interface UserSheet {
   subscribed: SongSheet[];
 }
 
-export type PhoneLoginParams = {
+export interface PhoneLoginParams {
   phone: number;
   password: string;
   remember: boolean;
-};
+}
 
-export type EmailLoginParams = {
+export interface EmailLoginParams {
   email: string;
   password: string;
   remember: boolean;
-};
+}

@@ -96,7 +96,7 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
     this.batchActionsService.likeSong(id);
   }
 
-  //批量收藏
+  // 批量收藏
   onLikeSongs(songs: Song[]) {
     const ids = songs.map((item) => item.id).join(',');
     this.onLikeSong(ids);

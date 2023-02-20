@@ -31,7 +31,7 @@ export class WySearchComponent implements OnInit, AfterViewInit, OnChanges {
   constructor(private overlay: Overlay, private viewContainerRef: ViewContainerRef) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['searchResult'] && !changes['searchResult'].firstChange) {
+    if (changes.searchResult && !changes.searchResult.firstChange) {
       this.showOverlayPanel();
     }
   }
@@ -52,7 +52,7 @@ export class WySearchComponent implements OnInit, AfterViewInit, OnChanges {
       .withLockedPosition(true);
     this.overlayRef = this.overlay.create({
       //  hasBackdrop: true,
-      positionStrategy: positionStrategy,
+      positionStrategy,
       scrollStrategy: this.overlay.scrollStrategies.reposition()
     });
     const panelPortal = new ComponentPortal(WySearchPanelComponent, this.viewContainerRef);

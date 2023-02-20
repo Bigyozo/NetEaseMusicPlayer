@@ -1,9 +1,9 @@
-export type PlayMode = {
+export interface PlayMode {
   type: 'loop' | 'random' | 'singleLoop';
   label: 'loop' | 'random' | 'singleLoop';
-};
+}
 
-export type StateArrType = {
+export interface StateArrType {
   type: any;
   cb: (param: any) => void;
-};
+}

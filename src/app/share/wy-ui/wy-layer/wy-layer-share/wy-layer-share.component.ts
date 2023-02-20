@@ -18,7 +18,7 @@ export class WyLayerShareComponent implements OnInit, OnChanges {
   @Input() shareInfo: ShareInfo;
   @Output() onCancel = new EventEmitter<void>();
   @Output() onShare = new EventEmitter<ShareParams>();
-  @Input() visible: boolean = false;
+  @Input() visible = false;
   formModel: FormGroup;
   surplusMsgCount = MAX_MSG;
   constructor() {
@@ -31,7 +31,7 @@ export class WyLayerShareComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    const visible = changes['visible'];
+    const visible = changes.visible;
     if (visible && !visible.firstChange) {
       this.formModel.get('msg').markAsTouched();
     }
