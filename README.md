@@ -1,27 +1,5 @@
-# NetEaseMusicPlayer
+# 网易云音乐网页端
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.0.
+实现了网易云的播放器功能以及歌单、歌曲、歌手和会员登录等功能。系统基于 angular8 开发，后端功能利用开源项目网易云音乐 Node.js API 实现。
 
-## Development server
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+[后端项目地址](https://github.com/Binaryify/NeteaseCloudMusicApi)
