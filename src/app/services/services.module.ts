@@ -1,5 +1,4 @@
-import { isPlatformBrowser } from '@angular/common';
-import { InjectionToken, NgModule, PLATFORM_ID } from '@angular/core';
+import { InjectionToken, NgModule } from '@angular/core';
 
 import { httpInterceptorProvides } from './http-interceptors';
 
@@ -13,13 +12,6 @@ export const WINDOW = new InjectionToken('WindowToken');
     {
       provide: API_CONFIG,
       useValue: '/api/'
-    },
-    {
-      provide: WINDOW,
-      useFactory(platformId: Object): Window | Object {
-        return isPlatformBrowser(platformId) ? window : {};
-      },
-      deps: [PLATFORM_ID]
     },
     httpInterceptorProvides
   ]
