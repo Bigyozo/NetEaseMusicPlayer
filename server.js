@@ -3,6 +3,7 @@ const proxy = require('http-proxy-middleware');
 const app = express();
 const PORT = 8800;
 app.use(express.static('www'));
+//target为后端项目地址
 const apiProxy = proxy('/api/**', {
   target: 'http://192.168.40.218:3000/',
   changeOrigin: true,
