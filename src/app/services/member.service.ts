@@ -1,8 +1,9 @@
 import queryString from 'query-string';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { map } from 'rxjs/internal/operators';
 
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { error } from '@angular/compiler/src/util';
 import { Inject, Injectable } from '@angular/core';
 
 import { SampleBack, SongSheet } from './data.types/common.types';
@@ -35,12 +36,30 @@ export class MemberService {
 
   phoneLogin(formValue: PhoneLoginParams): Observable<User> {
     const params = new HttpParams({ fromString: queryString.stringify(formValue) });
-    return this.http.get(this.uri + 'login/cellphone', { params }).pipe(map((res) => res as User));
+    return this.http.get(this.uri + 'login/cellphone', { params }).pipe(
+      map((res) => {
+        if (res.hasOwnProperty('message')) {
+          const err = res as Error;
+          throw new Error(err.message);
+        } else {
+          return res as User;
+        }
+      })
+    );
   }
 
   emailLogin(formValue: EmailLoginParams): Observable<User> {
     const params = new HttpParams({ fromString: queryString.stringify(formValue) });
-    return this.http.get(this.uri + 'login', { params }).pipe(map((res) => res as User));
+    return this.http.get(this.uri + 'login', { params }).pipe(
+      map((res) => {
+        if (res.hasOwnProperty('message')) {
+          const err = res as Error;
+          throw new Error(err.message);
+        } else {
+          return res as User;
+        }
+      })
+    );
   }
 
   getUserDetail(uid: string): Observable<User> {
