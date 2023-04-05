@@ -4,14 +4,14 @@ Language : 简体中文 | [English](./README_ENG.md)
 
 - 实现了网易云音乐的播放器以及歌单页面、歌曲页面、歌手页面和会员登录等功能。
 - 技术栈 angular8, ngrx8, ng-zorro-antd。
-- 后端功能利用开源项目网易云音乐 Node.js API 实现。
-  [后端项目地址](https://github.com/Binaryify/NeteaseCloudMusicApi)
+- 后端功能利用开源项目网易云音乐 API 实现，详情参见
+  [Binaryify/NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)
 
 ## 使用方法
 
 ### 项目直接运行
 
-1. 根据后端项目的 IP 与端口设置 proxyconfig.json 文件中的 target 属性。
+1. 网易云音乐 API 部署完成后，根据后端的 IP 与端口设置 proxyconfig.json 文件中的 target 属性。
 2. npm install 后启动项目。
 
 ```shell
