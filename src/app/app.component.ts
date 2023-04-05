@@ -11,6 +11,7 @@ import { createFeatureSelector, select, Store } from '@ngrx/store';
 
 import { SearchResult, SongSheet } from './services/data.types/common.types';
 import { EmailLoginParams, PhoneLoginParams, User } from './services/data.types/member.type';
+import { LanguageService } from './services/language.service';
 import { LikeSongParams, MemberService, ShareParams } from './services/member.service';
 import { SearchService } from './services/search.service';
 import { StorageService } from './services/storage.service';
@@ -51,7 +52,7 @@ export class AppComponent {
   wyRememberPhoneLogin: PhoneLoginParams;
   wyRememberEmailLogin: EmailLoginParams;
   mySheets: SongSheet[];
-
+  languageRes = this.languageService.languageRes;
   // 被收藏歌曲ID
   likeId: string;
   // 弹框显示
@@ -74,6 +75,7 @@ export class AppComponent {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private titleSerivce: Title,
+    private languageService: LanguageService,
     @Inject(DOCUMENT) private doc: Document
   ) {
     const userId = this.storgeService.getStorage('wyUserID');
