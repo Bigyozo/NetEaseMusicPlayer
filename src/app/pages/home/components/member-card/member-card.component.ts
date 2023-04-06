@@ -1,6 +1,9 @@
 import { NzMessageService } from 'ng-zorro-antd';
 import { timer } from 'rxjs';
+import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LanguageRes } from 'src/app/services/data.types/common.types';
 import { User } from 'src/app/services/data.types/member.type';
+import { LanguageService } from 'src/app/services/language.service';
 
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
@@ -13,11 +16,20 @@ import { MemberService } from '../../../../services/member.service';
 })
 export class MemberCardComponent implements OnInit {
   tipTitle = '';
+  lanRes: LanguageRes = LANGUAGE_CH;
   showTip = false;
   @Input() user: User;
   @Output() openModal = new EventEmitter<void>();
 
-  constructor(private memberService: MemberService, private messageService: NzMessageService) {}
+  constructor(
+    private memberService: MemberService,
+    private messageService: NzMessageService,
+    private languageService: LanguageService
+  ) {
+    this.languageService.language$.subscribe((item) => {
+      this.lanRes = item.res;
+    });
+  }
 
   ngOnInit() {}
 

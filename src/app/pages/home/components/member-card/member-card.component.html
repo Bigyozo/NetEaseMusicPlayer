@@ -1,7 +1,13 @@
 <div class="member">
   <div class="login" *ngIf="!user; else logined">
-    <p>Login in NetEase Music</p>
-    <button nz-button class="btn" (click)="openModal.emit()">Login In</button>
+    <p>
+      <!-- 登陆网易云音乐，享受无限收藏的乐趣 -->
+      {{ lanRes.C00014 }}
+    </p>
+    <button nz-button class="btn" (click)="openModal.emit()">
+      <!-- 用户登陆 -->
+      {{ lanRes.C00015 }}
+    </button>
   </div>
   <ng-template #logined>
     <div class="n-myinfo">
@@ -23,7 +29,10 @@
             nzPlacement="bottom"
             [nzVisible]="showTip"
           >
-            <button nz-button nzType="primary" nzBlock (click)="onSignin()">签到</button>
+            <button nz-button nzType="primary" nzBlock (click)="onSignin()">
+              <!-- 签到 -->
+              {{ lanRes.C00016 }}
+            </button>
           </div>
         </div>
       </div>
@@ -31,15 +40,24 @@
       <ul class="dny clearfix">
         <li class="fst">
           <strong class="ellipsis">{{ user.profile.eventCount }}</strong>
-          <span>动态</span>
+          <span>
+            <!-- 动态 -->
+            {{ lanRes.C00017 }}
+          </span>
         </li>
         <li>
           <strong class="ellipsis">{{ user.profile.follows }}</strong>
-          <span>关注</span>
+          <span>
+            <!-- 关注 -->
+            {{ lanRes.C00018 }}
+          </span>
         </li>
         <li class="lst">
           <strong class="ellipsis">{{ user.profile.followeds }}</strong>
-          <span>粉丝数</span>
+          <span>
+            <!-- 粉丝数 -->
+            {{ lanRes.C00019 }}
+          </span>
         </li>
       </ul>
     </div>
