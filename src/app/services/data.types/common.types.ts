@@ -85,3 +85,12 @@ export interface SearchResult {
   songs?: Song[];
   playlists?: SongSheet[];
 }
+
+export interface Language {
+  code: 'ch' | 'en';
+  res: LanguageRes;
+}
+
+export interface LanguageRes {
+  [key: string]: string;
+}

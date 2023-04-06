@@ -1,7 +1,11 @@
 import { NzCarouselComponent } from 'ng-zorro-antd';
 import { map } from 'rxjs/internal/operators';
-import { Banner, HotTag, Singer, SongSheet } from 'src/app/services/data.types/common.types';
+import { LANGUAGE_CH } from 'src/app/language/ch';
+import {
+    Banner, HotTag, LanguageRes, Singer, SongSheet
+} from 'src/app/services/data.types/common.types';
 import { User } from 'src/app/services/data.types/member.type';
+import { LanguageService } from 'src/app/services/language.service';
 import { MemberService } from 'src/app/services/member.service';
 import { SheetService } from 'src/app/services/sheet.service';
 import { MemberState, ModalTypes } from 'src/app/store/reducers/member.reducer';
@@ -21,7 +25,7 @@ import { getUserId } from '../../store/selectors/member.selectors';
 })
 export class HomeComponent implements OnInit {
   carouselActiveIndex = 0;
-
+  lanRes: LanguageRes = LANGUAGE_CH;
   banners: Banner[];
   hotTags: HotTag[];
   songSheetList: SongSheet[];
@@ -37,7 +41,8 @@ export class HomeComponent implements OnInit {
     private sheetService: SheetService,
     private batchActionsService: BatchActionsService,
     private store$: Store<AppStoreModule>,
-    private memberService: MemberService
+    private memberService: MemberService,
+    private languageService: LanguageService
   ) {
     this.route.data
       .pipe(map((res) => res.homeDatas))
@@ -57,6 +62,9 @@ export class HomeComponent implements OnInit {
           this.user = null;
         }
       });
+    this.languageService.language$.subscribe((item) => {
+      this.lanRes = item.res;
+    });
   }
 
   private getUserDetail(userId: string) {
