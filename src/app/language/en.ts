@@ -19,5 +19,21 @@ export const LANGUAGE_EN: LanguageRes = {
   C00016: 'Check In',
   C00017: 'Trend',
   C00018: 'Follow',
-  C00019: 'Fans'
+  C00019: 'Fans',
+  C00020: 'See More',
+  C00021: 'Created Playlist',
+  C00022: 'Favorite Playlist',
+  C00023: '听歌排行',
+  C00024: '累计听歌数',
+  C00025: '最近一周',
+  C00026: '所有时间',
+  C00027: '暂无音乐！',
+  C00028: '标题',
+  C00029: '时长',
+  C00030: '歌手',
+  C00031: '播放次数',
+  C00032: '播放',
+  C00033: '添加',
+  C00034: '收藏',
+  C00035: '分享'
 };

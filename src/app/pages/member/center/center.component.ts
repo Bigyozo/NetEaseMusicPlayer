@@ -1,8 +1,10 @@
 import { NzMessageService } from 'ng-zorro-antd';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/internal/operators';
-import { Singer, Song } from 'src/app/services/data.types/common.types';
+import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LanguageRes, Singer, Song } from 'src/app/services/data.types/common.types';
 import { RecordVal, User, UserSheet } from 'src/app/services/data.types/member.type';
+import { LanguageService } from 'src/app/services/language.service';
 import { MemberService, RecordType } from 'src/app/services/member.service';
 import { SheetService } from 'src/app/services/sheet.service';
 import { SongService } from 'src/app/services/song.service';
@@ -27,6 +29,7 @@ import { PlayState } from '../../../store/reducers/player.reducer';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CenterComponent implements OnInit, OnDestroy {
+  lanRes: LanguageRes = LANGUAGE_CH;
   user: User;
   records: RecordVal[];
   userSheet: UserSheet;
@@ -43,13 +46,18 @@ export class CenterComponent implements OnInit, OnDestroy {
     private songService: SongService,
     private nzMessageService: NzMessageService,
     private store$: Store<AppStoreModule>,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private languageService: LanguageService
   ) {
     this.route.data.pipe(map((res) => res.user)).subscribe(([user, userRecord, userSheet]) => {
       this.user = user;
       this.records = userRecord.slice(0, 10);
       this.userSheet = userSheet;
       this.listenCurrentSong();
+    });
+    this.languageService.language$.subscribe((item) => {
+      this.lanRes = item.res;
+      this.cdr.markForCheck();
     });
   }
 
