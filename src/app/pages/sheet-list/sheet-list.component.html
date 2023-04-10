@@ -9,8 +9,14 @@
         [(ngModel)]="orderValue"
         (ngModelChange)="onOrderChange($event)"
       >
-        <label nz-radio-button nzValue="hot">人气</label>
-        <label nz-radio-button nzValue="highquality">好评</label>
+        <label nz-radio-button nzValue="hot">
+          <!-- 人气 -->
+          {{ lanRes.C00042 }}
+        </label>
+        <label nz-radio-button nzValue="highquality">
+          <!-- 好评 -->
+          {{ lanRes.C00043 }}
+        </label>
       </nz-radio-group>
     </div>
 

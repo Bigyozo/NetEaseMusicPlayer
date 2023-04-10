@@ -1,6 +1,8 @@
 import { NzMessageService } from 'ng-zorro-antd';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/internal/operators';
+import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LanguageService } from 'src/app/services/language.service';
 import { SongService } from 'src/app/services/song.service';
 import { AppStoreModule } from 'src/app/store';
 import { SetShareInfo } from 'src/app/store/actions/member.action';
@@ -12,7 +14,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
 
-import { Singer, SingerDetail, Song } from '../../../services/data.types/common.types';
+import { LanguageRes, Singer, SingerDetail, Song } from '../../../services/data.types/common.types';
 import { MemberService } from '../../../services/member.service';
 import { getCurrentSong } from '../../../store/selectors/play.selectors';
 
@@ -22,6 +24,7 @@ import { getCurrentSong } from '../../../store/selectors/play.selectors';
   styleUrls: ['./singer-detail.component.less']
 })
 export class SingerDetailComponent implements OnInit, OnDestroy {
+  lanRes: LanguageRes = LANGUAGE_CH;
   singerDetail: SingerDetail;
   currentSong: Song;
   currentIndex = -1;
@@ -35,12 +38,16 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
     private songService: SongService,
     private batchActionsService: BatchActionsService,
     private nzMessageService: NzMessageService,
-    private memberService: MemberService
+    private memberService: MemberService,
+    private languageService: LanguageService
   ) {
     this.route.data.pipe(map((res) => res.singerDetail)).subscribe(([detail, simiSingers]) => {
       this.singerDetail = detail;
       this.simiSingers = simiSingers;
       this.listenCurrent();
+    });
+    this.languageService.language$.subscribe((item) => {
+      this.lanRes = item.res;
     });
   }
 

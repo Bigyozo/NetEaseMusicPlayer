@@ -16,7 +16,10 @@
 
           <div class="user f-cb">
             <div class="singers clearfix">
-              <span>歌手：</span>
+              <span>
+                <!-- 歌手： -->
+                {{ lanRes.C00045 }}
+              </span>
               <ul class="clearfix">
                 <li *ngFor="let singer of song.ar; last as isLast">
                   <a [routerLink]="['/singer', singer.id]">{{ singer.name }}</a>
@@ -26,7 +29,10 @@
             </div>
 
             <div class="al">
-              <span>歌曲</span>
+              <span>
+                <!-- 歌曲 -->
+                {{ lanRes.C00046 }}
+              </span>
               <span class="al-name">{{ song.al.name }}</span>
             </div>
           </div>
@@ -34,15 +40,23 @@
           <div class="btns">
             <nz-button-group class="btn">
               <button class="play" nz-button nzType="primary" (click)="onAddSong(song, true)">
-                <i nz-icon nzType="play-circle" nzTheme="outline"></i>播放
+                <i nz-icon nzType="play-circle" nzTheme="outline"></i>
+                <!-- 播放 -->
+                {{ lanRes.C00032 }}
               </button>
               <button class="add" nz-button nzType="primary" (click)="onAddSong(song)">+</button>
             </nz-button-group>
             <button class="btn like" nz-button (click)="onLikeSong(song.id.toString())">
-              <span>收藏</span>
+              <span>
+                <!-- 收藏 -->
+                {{ lanRes.C00034 }}
+              </span>
             </button>
             <button class="btn share" nz-button (click)="onShareSong(song)">
-              <span>分享</span>
+              <span>
+                <!-- 分享 -->
+                {{ lanRes.C00035 }}
+              </span>
             </button>
           </div>
 
