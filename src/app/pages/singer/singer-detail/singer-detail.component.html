@@ -30,7 +30,9 @@
               nzType="primary"
               (click)="onAddSongs(singerDetail.hotSongs, true)"
             >
-              <i nz-icon nzType="play-circle" nzTheme="outline"></i>播放
+              <i nz-icon nzType="play-circle" nzTheme="outline"></i>
+              <!-- 播放 -->
+              {{ lanRes.C00032 }}
             </button>
             <button
               class="add"
@@ -42,33 +44,46 @@
             </button>
           </nz-button-group>
           <button class="btn like" nz-button (click)="onLikeSongs(singerDetail.hotSongs)">
-            <span>收藏</span>{{ singerDetail.hotSongs.length }}
+            <span>
+              <!-- 收藏 -->
+              {{ lanRes.C00034 }} </span
+            >{{ singerDetail.hotSongs.length }}
           </button>
         </div>
-
+        <!-- 暂无音乐！ -->
         <nz-table
           class="wy-table"
           #basicTable
           [nzData]="singerDetail.hotSongs"
           [nzFrontPagination]="false"
           nzBordered
-          nzNoResult="暂无音乐！"
+          [nzNoResult]="lanRes.C00027"
         >
           <thead>
             <tr>
               <th nzWidth="80px"></th>
-              <th>标题</th>
-              <th nzWidth="120px">时长</th>
-              <th>专辑</th>
+              <th>
+                <!-- 标题 -->
+                {{ lanRes.C00028 }}
+              </th>
+              <th nzWidth="120px">
+                <!-- 时长 -->
+                {{ lanRes.C00029 }}
+              </th>
+              <th>
+                <!-- 专辑 -->
+                {{ lanRes.C00041 }}
+              </th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let item of basicTable.data; index as i">
               <td class="first-col">
                 <span>{{ i + 1 }}</span>
+                <!-- 播放 -->
                 <i
                   class="ico play-song"
-                  title="播放"
+                  [title]="lanRes.C00032"
                   [class.current]="currentIndex === i"
                   (click)="onAddSong(item, true)"
                 ></i>
@@ -79,9 +94,12 @@
               <td class="time-col">
                 <span>{{ item.dt / 1000 | formatTime }}</span>
                 <p class="icons">
-                  <i class="ico add" title="添加" (click)="onAddSong(item)"></i>
-                  <i class="ico like" title="收藏" (click)="onLikeSong(item.id)"></i>
-                  <i class="ico share" title="分享" (click)="onShareSong(item)"></i>
+                  <!-- 添加 -->
+                  <i class="ico add" [title]="lanRes.C00033" (click)="onAddSong(item)"></i>
+                  <!-- 收藏 -->
+                  <i class="ico like" [title]="lanRes.C00034" (click)="onLikeSong(item.id)"></i>
+                  <!-- 分享 -->
+                  <i class="ico share" [title]="lanRes.C00035" (click)="onShareSong(item)"></i>
                 </p>
               </td>
               <td>{{ item.al.name }}</td>
@@ -94,7 +112,10 @@
 
   <div class="dt-right">
     <div class="right-wrap">
-      <h3>相似歌手</h3>
+      <h3>
+        <!-- 相似歌手 -->
+        {{ lanRes.C00044 }}
+      </h3>
       <ul class="clearfix">
         <li *ngFor="let item of simiSingers" [routerLink]="['/singer', item.id]">
           <div class="pic">

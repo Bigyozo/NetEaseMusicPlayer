@@ -1,6 +1,8 @@
 import { NzMessageService } from 'ng-zorro-antd';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/internal/operators';
+import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LanguageService } from 'src/app/services/language.service';
 import { SetShareInfo } from 'src/app/store/actions/member.action';
 import { PlayState } from 'src/app/store/reducers/player.reducer';
 
@@ -8,7 +10,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
 
-import { Singer, Song, SongSheet } from '../../services/data.types/common.types';
+import { LanguageRes, Singer, Song, SongSheet } from '../../services/data.types/common.types';
 import { MemberService } from '../../services/member.service';
 import { SongService } from '../../services/song.service';
 import { BatchActionsService } from '../../store/batch-actions.service';
@@ -22,6 +24,7 @@ import { findIndex } from '../../utils/array';
   styleUrls: ['./sheet-info.component.less']
 })
 export class SheetInfoComponent implements OnInit, OnDestroy {
+  lanRes: LanguageRes = LANGUAGE_CH;
   sheetInfo: SongSheet;
 
   description = {
@@ -45,7 +48,8 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
     private songService: SongService,
     private batchActionsService: BatchActionsService,
     private memberService: MemberService,
-    private nzMessageService: NzMessageService
+    private nzMessageService: NzMessageService,
+    private languageService: LanguageService
   ) {
     this.route.data.pipe(map((res) => res.sheetInfo)).subscribe((res) => {
       this.sheetInfo = res;
@@ -53,6 +57,9 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
         this.changeDesc(res.description);
       }
       this.listenCurrent();
+    });
+    this.languageService.language$.subscribe((item) => {
+      this.lanRes = item.res;
     });
   }
 

@@ -18,15 +18,24 @@
         <ul class="dny clearfix">
           <li class="fst">
             <strong class="ellipsis">{{ user.profile.eventCount }}</strong>
-            <span>动态</span>
+            <span>
+              <!-- 动态 -->
+              {{ lanRes.C00017 }}
+            </span>
           </li>
           <li>
             <strong class="ellipsis">{{ user.profile.follows }}</strong>
-            <span>粉丝</span>
+            <span>
+              <!-- 关注 -->
+              {{ lanRes.C00018 }}
+            </span>
           </li>
           <li class="lst">
             <strong class="ellipsis">{{ user.profile.followeds }}</strong>
-            <span>关注</span>
+            <span>
+              <!-- 粉丝数 -->
+              {{ lanRes.C00019 }}
+            </span>
           </li>
         </ul>
         <div class="inf f-brk">{{ user.profile.signature }}</div>
@@ -44,12 +53,19 @@
       (onShareSong)="onShareSong($event)"
     >
     </app-records>
-    <a class="look-more" [routerLink]="['/records', user.profile.userId]">查看更多&gt;</a>
+    <a class="look-more" [routerLink]="['/records', user.profile.userId]">
+      <!-- 查看更多 -->
+      {{ lanRes.C00020 }}
+      &gt;
+    </a>
 
     <div class="wy-sec sheets">
       <div class="u-title wy-sec-wrap clearfix">
         <h3 class="wy-sec-tit">
-          <span class="f-ff2">我创建的歌单</span>
+          <span class="f-ff2">
+            <!-- 我创建的歌单 -->
+            {{ lanRes.C00021 }}
+          </span>
           <span class="sub s-fc3">{{ userSheet.self.length }}</span>
         </h3>
       </div>
@@ -69,7 +85,10 @@
     <div class="wy-sec sheets">
       <div class="u-title wy-sec-wrap clearfix">
         <h3 class="wy-sec-tit">
-          <span class="f-ff2">我收藏的歌单</span>
+          <span class="f-ff2">
+            <!-- 我收藏的歌单 -->
+            {{ lanRes.C00022 }}
+          </span>
           <span class="sub s-fc3">{{ userSheet.subscribed.length }}</span>
         </h3>
       </div>

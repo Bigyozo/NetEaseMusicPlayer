@@ -1,7 +1,9 @@
 import { NzMessageService } from 'ng-zorro-antd';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/internal/operators';
-import { Singer, Song } from 'src/app/services/data.types/common.types';
+import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LanguageRes, Singer, Song } from 'src/app/services/data.types/common.types';
+import { LanguageService } from 'src/app/services/language.service';
 import { SongService } from 'src/app/services/song.service';
 import { AppStoreModule } from 'src/app/store';
 import { SetShareInfo } from 'src/app/store/actions/member.action';
@@ -21,6 +23,7 @@ import { getCurrentSong } from '../../store/selectors/play.selectors';
   styleUrls: ['./song-info.component.less']
 })
 export class SongInfoComponent implements OnInit {
+  lanRes: LanguageRes = LANGUAGE_CH;
   song: Song;
   lyric: BaseLyricLine[];
   private destroy$ = new Subject<void>();
@@ -35,12 +38,16 @@ export class SongInfoComponent implements OnInit {
     private songService: SongService,
     private store$: Store<AppStoreModule>,
     private batchActionsService: BatchActionsService,
-    private nzMessageService: NzMessageService
+    private nzMessageService: NzMessageService,
+    private languageService: LanguageService
   ) {
     this.route.data.pipe(map((res) => res.songInfo)).subscribe(([song, lryic]) => {
       this.song = song;
       this.lyric = new WyLyric(lryic).lines;
       this.listenCurrent();
+    });
+    this.languageService.language$.subscribe((item) => {
+      this.lanRes = item.res;
     });
   }
 

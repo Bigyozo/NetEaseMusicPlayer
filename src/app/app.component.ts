@@ -9,8 +9,10 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
 
-import { SearchResult, SongSheet } from './services/data.types/common.types';
+import { LANGUAGE_CH } from './language/ch';
+import { LanguageRes, SearchResult, SongSheet } from './services/data.types/common.types';
 import { EmailLoginParams, PhoneLoginParams, User } from './services/data.types/member.type';
+import { LanguageService } from './services/language.service';
 import { LikeSongParams, MemberService, ShareParams } from './services/member.service';
 import { SearchService } from './services/search.service';
 import { StorageService } from './services/storage.service';
@@ -34,6 +36,7 @@ interface StateArrType {
   styleUrls: ['./app.component.less']
 })
 export class AppComponent {
+  lanRes: LanguageRes = LANGUAGE_CH;
   title = 'MusicPlayer by Bigyozo';
   menu = [
     {
@@ -46,12 +49,16 @@ export class AppComponent {
     }
   ];
 
+  languages = [
+    { label: '中文', code: 'ch' },
+    { label: 'English', code: 'en' }
+  ];
+
   searchResult: SearchResult;
   user: User;
   wyRememberPhoneLogin: PhoneLoginParams;
   wyRememberEmailLogin: EmailLoginParams;
   mySheets: SongSheet[];
-
   // 被收藏歌曲ID
   likeId: string;
   // 弹框显示
@@ -74,6 +81,7 @@ export class AppComponent {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private titleSerivce: Title,
+    private languageService: LanguageService,
     @Inject(DOCUMENT) private doc: Document
   ) {
     const userId = this.storgeService.getStorage('wyUserID');
@@ -101,6 +109,19 @@ export class AppComponent {
       filter((evt) => evt instanceof NavigationEnd)
     ) as Observable<NavigationEnd>;
     this.setLoadIngBar();
+    this.languageService.language$.subscribe((item) => {
+      this.lanRes = item.res;
+      this.menu = [
+        {
+          label: this.lanRes.C00002,
+          path: '/home'
+        },
+        {
+          label: this.lanRes.C00003,
+          path: '/sheet'
+        }
+      ];
+    });
   }
 
   private setTitle() {
@@ -189,6 +210,10 @@ export class AppComponent {
     if (this.visible !== visible) {
       this.visible = visible;
     }
+  }
+
+  onChangeLanguage(code: string) {
+    this.languageService.changeLanguage(code);
   }
 
   onSearch(keywords: string) {

@@ -1,7 +1,10 @@
+import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LanguageService } from 'src/app/services/language.service';
+
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { SheetList } from '../../services/data.types/common.types';
+import { LanguageRes, SheetList } from '../../services/data.types/common.types';
 import { SheetParams, SheetService } from '../../services/sheet.service';
 import { BatchActionsService } from '../../store/batch-actions.service';
 
@@ -11,6 +14,7 @@ import { BatchActionsService } from '../../store/batch-actions.service';
   styleUrls: ['./sheet-list.component.less']
 })
 export class SheetListComponent implements OnInit {
+  lanRes: LanguageRes = LANGUAGE_CH;
   listParams: SheetParams = {
     cat: '全部',
     order: 'hot',
@@ -24,10 +28,14 @@ export class SheetListComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private sheetService: SheetService,
-    private batchActionsService: BatchActionsService
+    private batchActionsService: BatchActionsService,
+    private languageService: LanguageService
   ) {
     this.listParams.cat = this.route.snapshot.queryParamMap.get('cat') || '全部';
     this.getList();
+    this.languageService.language$.subscribe((item) => {
+      this.lanRes = item.res;
+    });
   }
 
   private getList() {

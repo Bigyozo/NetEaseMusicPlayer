@@ -26,7 +26,10 @@
             <div class="navs">
               <h2>
                 <i></i>
-                <a>recommand</a>
+                <a>
+                  <!-- 推荐 -->
+                  {{ lanRes.C00010 }}
+                </a>
               </h2>
               <nav>
                 <a
@@ -37,8 +40,9 @@
                 >
               </nav>
             </div>
-            <a
-              >more
+            <a>
+              <!-- 更多 -->
+              {{ lanRes.C00011 }}
               <i nz-icon nzType="arrow-right" theme="outline"> </i>
             </a>
           </div>
@@ -58,7 +62,12 @@
       <div class="right">
         <app-member-card [user]="user" (openModal)="openModal()"></app-member-card>
         <div class="settled-singer">
-          <div class="tit"><b>歌手</b></div>
+          <div class="tit">
+            <b>
+              <!-- 歌手 -->
+              {{ lanRes.C00012 }}
+            </b>
+          </div>
           <div class="list">
             <div class="card" *ngFor="let item of singerList" [routerLink]="['/singer', item.id]">
               <div class="pic">
@@ -66,7 +75,11 @@
               </div>
               <div class="txt">
                 <b class="ellipsis">{{ item.name }}</b>
-                <span>专辑数：{{ item.albumSize }}</span>
+                <span>
+                  <!-- 专辑数： -->
+                  {{ lanRes.C00013 }}
+                  {{ item.albumSize }}</span
+                >
               </div>
             </div>
           </div>

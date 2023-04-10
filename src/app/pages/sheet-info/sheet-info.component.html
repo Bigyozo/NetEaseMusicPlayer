@@ -30,13 +30,19 @@
                 sheetInfo.creator?.nickname
               }}</a>
             </span>
-            <span class="time s-fcd">{{ sheetInfo.createTime | date : 'yyyy-MM-dd' }}创建</span>
+            <span class="time s-fcd"
+              >{{ sheetInfo.createTime | date : 'yyyy-MM-dd' }}
+              <!-- 创建 -->
+              {{ lanRes.C00036 }}
+            </span>
           </div>
 
           <div class="btns">
             <nz-button-group class="btn">
               <button class="play" nz-button nzType="primary">
-                <i nz-icon nzType="play-circle" nzTheme="outline"></i>播放
+                <i nz-icon nzType="play-circle" nzTheme="outline"></i>
+                <!-- 播放 -->
+                {{ lanRes.C00032 }}
               </button>
               <button class="add" nz-button nzType="primary" (click)="onAddSongs(sheetInfo.tracks)">
                 +
@@ -48,14 +54,23 @@
               [disabled]="sheetInfo.subscribed"
               (click)="onLikeSheet(sheetInfo.id.toString())"
             >
-              <span>收藏</span>({{ sheetInfo.subscribedCount }})
+              <span>
+                <!-- 收藏 -->
+                {{ lanRes.C00034 }} </span
+              >({{ sheetInfo.subscribedCount }})
             </button>
             <button class="btn share" nz-button (click)="shareResource(sheetInfo, 'playlist')">
-              <span>分享</span>({{ sheetInfo.shareCount }})
+              <span>
+                <!-- 分享 -->
+                {{ lanRes.C00035 }} </span
+              >({{ sheetInfo.shareCount }})
             </button>
           </div>
           <div class="tags clearfix">
-            <span>标签</span>
+            <span>
+              <!-- 标签 -->
+              {{ lanRes.C00037 }}
+            </span>
             <div class="tag-wrap">
               <nz-tag *ngFor="let item of sheetInfo.tags">{{ item }}</nz-tag>
             </div>
@@ -78,40 +93,60 @@
     <div class="wy-sec">
       <div class="u-title wy-sec-wrap clearfix">
         <h3 class="wy-sec-tit">
-          <span class="f-ff2">歌曲列表</span>
+          <span class="f-ff2">
+            <!-- 歌曲列表 -->
+            {{ lanRes.C00038 }}
+          </span>
         </h3>
-        <span class="sub s-fc3"> {{ sheetInfo.tracks.length }} 首歌 </span>
+        <span class="sub s-fc3">
+          {{ sheetInfo.tracks.length }}
+          <!-- 首歌 -->
+          {{ lanRes.C00039 }}
+        </span>
         <div class="more s-fc3">
-          播放：
+          <!-- 播放次数： -->
+          {{ lanRes.C00040 }}
           <strong class="s-fc6">{{ sheetInfo.playCount }}</strong>
-          次
         </div>
       </div>
-
+      <!-- 暂无音乐！ -->
       <nz-table
         class="wy-table"
         #basicTable
         [nzData]="sheetInfo.tracks"
         [nzFrontPagination]="false"
         nzBordered
-        nzNoResult="暂无音乐！"
+        [nzNoResult]="lanRes.C00027"
       >
         <thead>
           <tr>
             <th nzWidth="80px"></th>
-            <th>标题</th>
-            <th nzWidth="120px">时长</th>
-            <th nzWidth="80px">歌手</th>
-            <th>专辑</th>
+            <th>
+              <!-- 标题 -->
+              {{ lanRes.C00028 }}
+            </th>
+            <th nzWidth="120px">
+              <!-- 时长 -->
+              {{ lanRes.C00029 }}
+            </th>
+            <th nzWidth="80px">
+              <!-- 歌手 -->
+              {{ lanRes.C00030 }}
+            </th>
+            <th>
+              <!-- 专辑 -->
+              {{ lanRes.C00041 }}
+            </th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of basicTable.data; index as i">
             <td class="first-col">
               <span>{{ i + 1 }}</span>
+              <!-- 播放 -->
               <i
                 class="ico play-song"
-                title="播放"
+                [title]="lanRes.C00032"
                 [class.current]="currentIndex === i"
                 (click)="onAddSong(item, true)"
               ></i>
@@ -122,9 +157,16 @@
             <td class="time-col">
               <span>{{ item.dt / 1000 | formatTime }}</span>
               <p class="icons">
-                <i class="ico add" title="添加" (click)="onAddSong(item)"></i>
-                <i class="ico like" title="收藏" (click)="onLikeSong(item.id.toString())"></i>
-                <i class="ico share" title="分享" (click)="shareResource(item)"></i>
+                <!-- 添加 -->
+                <i class="ico add" [title]="lanRes.C00033" (click)="onAddSong(item)"></i>
+                <!-- 收藏 -->
+                <i
+                  class="ico like"
+                  [title]="lanRes.C00034"
+                  (click)="onLikeSong(item.id.toString())"
+                ></i>
+                <!-- 分享 -->
+                <i class="ico share" [title]="lanRes.C00035" (click)="shareResource(item)"></i>
               </p>
             </td>
             <td>
