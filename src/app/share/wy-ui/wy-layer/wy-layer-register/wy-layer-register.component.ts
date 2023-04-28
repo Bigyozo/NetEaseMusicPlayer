@@ -1,6 +1,9 @@
 import { NzMessageService } from 'ng-zorro-antd';
 import { interval } from 'rxjs';
 import { take } from 'rxjs/internal/operators';
+import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LanguageRes } from 'src/app/services/data.types/common.types';
+import { LanguageService } from 'src/app/services/language.service';
 import { ModalTypes } from 'src/app/store/reducers/member.reducer';
 
 import {
@@ -23,6 +26,7 @@ enum Exist {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WyLayerRegisterComponent implements OnInit, OnChanges {
+  lanRes: LanguageRes = LANGUAGE_CH;
   @Input() visible = false;
   @Output() onChangeModalType = new EventEmitter<string>();
   showCode = false;
@@ -35,11 +39,16 @@ export class WyLayerRegisterComponent implements OnInit, OnChanges {
     private fb: FormBuilder,
     private memberService: MemberService,
     private messageService: NzMessageService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private languageService: LanguageService
   ) {
     this.formModel = this.fb.group({
       phone: ['', [Validators.required, Validators.pattern(/^1\d{10}$/)]],
       password: ['', [Validators.required, Validators.minLength(6)]]
+    });
+    this.languageService.language$.subscribe((item) => {
+      this.lanRes = item.res;
+      this.cdr.markForCheck();
     });
   }
 

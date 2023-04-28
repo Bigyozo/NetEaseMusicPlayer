@@ -2,16 +2,25 @@
   <div class="modal-wrap">
     <form nz-form class="login-form" [formGroup]="formModel" (ngSubmit)="onSubmit()">
       <nz-form-item>
-        <nz-form-control nzHasFeedback nzErrorTip="请输入正确的邮箱地址">
+        <!-- 请输入正确的邮箱地址 -->
+        <nz-form-control nzHasFeedback [nzErrorTip]="lanRes.C00052">
           <nz-input-group nzPrefixIcon="mobile">
-            <input type="tel" nz-input placeholder="请输入邮箱地址" formControlName="email" />
+            <!-- 请输入邮箱地址 -->
+            <input type="tel" nz-input [placeholder]="lanRes.C00053" formControlName="email" />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-control nzHasFeedback nzErrorTip="请输入正确的密码">
+        <!-- 请输入正确的密码 -->
+        <nz-form-control nzHasFeedback nzErrorTip="lanRes.C00054">
           <nz-input-group nzPrefixIcon="lock">
-            <input type="password" nz-input placeholder="请输入密码" formControlName="password" />
+            <!-- 请输入密码 -->
+            <input
+              type="password"
+              nz-input
+              placeholder="lanRes.C00055"
+              formControlName="password"
+            />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -19,7 +28,10 @@
         <nz-form-control nzHasFeedback>
           <div class="tools">
             <label nz-checkbox class="remember" formControlName="remember">
-              <span>记住密码</span>
+              <span>
+                <!-- 记住密码 -->
+                {{ lanRes.C00056 }}
+              </span>
             </label>
           </div>
           <button
@@ -29,7 +41,8 @@
             nzType="primary"
             nzBolck
           >
-            登陆
+            <!-- 登陆 -->
+            {{ lanRes.C00004 }}
           </button>
         </nz-form-control>
       </nz-form-item>
@@ -38,6 +51,13 @@
 </div>
 
 <div class="m-footer clearfix">
-  <a (click)="onChangeModalType.emit('default')">&lt; 其他登陆方式</a>
-  <a (click)="onChangeModalType.emit('register')">没有账号？开始注册</a>
+  <a (click)="onChangeModalType.emit('default')"
+    >&lt;
+    <!-- 其他登陆方式 -->
+    {{ lanRes.C00057 }}
+  </a>
+  <a (click)="onChangeModalType.emit('register')">
+    <!-- 没有账号？开始注册 -->
+    {{ lanRes.C00058 }}
+  </a>
 </div>

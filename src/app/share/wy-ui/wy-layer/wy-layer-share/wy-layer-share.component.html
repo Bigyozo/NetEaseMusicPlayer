@@ -2,7 +2,8 @@
   <div class="u-txtwrap">
     <form nz-form [formGroup]="formModel">
       <nz-form-item>
-        <nz-form-control nzErrorTip="不能超过140个字">
+        <!-- 不能超过140个字 -->
+        <nz-form-control [nzErrorTip]="lanRes.C00069">
           <textarea nz-input rows="6" formControlName="msg"></textarea>
         </nz-form-control>
       </nz-form-item>
@@ -18,9 +19,13 @@
   <div class="tools clearfix">
     <span class="txt-count" [class.exceed]="surplusMsgCount < 0">{{ surplusMsgCount }}</span>
     <div class="btns">
-      <button nz-button (click)="onCancel.emit()">取消</button>
+      <button nz-button (click)="onCancel.emit()">
+        <!-- 取消 -->
+        {{ lanRes.C00070 }}
+      </button>
       <button nz-button nzType="primary" [disabled]="!formModel.valid" (click)="onSubmit()">
-        分享
+        <!-- 分享 -->
+        {{ lanRes.C00035 }}
       </button>
     </div>
   </div>
