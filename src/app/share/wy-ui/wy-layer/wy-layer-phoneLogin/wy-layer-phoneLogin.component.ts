@@ -1,9 +1,12 @@
+import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LanguageRes } from 'src/app/services/data.types/common.types';
 import { PhoneLoginParams } from 'src/app/services/data.types/member.type';
+import { LanguageService } from 'src/app/services/language.service';
 import { codeJson } from 'src/app/utils/base64';
 
 import {
-    ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output,
-    SimpleChanges
+    ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit,
+    Output, SimpleChanges
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -14,16 +17,25 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WyLayerPhoneLoginComponent implements OnInit, OnChanges {
+  lanRes: LanguageRes = LANGUAGE_CH;
   @Input() wyRememberLogin: PhoneLoginParams;
   @Output() onChangeModalType = new EventEmitter<string | void>();
   @Output() onLogin = new EventEmitter<PhoneLoginParams>();
   @Input() visible = false;
   formModel: FormGroup;
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private languageService: LanguageService,
+    private cdr: ChangeDetectorRef
+  ) {
     this.formModel = this.fb.group({
       phone: ['', [Validators.required, Validators.pattern(/^1\d{10}$/)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       remember: [false]
+    });
+    this.languageService.language$.subscribe((item) => {
+      this.lanRes = item.res;
+      this.cdr.markForCheck();
     });
   }
 

@@ -1,16 +1,14 @@
 import { timer } from 'rxjs';
-import { SongSheet } from 'src/app/services/data.types/common.types';
+import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LanguageRes, SongSheet } from 'src/app/services/data.types/common.types';
+import { LanguageService } from 'src/app/services/language.service';
 import { LikeSongParams } from 'src/app/services/member.service';
-import { AppStoreModule } from 'src/app/store';
-import { MemberState } from 'src/app/store/reducers/member.reducer';
-import { getLikeId } from 'src/app/store/selectors/member.selectors';
 
 import {
-    ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output,
-    SimpleChanges
+    ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit,
+    Output, SimpleChanges
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { createFeatureSelector, select, Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-wy-layer-like',
@@ -19,6 +17,7 @@ import { createFeatureSelector, select, Store } from '@ngrx/store';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WyLayerLikeComponent implements OnInit, OnChanges {
+  lanRes: LanguageRes = LANGUAGE_CH;
   @Input()
   mySheets: SongSheet[];
   @Input()
@@ -33,9 +32,17 @@ export class WyLayerLikeComponent implements OnInit, OnChanges {
   formModel: FormGroup;
 
   creating = false;
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private languageService: LanguageService,
+    private cdr: ChangeDetectorRef
+  ) {
     this.formModel = this.fb.group({
       sheetName: ['', [Validators.required]]
+    });
+    this.languageService.language$.subscribe((item) => {
+      this.lanRes = item.res;
+      this.cdr.markForCheck();
     });
   }
 

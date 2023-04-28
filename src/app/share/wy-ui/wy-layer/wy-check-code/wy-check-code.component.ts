@@ -1,6 +1,10 @@
+import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LanguageRes } from 'src/app/services/data.types/common.types';
+import { LanguageService } from 'src/app/services/language.service';
+
 import {
-    ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output,
-    SimpleChanges
+    ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit,
+    Output, SimpleChanges
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -11,6 +15,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WyCheckCodeComponent implements OnInit, OnChanges {
+  lanRes: LanguageRes = LANGUAGE_CH;
   private phoneHideStr = '';
   formModel: FormGroup;
   showRepeatBtn = false;
@@ -36,7 +41,11 @@ export class WyCheckCodeComponent implements OnInit, OnChanges {
     return this.phoneHideStr;
   }
 
-  constructor() {
+  constructor(private languageService: LanguageService, private cdr: ChangeDetectorRef) {
+    this.languageService.language$.subscribe((item) => {
+      this.lanRes = item.res;
+      this.cdr.markForCheck();
+    });
     this.formModel = new FormGroup({
       code: new FormControl('', [Validators.required, Validators.pattern(/\d{4}/)])
     });
