@@ -7,6 +7,13 @@ Language : 简体中文 | [English](./README_ENG.md)
 - 后端功能利用开源项目网易云音乐 API 实现，详情参见
   [Binaryify/NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)
 
+## 效果图
+
+主界面
+![主界面](/src/assets/images/main.png)
+播放器
+![播放器](/src/assets/images/player.png)
+
 ## 使用方法
 
 ### 项目直接运行

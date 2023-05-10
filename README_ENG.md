@@ -7,6 +7,13 @@ Language : [简体中文](./README.md) | English
 - The backend is implemented using the Netease Cloud Music Node.js API created by Binaryify. View details from
   [Binaryify/NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)
 
+## Rendering
+
+HomePage
+![HomePage](/src/assets/images/main.png)
+MusicPlayer
+![MusicPlayer](/src/assets/images/player.png)
+
 ## HOW TO USE
 
 ### Launch Directly
