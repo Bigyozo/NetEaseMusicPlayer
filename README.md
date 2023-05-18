@@ -18,7 +18,7 @@ Language : 简体中文 | [English](./README_ENG.md)
 
 ### 项目直接运行
 
-1. 网易云音乐 API 部署完成后，根据后端的 IP 与端口设置 proxyconfig.json 文件中的 target 属性。
+1. 网易云音乐 API 部署完成后，根据网易云音乐 API 的 IP 与端口设置 proxyconfig.json 文件中的 target 属性。
 2. npm install 后启动项目。
 
 ```shell
@@ -28,7 +28,7 @@ npm run start
 
 ### 编译运行
 
-1. 根据后端项目的 IP 与端口设置 server.js 文件中的 target 属性。
+1. 根据网易云音乐 API 的 IP 与端口设置 server.js 文件中的 target 属性。
 2. 编译项目生成 www 目录。
 3. 执行 server.js 文件。
 
@@ -39,12 +39,23 @@ node server.js
 
 ### docker 容器运行
 
-1. 根据后端项目所在容器的 IP 与端口设置 server.js 文件中的 target 属性。
-2. 将编译生成的 www 目录，package.json, server.js 与 Dockerfile 文件放入 Linux 服务器。
-3. 生成 docker 镜像。
-4. 运行 docker 容器。
+#### 拉取镜像运行
+
+1. 直接拉取 docker 镜像。
+2. 运行 docker 容器（API_IP:网易云音乐 API 容器 IP, API_PORT:网易云音乐 API 容器端口, PORT:本项目端口）。
+
+```shell
+docker pull bigyozo/netease_music_ui
+docker run -d --name containerName -p 8800:8800 imageName -e API_IP=172.17.0.3 API_PORT=3000 PORT=8800
+```
+
+#### 编译镜像运行
+
+1. 将编译生成的 www 目录，package.json, server.js 与 Dockerfile 文件放入 Linux 服务器。
+2. 生成 docker 镜像。
+3. 运行 docker 容器（API_IP:网易云音乐 API 容器 IP, API_PORT:网易云音乐 API 容器端口, PORT:本项目端口）。
 
 ```shell
 docker build -t imageName .
-docker run -d --name containerName -p 8800:8800 imageName
+docker run -d --name containerName -p 8800:8800 imageName -e API_IP=172.17.0.3 API_PORT=3000 PORT=8800
 ```

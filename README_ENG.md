@@ -39,12 +39,23 @@ node server.js
 
 ### Run In Docker
 
-1. Set the target attribute in the server.js file according to the IP and port of the container containing the back-end project.
-2. Put the compiled www directory, package.json, server.js and Dockerfile files into the Linux server.
-3. Generate the docker image.
-4. Run the docker container.
+#### By Pulling image
+
+1. Pull the docker image of this project。
+2. Run docker container (API_IP: IP of NeteaseCloudMusicApi , API_PORT: port of NeteaseCloudMusicApi, PORT: port of this project).。
+
+```shell
+docker pull bigyozo/netease_music_ui
+docker run -d --name containerName -p 8800:8800 imageName -e API_IP=172.17.0.3 API_PORT=3000 PORT=8800
+```
+
+#### By Building image
+
+1.  Put the compiled www directory, package.json, server.js and Dockerfile files into the Linux server.
+2.  Generate docker image.
+3.  Run the docker container (API_IP: IP of NeteaseCloudMusicApi , API_PORT: port of NeteaseCloudMusicApi, PORT: port of this project).
 
 ```shell
 docker build -t imageName .
-docker run -d --name containerName -p 8800:8800 imageName
+docker run -d --name containerName -p 8800:8800 imageName -e API_IP=172.17.0.3 API_PORT=3000 PORT=8800
 ```
