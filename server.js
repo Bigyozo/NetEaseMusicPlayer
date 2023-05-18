@@ -1,11 +1,13 @@
 const express = require('express');
 const proxy = require('http-proxy-middleware');
 const app = express();
-const PORT = 8800;
+const PORT = process.env.PORT || 8800;
+const API_IP = process.env.API_IP || '172.17.0.3';
+const API_PORT = process.env.API_PORT || 3000;
 app.use(express.static('www'));
 //target为后端项目地址
 const apiProxy = proxy('/api/**', {
-  target: 'http://192.168.40.218:3000/',
+  target: 'http://' + API_IP + ':' + API_PORT + '/',
   changeOrigin: true,
   pathRewrite: {
     '^/api': ''
