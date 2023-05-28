@@ -1,59 +1,68 @@
-Language : 简体中文 | [English](./README_ENG.md)
+Language : [简体中文](./README.md) | English
 
-# 网易云音乐网页端
+# Netease Cloud Music Website
 
-- 实现了网易云音乐的播放器以及歌单页面、歌曲页面、歌手页面和会员登录等功能。
-- 技术栈 angular8, ngrx8, ng-zorro-antd。
-- 后端功能利用开源项目网易云音乐 API 实现，详情参见
+- The system realizes the functions of music player, song list page, song page, singer page and member login on Netease Cloud Music Website.
+- Technology stack: angular8, ngrx8, ng-zorro-antd。
+- The backend is implemented using the Netease Cloud Music Node.js API created by Binaryify. View details from
   [Binaryify/NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)
 
-## 效果图
+## Rendering
 
-主界面
-![主界面](/src/assets/images/main.png)
-播放器
-![播放器](/src/assets/images/player.png)
+HomePage
+![HomePage](/src/assets/images/main.png)
+MusicPlayer
+![MusicPlayer](/src/assets/images/player.png)
 
-## 使用方法
+## HOW TO USE
 
-### 项目直接运行
+### Deploy the NeteaseCloudMusicApi
 
-1. 网易云音乐 API 部署完成后，根据网易云音乐 API 的 IP 与端口设置 proxyconfig.json 文件中的 target 属性。
-2. npm install 后启动项目。
+1. Before running the project, NeteaseCloudMusicApi needs to be deployed.
+
+```shell
+docker pull binaryify/netease_cloud_music_api
+docker run -d -p 3000:3000 --name netease_cloud_music_api binaryify/netease_cloud_music_api
+```
+
+### Launch Directly
+
+1. Set the property key named 'target' in the proxyconfig.json file according to the IP and port of the NeteaseCloudMusicApi.
+2. Launch the project after npm install.
 
 ```shell
 npm install
 npm run start
 ```
 
-### 编译运行
+### Run After Compile
 
-1. 根据网易云音乐 API 的 IP 与端口设置 server.js 文件中的 target 属性。
-2. 编译项目生成 www 目录。
-3. 执行 server.js 文件。
+1.  Set the property key named 'target' in the proxyconfig.json file according to the IP and port of the NeteaseCloudMusicApi.
+2.  Compile the project into a directory named www.
+3.  Execute the server.js file.
 
 ```shell
 npm run build
 node server.js
 ```
 
-### docker 容器运行
+### Run In Docker
 
-#### 拉取镜像运行
+#### By Pulling image
 
-1. 直接拉取 docker 镜像。
-2. 运行 docker 容器（API_IP:网易云音乐 API 容器 IP, API_PORT:网易云音乐 API 容器端口, PORT:本项目端口）。
+1. Pull the docker image of this project.(Currently this image only supports ARM servers)
+2. Run docker container (API_IP: IP of NeteaseCloudMusicApi , API_PORT: port of NeteaseCloudMusicApi, PORT: port of this project).
 
 ```shell
 docker pull bigyozo/netease_music_ui
 docker run -d --name containerName -p 8800:8800 imageName -e API_IP=172.17.0.3 API_PORT=3000 PORT=8800
 ```
 
-#### 编译镜像运行
+#### By Building image
 
-1. 将编译生成的 www 目录，package.json, server.js 与 Dockerfile 文件放入 Linux 服务器。
-2. 生成 docker 镜像。
-3. 运行 docker 容器（API_IP:网易云音乐 API 容器 IP, API_PORT:网易云音乐 API 容器端口, PORT:本项目端口）。
+1.  Put the compiled www directory, package.json, server.js and Dockerfile files into the Linux server.
+2.  Generate docker image.
+3.  Run the docker container (API_IP: IP of NeteaseCloudMusicApi , API_PORT: port of NeteaseCloudMusicApi, PORT: port of this project).
 
 ```shell
 docker build -t imageName .

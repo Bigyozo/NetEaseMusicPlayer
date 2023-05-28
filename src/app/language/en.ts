@@ -70,5 +70,8 @@ export const LANGUAGE_EN: LanguageRes = {
   C00067: 'Please fill in the correct phone number.',
   C00068: 'Password',
   C00069: 'Cannot exceed 140 words.',
-  C00070: 'Cancel'
+  C00070: 'Cancel',
+  C00071: 'PlayList',
+  C00072: 'Collect All',
+  C00073: 'Clear'
 };

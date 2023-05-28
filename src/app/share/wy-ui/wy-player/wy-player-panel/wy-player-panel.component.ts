@@ -1,11 +1,20 @@
 import { timer } from 'rxjs';
-import { Song } from 'src/app/services/data.types/common.types';
+import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LanguageRes, Song } from 'src/app/services/data.types/common.types';
+import { LanguageService } from 'src/app/services/language.service';
 import { SongService } from 'src/app/services/song.service';
 import { findIndex } from 'src/app/utils/array';
 
 import {
-    Component, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges,
-    ViewChildren
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  QueryList,
+  SimpleChanges,
+  ViewChildren
 } from '@angular/core';
 
 import { WyScrollComponent } from '../wy-scroll/wy-scroll.component';
@@ -17,6 +26,7 @@ import { BaseLyricLine, WyLyric } from './wy-lyric';
   styleUrls: ['./wy-player-panel.component.less']
 })
 export class WyPlayerPanelComponent implements OnInit, OnChanges {
+  lanRes: LanguageRes = LANGUAGE_CH;
   @Input() playing: boolean;
   @Input() songList: Song[];
   @Input() currentSong: Song;
@@ -40,7 +50,11 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
   private startLine = 2;
   lyricRefs: NodeList;
 
-  constructor(private songService: SongService) {}
+  constructor(private songService: SongService, private languageService: LanguageService) {
+    this.languageService.language$.subscribe((item) => {
+      this.lanRes = item.res;
+    });
+  }
 
   ngOnInit() {}
 
