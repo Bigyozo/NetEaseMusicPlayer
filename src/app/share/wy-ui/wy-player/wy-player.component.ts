@@ -1,6 +1,8 @@
 import { NzModalService } from 'ng-zorro-antd';
 import { timer } from 'rxjs';
-import { Singer, Song } from 'src/app/services/data.types/common.types';
+import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LanguageRes, Singer, Song } from 'src/app/services/data.types/common.types';
+import { LanguageService } from 'src/app/services/language.service';
 import { AppStoreModule } from 'src/app/store';
 import { SetShareInfo } from 'src/app/store/actions/member.action';
 import {
@@ -47,6 +49,7 @@ enum TipTitles {
   ]
 })
 export class WyPlayerComponent implements OnInit {
+  lanRes: LanguageRes = LANGUAGE_CH;
   controlTooltip = {
     title: '',
     show: false
@@ -94,7 +97,8 @@ export class WyPlayerComponent implements OnInit {
     private store$: Store<AppStoreModule>,
     private nzModalService: NzModalService,
     private batchActionsService: BatchActionsService,
-    private router: Router
+    private router: Router,
+    private languageService: LanguageService
   ) {
     const appstore$ = this.store$.pipe(select(createFeatureSelector<PlayState>('player')));
 
@@ -127,6 +131,10 @@ export class WyPlayerComponent implements OnInit {
 
     stateArr.forEach((item) => {
       appstore$.pipe(select(item.type)).subscribe(item.cb);
+    });
+
+    this.languageService.language$.subscribe((item) => {
+      this.lanRes = item.res;
     });
   }
 
@@ -213,7 +221,9 @@ export class WyPlayerComponent implements OnInit {
   }
 
   OnPrev(index: number) {
-    if (!this.songReady) { return; }
+    if (!this.songReady) {
+      return;
+    }
     if (this.playList.length === 1) {
       this.loop();
     } else {
@@ -223,7 +233,9 @@ export class WyPlayerComponent implements OnInit {
   }
 
   OnNext(index: number) {
-    if (!this.songReady) { return; }
+    if (!this.songReady) {
+      return;
+    }
     if (this.playList.length === 1) {
       this.loop();
     } else {
@@ -353,8 +365,9 @@ export class WyPlayerComponent implements OnInit {
   }
 
   onClearSong() {
+    //确认清空列表？
     this.nzModalService.confirm({
-      nzTitle: '确认清空列表？',
+      nzTitle: this.lanRes.C00084,
       nzOnOk: () => {
         this.batchActionsService.clearSong();
       }
@@ -388,7 +401,8 @@ export class WyPlayerComponent implements OnInit {
   }
 
   onShareSong(resource: Song, type = 'song') {
-    const txt = this.makeTxt('歌曲', resource.name, resource.ar);
+    //歌曲
+    const txt = this.makeTxt(this.lanRes.C00046, resource.name, resource.ar);
     this.store$.dispatch(SetShareInfo({ info: { id: resource.id.toString(), type, txt } }));
   }
 

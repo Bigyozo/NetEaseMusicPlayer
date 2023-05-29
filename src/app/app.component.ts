@@ -254,7 +254,8 @@ export class AppComponent {
       (user) => {
         this.user = user;
         this.batchActionsService.controlModal(false);
-        this.alertMessage('success', 'Login success');
+        //Login success
+        this.alertMessage('success', this.lanRes.C00076);
         this.storgeService.setStorage({ key: 'wyUserID', value: user.profile.userId });
         this.store$.dispatch(SetUserId({ userId: user.profile.userId.toString() }));
         if (params.remember) {
@@ -269,7 +270,8 @@ export class AppComponent {
       },
       (error) => {
         this.showSpin = false;
-        this.alertMessage('error', error.message || 'Login fail');
+        //Login fail
+        this.alertMessage('error', error.message || this.lanRes.C00077);
       }
     );
   }
@@ -296,7 +298,8 @@ export class AppComponent {
       },
       (error) => {
         this.showSpin = false;
-        this.alertMessage('error', error.message || 'Login fail');
+        //'Login fail'
+        this.alertMessage('error', error.message || this.lanRes.C00077);
       }
     );
   }
@@ -311,7 +314,8 @@ export class AppComponent {
         this.alertMessage('success', 'Logout success');
       },
       (error) => {
-        this.alertMessage('error', error.message || 'Logout fail');
+        //'Login fail'
+        this.alertMessage('error', error.message || this.lanRes.C00077);
       }
     );
   }
@@ -335,10 +339,12 @@ export class AppComponent {
     this.memberService.likeSong(args).subscribe(
       () => {
         this.batchActionsService.controlModal(false);
-        this.alertMessage('success', '收藏成功');
+        //Collect success
+        this.alertMessage('success', this.lanRes.C00078);
       },
       (error) => {
-        this.alertMessage('error', error.msg || '收藏失败');
+        //Collect fail
+        this.alertMessage('error', error.msg || this.lanRes.C00079);
       }
     );
   }
@@ -349,7 +355,8 @@ export class AppComponent {
         this.onLikeSong({ pid, tracks: this.likeId });
       },
       (error) => {
-        this.alertMessage('error', error.msg || '新建失败');
+        //Create fail
+        this.alertMessage('error', error.msg || this.lanRes.C00080);
       }
     );
   }
@@ -362,17 +369,20 @@ export class AppComponent {
     this.memberService.shareResource(args).subscribe(
       () => {
         this.openModal(ModalTypes.Share, false);
-        this.alertMessage('success', '分享成功');
+        //Share succes
+        this.alertMessage('success', this.lanRes.C00081);
       },
       (error) => {
-        this.alertMessage('error', error.msg || '分享失败');
+        //Share fail
+        this.alertMessage('error', error.msg || this.lanRes.C00082);
       }
     );
   }
 
   // 注册账号
   onRegister(phone: string) {
-    this.alertMessage('error', '暂时不支持注册');
+    //not support register
+    this.alertMessage('error', this.lanRes.C00083);
   }
 
   openModalByMenu(type: 'loginByPhone' | 'loginByEmail' | 'register') {
