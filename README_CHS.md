@@ -1,4 +1,4 @@
-Language : 简体中文 | [English](./README_ENG.md)
+Language : 简体中文 | [English](./README.md)
 
 # 网易云音乐网页端
 
