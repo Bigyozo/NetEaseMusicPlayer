@@ -1,4 +1,4 @@
-Language : [简体中文](./README.md) | English
+Language : [简体中文](./README_CHS.md) | English
 
 # Netease Cloud Music Website
 
@@ -37,7 +37,7 @@ npm run start
 
 ### Run After Compile
 
-1.  Set the property key named 'target' in the proxyconfig.json file according to the IP and port of the NeteaseCloudMusicApi.
+1.  Set the property key named 'target' in the server.js file according to the IP and port of the NeteaseCloudMusicApi.
 2.  Compile the project into a directory named www.
 3.  Execute the server.js file.
 
