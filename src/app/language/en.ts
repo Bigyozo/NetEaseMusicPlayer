@@ -73,5 +73,17 @@ export const LANGUAGE_EN: LanguageRes = {
   C00070: 'Cancel',
   C00071: 'PlayList',
   C00072: 'Collect All',
-  C00073: 'Clear'
+  C00073: 'Clear',
+  C00074: 'Song',
+  C00075: 'Song sheet/Artist/Song',
+  C00076: 'Login Successful',
+  C00077: 'Login Failed',
+  C00078: 'Collect Successful',
+  C00079: 'Collect Failed',
+  C00080: 'Create Failed',
+  C00081: 'Share Successful',
+  C00082: 'Share Failed',
+  C00083: 'Registration is not currently supported',
+  C00084: 'Confirm Clear Playlist?',
+  C00085: 'No URL'
 };

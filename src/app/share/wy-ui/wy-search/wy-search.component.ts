@@ -1,5 +1,7 @@
 import { fromEvent } from 'rxjs';
 import { debounceTime, distinctUntilChanged, pluck } from 'rxjs/internal/operators';
+import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LanguageService } from 'src/app/services/language.service';
 import { isEmptyObject } from 'src/app/utils/tools';
 
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
@@ -9,7 +11,7 @@ import {
     SimpleChanges, TemplateRef, ViewChild, ViewContainerRef
 } from '@angular/core';
 
-import { SearchResult } from '../../../services/data.types/common.types';
+import { LanguageRes, SearchResult } from '../../../services/data.types/common.types';
 import { WySearchPanelComponent } from './wy-search-panel/wy-search-panel.component';
 
 @Component({
@@ -18,6 +20,7 @@ import { WySearchPanelComponent } from './wy-search-panel/wy-search-panel.compon
   styleUrls: ['./wy-search.component.less']
 })
 export class WySearchComponent implements OnInit, AfterViewInit, OnChanges {
+  lanRes: LanguageRes = LANGUAGE_CH;
   @Input() customView: TemplateRef<any>;
   @Input() searchResult: SearchResult;
   @Input() connectedRef: ElementRef;
@@ -28,7 +31,15 @@ export class WySearchComponent implements OnInit, AfterViewInit, OnChanges {
 
   private overlayRef: OverlayRef;
 
-  constructor(private overlay: Overlay, private viewContainerRef: ViewContainerRef) {}
+  constructor(
+    private overlay: Overlay,
+    private viewContainerRef: ViewContainerRef,
+    private languageService: LanguageService
+  ) {
+    this.languageService.language$.subscribe((item) => {
+      this.lanRes = item.res;
+    });
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.searchResult && !changes.searchResult.firstChange) {

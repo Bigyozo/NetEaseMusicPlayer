@@ -1,7 +1,10 @@
+import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LanguageService } from 'src/app/services/language.service';
+
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { SearchResult } from '../../../../services/data.types/common.types';
+import { LanguageRes, SearchResult } from '../../../../services/data.types/common.types';
 
 @Component({
   selector: 'app-wy-search-panel',
@@ -9,8 +12,13 @@ import { SearchResult } from '../../../../services/data.types/common.types';
   styleUrls: ['./wy-search-panel.component.less']
 })
 export class WySearchPanelComponent implements OnInit {
+  lanRes: LanguageRes = LANGUAGE_CH;
   searchResult: SearchResult;
-  constructor(private router: Router) {}
+  constructor(private router: Router, private languageService: LanguageService) {
+    this.languageService.language$.subscribe((item) => {
+      this.lanRes = item.res;
+    });
+  }
 
   ngOnInit() {}
 

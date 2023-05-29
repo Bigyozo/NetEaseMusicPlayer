@@ -111,14 +111,16 @@ export class CenterComponent implements OnInit, OnDestroy {
         if (list.length) {
           this.batchActionsService.insertSong(list[0], isPlay);
         } else {
-          this.nzMessageService.create('warning', '无URL');
+          //无URL
+          this.nzMessageService.create('warning', this.lanRes.C00085);
         }
       });
     }
   }
 
   onShareSong(resource: Song, type = 'song') {
-    const txt = this.makeTxt('歌曲', resource.name, resource.ar);
+    //歌曲
+    const txt = this.makeTxt(this.lanRes.C00046, resource.name, resource.ar);
     this.store$.dispatch(SetShareInfo({ info: { id: resource.id.toString(), type, txt } }));
   }
 
