@@ -6,7 +6,7 @@ Language : [简体中文](./README_CHS.md) | English
 - Technology stack: angular8, ngrx8, ng-zorro-antd。
 - The backend is implemented using the Netease Cloud Music Node.js API created by Binaryify. View details from
   [Binaryify/NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)
-
+- [Have a try](http://zhangfanglong.click)
 ## Rendering
 
 HomePage
