@@ -7,6 +7,8 @@ Language : 简体中文 | [English](./README.md)
 - 后端功能利用开源项目网易云音乐 API 实现，详情参见
   [Binaryify/NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)
 
+### [点击试用](http://zhangfanglong.click)
+
 ## 效果图
 
 主界面
