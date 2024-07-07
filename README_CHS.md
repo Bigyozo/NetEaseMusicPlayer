@@ -52,7 +52,7 @@ node server.js
 
 #### 拉取镜像运行
 
-1. 直接拉取 docker 镜像。(目前此镜像仅支持 ARM 服务器)
+1. 直接拉取 docker 镜像。
 2. 运行 docker 容器（API_IP:网易云音乐 API 容器 IP, API_PORT:网易云音乐 API 容器端口, PORT:本项目端口）。
 
 ```shell
