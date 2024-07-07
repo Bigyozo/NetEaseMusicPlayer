@@ -52,7 +52,7 @@ node server.js
 
 #### By Pulling image
 
-1. Pull the docker image of this project.(Currently this image only supports ARM servers)
+1. Pull the docker image of this project.
 2. Run docker container (API_IP: IP of NeteaseCloudMusicApi , API_PORT: port of NeteaseCloudMusicApi, PORT: port of this project).
 
 ```shell
