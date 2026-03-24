@@ -1,4 +1,4 @@
-Language : 简体中文 | [English](./README.md)
+Language : 简体中文 | [English](./README_ENG.md) | [日本語](./README.md)
 
 # 网易云音乐网页端
 
@@ -7,7 +7,7 @@ Language : 简体中文 | [English](./README.md)
 - 后端功能利用开源项目网易云音乐 API 实现，详情参见
   [Binaryify/NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)
 
-### [点击试用](http://zhangfanglong.click)
+### [点击试用](http://zhangfanglong.click:8800)
 
 ## 效果图
 
