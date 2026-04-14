@@ -8,7 +8,7 @@ import { PagesModule } from '../pages/pages.module';
 import { ShareModule } from '../share/share.module';
 import ja from '@angular/common/locales/ja';
 import { registerLocaleData } from '@angular/common';
-import { NZ_I18N, ja_JP } from 'ng-zorro-antd';
+import { NZ_I18N, ja_JP } from 'ng-zorro-antd/i18n';
 import { AppStoreModule } from '../store';
 
 registerLocaleData(ja);

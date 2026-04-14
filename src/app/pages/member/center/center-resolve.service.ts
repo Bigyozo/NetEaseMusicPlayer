@@ -1,5 +1,5 @@
 import { forkJoin, Observable } from 'rxjs';
-import { first } from 'rxjs/internal/operators';
+import { first } from 'rxjs/operators';
 import { RecordVal, User, UserSheet } from 'src/app/services/data.types/member.type';
 
 import { Injectable } from '@angular/core';

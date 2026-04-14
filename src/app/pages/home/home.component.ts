@@ -1,5 +1,5 @@
-import { NzCarouselComponent } from 'ng-zorro-antd';
-import { map } from 'rxjs/internal/operators';
+import { NzCarouselComponent } from 'ng-zorro-antd/carousel';
+import { map } from 'rxjs/operators';
 import { LANGUAGE_CH } from 'src/app/language/ch';
 import {
     Banner, HotTag, LanguageRes, Singer, SongSheet
@@ -18,7 +18,7 @@ import { BatchActionsService } from '../../store/batch-actions.service';
 import { AppStoreModule } from '../../store/index';
 import { getUserId } from '../../store/selectors/member.selectors';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.less']

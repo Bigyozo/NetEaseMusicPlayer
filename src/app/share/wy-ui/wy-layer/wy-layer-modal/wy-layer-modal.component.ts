@@ -33,7 +33,7 @@ interface SizeType {
   h: number;
 }
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-wy-layer-modal',
   templateUrl: './wy-layer-modal.component.html',
   styleUrls: ['./wy-layer-modal.component.less'],

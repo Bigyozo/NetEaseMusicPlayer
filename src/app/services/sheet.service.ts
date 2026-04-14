@@ -1,6 +1,6 @@
 import queryString from 'query-string';
 import { Observable } from 'rxjs';
-import { map, pluck, switchMap } from 'rxjs/internal/operators';
+import { map, pluck, switchMap } from 'rxjs/operators';
 
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';

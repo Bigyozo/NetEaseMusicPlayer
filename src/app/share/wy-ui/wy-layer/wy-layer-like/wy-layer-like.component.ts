@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-wy-layer-like',
   templateUrl: './wy-layer-like.component.html',
   styleUrls: ['./wy-layer-like.component.less'],

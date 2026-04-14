@@ -9,7 +9,7 @@ import {
   ViewChild
 } from '@angular/core';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-wy-carousel',
   templateUrl: './wy-carousel.component.html',
   styleUrls: ['./wy-carousel.component.less'],

@@ -11,7 +11,7 @@
       <ng-template #itemTpl let-item>
         <nz-list-item class="list-item" (click)="onLike(item.id.toString())">
           <nz-list-item-meta
-            [nzTitle]="nzTitle"
+            [nzTooltipTitle]="nzTitle"
             [nzDescription]="item.trackCount"
             [nzAvatar]="item.coverImgUrl"
           >

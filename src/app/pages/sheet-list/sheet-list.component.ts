@@ -8,7 +8,7 @@ import { LanguageRes, SheetList } from '../../services/data.types/common.types';
 import { SheetParams, SheetService } from '../../services/sheet.service';
 import { BatchActionsService } from '../../store/batch-actions.service';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-sheet-list',
   templateUrl: './sheet-list.component.html',
   styleUrls: ['./sheet-list.component.less']

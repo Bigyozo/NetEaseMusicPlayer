@@ -1,4 +1,4 @@
-import { NzMessageService } from 'ng-zorro-antd';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { timer } from 'rxjs';
 import { LANGUAGE_CH } from 'src/app/language/ch';
 import { LanguageRes } from 'src/app/services/data.types/common.types';
@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { MemberService } from '../../../../services/member.service';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-member-card',
   templateUrl: './member-card.component.html',
   styleUrls: ['./member-card.component.less']

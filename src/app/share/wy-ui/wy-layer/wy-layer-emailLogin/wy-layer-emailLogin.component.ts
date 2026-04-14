@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-wy-layer-emailLogin',
   templateUrl: './wy-layer-emailLogin.component.html',
   styleUrls: ['./wy-layer-emailLogin.component.less'],

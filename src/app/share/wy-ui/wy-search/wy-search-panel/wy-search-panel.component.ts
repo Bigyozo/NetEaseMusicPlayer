@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 
 import { LanguageRes, SearchResult } from '../../../../services/data.types/common.types';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-wy-search-panel',
   templateUrl: './wy-search-panel.component.html',
   styleUrls: ['./wy-search-panel.component.less']

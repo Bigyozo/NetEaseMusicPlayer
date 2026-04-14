@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/internal/operators';
+import { catchError } from 'rxjs/operators';
 
 import {
   HttpErrorResponse,

@@ -1,4 +1,4 @@
-import { NzModalService } from 'ng-zorro-antd';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { timer } from 'rxjs';
 import { LANGUAGE_CH } from 'src/app/language/ch';
 import { LanguageRes, Singer, Song } from 'src/app/services/data.types/common.types';
@@ -35,7 +35,7 @@ enum TipTitles {
   Add = '已添加到列表',
   Play = '已开始播放'
 }
-@Component({
+@Component({ standalone: false,
   selector: 'app-wy-player',
   templateUrl: './wy-player.component.html',
   styleUrls: ['./wy-player.component.less'],

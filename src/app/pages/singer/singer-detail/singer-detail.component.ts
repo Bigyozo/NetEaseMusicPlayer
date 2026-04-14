@@ -1,6 +1,6 @@
-import { NzMessageService } from 'ng-zorro-antd';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/internal/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import { LANGUAGE_CH } from 'src/app/language/ch';
 import { LanguageService } from 'src/app/services/language.service';
 import { SongService } from 'src/app/services/song.service';
@@ -18,7 +18,7 @@ import { LanguageRes, Singer, SingerDetail, Song } from '../../../services/data.
 import { MemberService } from '../../../services/member.service';
 import { getCurrentSong } from '../../../store/selectors/play.selectors';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-singer-detail',
   templateUrl: './singer-detail.component.html',
   styleUrls: ['./singer-detail.component.less']

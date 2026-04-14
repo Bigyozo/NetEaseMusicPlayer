@@ -1,6 +1,6 @@
-import { NzMessageService } from 'ng-zorro-antd';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/internal/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import { Singer, Song } from 'src/app/services/data.types/common.types';
 import { RecordVal, User } from 'src/app/services/data.types/member.type';
 import { MemberService, RecordType } from 'src/app/services/member.service';
@@ -19,7 +19,7 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-record-detail',
   templateUrl: './record-detail.component.html',
   styles: [
@@ -37,7 +37,7 @@ export class RecordDetailComponent implements OnInit, OnDestroy {
   recordType = RecordType.weekData;
   private currentSong: Song;
   currentIndex = -1;
-  private destory$ = new Subject();
+  private destory$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,

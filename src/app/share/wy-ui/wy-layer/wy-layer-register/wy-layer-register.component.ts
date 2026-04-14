@@ -1,6 +1,6 @@
-import { NzMessageService } from 'ng-zorro-antd';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { interval } from 'rxjs';
-import { take } from 'rxjs/internal/operators';
+import { take } from 'rxjs/operators';
 import { LANGUAGE_CH } from 'src/app/language/ch';
 import { LanguageRes } from 'src/app/services/data.types/common.types';
 import { LanguageService } from 'src/app/services/language.service';
@@ -19,7 +19,7 @@ enum Exist {
   '不存在' = -1
 }
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-wy-layer-register',
   templateUrl: './wy-layer-register.component.html',
   styleUrls: ['./wy-layer-register.component.less'],

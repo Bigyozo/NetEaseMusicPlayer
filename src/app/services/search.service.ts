@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/internal/operators';
+import { map } from 'rxjs/operators';
 
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
@@ -16,7 +16,7 @@ export class SearchService {
   search(keywords: string): Observable<SearchResult> {
     const params = new HttpParams().set('keywords', keywords);
     return this.http
-      .get(this.uri + 'search/suggest', { params })
+      .get<{ result: SearchResult }>(this.uri + 'search/suggest', { params })
       .pipe(map((res: { result: SearchResult }) => res.result));
   }
 }

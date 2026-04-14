@@ -11,7 +11,7 @@ import {
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 const MAX_MSG = 140;
-@Component({
+@Component({ standalone: false,
   selector: 'app-wy-layer-share',
   templateUrl: './wy-layer-share.component.html',
   styleUrls: ['./wy-layer-share.component.less'],

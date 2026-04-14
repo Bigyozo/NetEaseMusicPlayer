@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-wy-layer-phoneLogin',
   templateUrl: './wy-layer-phoneLogin.component.html',
   styleUrls: ['./wy-layer-phoneLogin.component.less'],

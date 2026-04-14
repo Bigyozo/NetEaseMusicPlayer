@@ -1,6 +1,6 @@
-import { NzMessageService } from 'ng-zorro-antd';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { interval, Observable } from 'rxjs';
-import { filter, map, mergeMap, takeUntil } from 'rxjs/internal/operators';
+import { filter, map, mergeMap, takeUntil } from 'rxjs/operators';
 import { MemberState, ModalTypes, ShareInfo } from 'src/app/store/reducers/member.reducer';
 
 import { DOCUMENT } from '@angular/common';
@@ -30,7 +30,7 @@ interface StateArrType {
   cb: (param: any) => void;
 }
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.less']

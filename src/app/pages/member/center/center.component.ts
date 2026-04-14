@@ -1,6 +1,6 @@
-import { NzMessageService } from 'ng-zorro-antd';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/internal/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import { LANGUAGE_CH } from 'src/app/language/ch';
 import { LanguageRes, Singer, Song } from 'src/app/services/data.types/common.types';
 import { RecordVal, User, UserSheet } from 'src/app/services/data.types/member.type';
@@ -22,7 +22,7 @@ import { createFeatureSelector, select, Store } from '@ngrx/store';
 
 import { PlayState } from '../../../store/reducers/player.reducer';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-center',
   templateUrl: './center.component.html',
   styleUrls: ['./center.component.less'],
@@ -36,7 +36,7 @@ export class CenterComponent implements OnInit, OnDestroy {
   recordType = RecordType.weekData;
   private currentSong: Song;
   currentIndex = -1;
-  private destory$ = new Subject();
+  private destory$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,

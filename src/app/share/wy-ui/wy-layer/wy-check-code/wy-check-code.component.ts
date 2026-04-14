@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-wy-check-code',
   templateUrl: './wy-check-code.component.html',
   styleUrls: ['./wy-check-code.component.less'],

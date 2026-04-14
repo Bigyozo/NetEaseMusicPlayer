@@ -22,7 +22,7 @@ import {
   map,
   pluck,
   tap
-} from 'rxjs/internal/operators';
+} from 'rxjs/operators';
 import { inArray } from 'src/app/utils/array';
 import {
   getPercent,
@@ -32,7 +32,7 @@ import {
 import { getElementOffset, sliderEvent } from './wy-slider-helper';
 import { SliderEventObserverConfig, SliderValue } from './wy-slider-types';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-wy-slider',
   templateUrl: './wy-slider.component.html',
   styleUrls: ['./wy-slider.component.less'],

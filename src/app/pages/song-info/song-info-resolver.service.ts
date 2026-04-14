@@ -1,5 +1,5 @@
 import { forkJoin, Observable } from 'rxjs';
-import { first } from 'rxjs/internal/operators';
+import { first } from 'rxjs/operators';
 import { Song } from 'src/app/services/data.types/common.types';
 
 import { Injectable } from '@angular/core';

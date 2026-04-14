@@ -1,4 +1,5 @@
-import { NzIconModule, NzInputModule } from 'ng-zorro-antd';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzInputModule } from 'ng-zorro-antd/input';
 
 import { OverlayModule } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
@@ -9,7 +10,6 @@ import { WySearchComponent } from './wy-search.component';
 
 @NgModule({
   declarations: [WySearchComponent, WySearchPanelComponent],
-  entryComponents: [WySearchPanelComponent],
   imports: [CommonModule, NzIconModule, NzInputModule, OverlayModule],
   exports: [WySearchComponent]
 })

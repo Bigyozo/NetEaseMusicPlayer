@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { WySliderStyle } from './wy-slider-types';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-wy-slider-track',
   template: `<div
     class="wy-slider-track"

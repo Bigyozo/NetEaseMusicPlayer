@@ -4,7 +4,7 @@ import {
     ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output
 } from '@angular/core';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-single-sheet',
   templateUrl: './single-sheet.component.html',
   styleUrls: ['./single-sheet.component.less'],

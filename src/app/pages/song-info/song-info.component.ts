@@ -1,6 +1,6 @@
-import { NzMessageService } from 'ng-zorro-antd';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/internal/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import { LANGUAGE_CH } from 'src/app/language/ch';
 import { LanguageRes, Singer, Song } from 'src/app/services/data.types/common.types';
 import { LanguageService } from 'src/app/services/language.service';
@@ -17,7 +17,7 @@ import { createFeatureSelector, select, Store } from '@ngrx/store';
 import { BaseLyricLine, WyLyric } from '../../share/wy-ui/wy-player/wy-player-panel/wy-lyric';
 import { getCurrentSong } from '../../store/selectors/play.selectors';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-song-info',
   templateUrl: './song-info.component.html',
   styleUrls: ['./song-info.component.less']

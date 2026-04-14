@@ -1,5 +1,5 @@
 import { fromEvent } from 'rxjs';
-import { debounceTime, distinctUntilChanged, pluck } from 'rxjs/internal/operators';
+import { debounceTime, distinctUntilChanged, pluck } from 'rxjs/operators';
 import { LANGUAGE_CH } from 'src/app/language/ch';
 import { LanguageService } from 'src/app/services/language.service';
 import { isEmptyObject } from 'src/app/utils/tools';
@@ -14,7 +14,7 @@ import {
 import { LanguageRes, SearchResult } from '../../../services/data.types/common.types';
 import { WySearchPanelComponent } from './wy-search-panel/wy-search-panel.component';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-wy-search',
   templateUrl: './wy-search.component.html',
   styleUrls: ['./wy-search.component.less']

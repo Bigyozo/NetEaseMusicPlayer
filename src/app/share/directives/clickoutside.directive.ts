@@ -3,7 +3,7 @@ import {
     Directive, ElementRef, EventEmitter, Inject, Input, OnChanges, Output, Renderer2, SimpleChanges
 } from '@angular/core';
 
-@Directive({
+@Directive({ standalone: false,
   selector: '[appClickoutside]'
 })
 export class ClickoutsideDirective implements OnChanges {

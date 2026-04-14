@@ -1,9 +1,8 @@
 import queryString from 'query-string';
 import { Observable, throwError } from 'rxjs';
-import { map } from 'rxjs/internal/operators';
+import { map } from 'rxjs/operators';
 
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { error } from '@angular/compiler/src/util';
 import { Inject, Injectable } from '@angular/core';
 
 import { SampleBack, SongSheet } from './data.types/common.types';

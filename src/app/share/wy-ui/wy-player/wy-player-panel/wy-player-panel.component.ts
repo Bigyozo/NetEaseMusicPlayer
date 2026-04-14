@@ -20,7 +20,7 @@ import {
 import { WyScrollComponent } from '../wy-scroll/wy-scroll.component';
 import { BaseLyricLine, WyLyric } from './wy-lyric';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-wy-player-panel',
   templateUrl: './wy-player-panel.component.html',
   styleUrls: ['./wy-player-panel.component.less']

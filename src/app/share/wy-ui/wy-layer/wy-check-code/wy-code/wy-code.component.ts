@@ -1,5 +1,5 @@
 import { fromEvent, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/internal/operators';
+import { takeUntil } from 'rxjs/operators';
 
 import { BACKSPACE } from '@angular/cdk/keycodes';
 import {
@@ -17,7 +17,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 const CODELEN = 4;
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-wy-code',
   templateUrl: './wy-code.component.html',
   styleUrls: ['./wy-code.component.less'],
@@ -34,7 +34,7 @@ export class WyCodeComponent implements OnInit, ControlValueAccessor, AfterViewI
   inputArr = [];
   inputEl: HTMLElement[];
   private code: string;
-  private destory$ = new Subject();
+  private destory$ = new Subject<void>();
   result: string[] = [];
   currentFocusIndex = 0;
   @ViewChild('codeWrap', { static: true }) private codeWrap: ElementRef;

@@ -18,7 +18,7 @@ import ScrollBar from '@better-scroll/scroll-bar';
 import { timer } from 'rxjs';
 BScroll.use(ScrollBar);
 BScroll.use(MouseWheel);
-@Component({
+@Component({ standalone: false,
   selector: 'app-wy-scroll',
   template: `
     <div class="wy-scroll" #wrap>

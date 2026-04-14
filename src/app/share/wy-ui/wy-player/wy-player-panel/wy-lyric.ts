@@ -1,5 +1,5 @@
 import { from, Subject, Subscription, timer, zip } from 'rxjs';
-import { skip } from 'rxjs/internal/operators';
+import { skip } from 'rxjs/operators';
 import { Lyric } from 'src/app/services/data.types/common.types';
 
 const timeExp = /\[(\d{1,2}):(\d{2})(?:\.(\d{2,3}))?\]/;

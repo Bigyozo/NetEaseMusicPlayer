@@ -9,7 +9,7 @@ import {
 
 import { RecordType } from '../../../../services/member.service';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-records',
   templateUrl: './records.component.html',
   styleUrls: ['./records.component.less'],

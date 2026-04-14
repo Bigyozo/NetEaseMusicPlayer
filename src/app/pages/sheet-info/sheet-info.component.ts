@@ -1,6 +1,6 @@
-import { NzMessageService } from 'ng-zorro-antd';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/internal/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import { LANGUAGE_CH } from 'src/app/language/ch';
 import { LanguageService } from 'src/app/services/language.service';
 import { SetShareInfo } from 'src/app/store/actions/member.action';
@@ -18,7 +18,7 @@ import { AppStoreModule } from '../../store/index';
 import { getCurrentSong } from '../../store/selectors/play.selectors';
 import { findIndex } from '../../utils/array';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-sheet-info',
   templateUrl: './sheet-info.component.html',
   styleUrls: ['./sheet-info.component.less']

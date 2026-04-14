@@ -6,7 +6,7 @@ import {
     ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnInit, Output
 } from '@angular/core';
 
-@Component({
+@Component({ standalone: false,
   selector: 'app-wy-layer-default',
   template: `
     <div class="cnzt">
