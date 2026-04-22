@@ -1,10 +1,10 @@
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { interval, Observable } from 'rxjs';
+import { interval, Observable, Subject } from 'rxjs';
 import { filter, map, mergeMap, takeUntil } from 'rxjs/operators';
 import { MemberState, ModalTypes, ShareInfo } from 'src/app/store/reducers/member.reducer';
 
 import { DOCUMENT } from '@angular/common';
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnDestroy } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
@@ -35,7 +35,7 @@ interface StateArrType {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.less']
 })
-export class AppComponent {
+export class AppComponent implements OnDestroy {
   lanRes: LanguageRes = LANGUAGE_CH;
   title = 'MusicPlayer by Bigyozo';
   menu = [
@@ -70,6 +70,7 @@ export class AppComponent {
   routeTitle = '';
   loadPercent = 0;
   private navEnd: Observable<NavigationEnd>;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private searchService: SearchService,
@@ -101,15 +102,17 @@ export class AppComponent {
     }
     this.listenStates();
 
-    this.router.events.pipe(filter((evt) => evt instanceof NavigationStart)).subscribe(() => {
-      this.loadPercent = 0;
-      this.setTitle();
-    });
+    this.router.events
+      .pipe(filter((evt) => evt instanceof NavigationStart), takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.loadPercent = 0;
+        this.setTitle();
+      });
     this.navEnd = this.router.events.pipe(
       filter((evt) => evt instanceof NavigationEnd)
     ) as Observable<NavigationEnd>;
     this.setLoadIngBar();
-    this.languageService.language$.subscribe((item) => {
+    this.languageService.language$.pipe(takeUntil(this.destroy$)).subscribe((item) => {
       this.lanRes = item.res;
       this.menu = [
         {
@@ -124,6 +127,11 @@ export class AppComponent {
     });
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   private setTitle() {
     this.navEnd
       .pipe(
@@ -134,7 +142,8 @@ export class AppComponent {
           }
           return route;
         }),
-        mergeMap((route) => route.data)
+        mergeMap((route) => route.data),
+        takeUntil(this.destroy$)
       )
       .subscribe((data) => {
         this.routeTitle = data.title;
@@ -148,7 +157,7 @@ export class AppComponent {
       .subscribe(() => {
         this.loadPercent = Math.max(95, ++this.loadPercent);
       });
-    this.navEnd.subscribe(() => {
+    this.navEnd.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.loadPercent = 100;
       //  this.doc.documentElement.scrollTop = 0;
     });
@@ -176,7 +185,7 @@ export class AppComponent {
     ];
 
     stateArr.forEach((item) => {
-      appStore$.pipe(select(item.type)).subscribe(item.cb);
+      appStore$.pipe(select(item.type), takeUntil(this.destroy$)).subscribe(item.cb);
     });
   }
 
@@ -320,7 +329,7 @@ export class AppComponent {
     );
   }
 
-  // 获取当前用户的歌单
+  // 获取当前用户の歌单
   onLoadMySheets() {
     if (this.user) {
       this.memberService
@@ -344,7 +353,7 @@ export class AppComponent {
       },
       (error) => {
         //Collect fail
-        this.alertMessage('error', error.msg || this.lanRes.C00079);
+        this.alertMessage('error', error.message || this.lanRes.C00079);
       }
     );
   }
@@ -356,7 +365,7 @@ export class AppComponent {
       },
       (error) => {
         //Create fail
-        this.alertMessage('error', error.msg || this.lanRes.C00080);
+        this.alertMessage('error', error.message || this.lanRes.C00080);
       }
     );
   }
@@ -374,7 +383,7 @@ export class AppComponent {
       },
       (error) => {
         //Share fail
-        this.alertMessage('error', error.msg || this.lanRes.C00082);
+        this.alertMessage('error', error.message || this.lanRes.C00082);
       }
     );
   }
