@@ -1,4 +1,4 @@
-import { forkJoin, Observable } from 'rxjs';
+import { EMPTY, forkJoin, Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { RecordVal, User, UserSheet } from 'src/app/services/data.types/member.type';
 
@@ -23,6 +23,7 @@ export class CenterResolverService implements Resolve<CenterDataType> {
       ]).pipe(first());
     } else {
       this.router.navigate(['/home']);
+      return EMPTY;
     }
   }
 }
