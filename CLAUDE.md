@@ -87,3 +87,5 @@ All services (`HomeService`, `SheetService`, `SongService`, `SingerService`, `Me
 ### Styling
 
 Global styles in `src/assets/styles/` (variables, mixins, layout, zorro overrides). Component styles use LESS. The Angular project is configured with `skipTests: true` for all schematics — there are no unit test files for components.
+
+全ての会話は日本語で回答してください
