@@ -45,6 +45,12 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
-CLAUDE.md
+
+# Claude Code (session/memory data, not project instructions)
 .claude
 .angular
+
+# Environment variables
+.env
+.env.local
+.env.*.local
