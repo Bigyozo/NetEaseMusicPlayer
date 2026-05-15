@@ -5,10 +5,10 @@ import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 
 import { Banner, HotTag, SongSheet } from './data.types/common.types';
-import { API_CONFIG, ServicesModule } from './services.module';
+import { API_CONFIG } from './tokens';
 
 @Injectable({
-  providedIn: ServicesModule
+  providedIn: 'root'
 })
 export class HomeService {
   constructor(private http: HttpClient, @Inject(API_CONFIG) private uri: string) {}

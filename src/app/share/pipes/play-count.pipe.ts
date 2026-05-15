@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({ standalone: false,
-  name: 'playCount'
+@Pipe({
+  name: 'playCount',
+  standalone: true
 })
 export class PlayCountPipe implements PipeTransform {
   transform(value: number): number | string {

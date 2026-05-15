@@ -5,12 +5,13 @@ import { WySliderTrackComponent } from './wy-slider-track.component';
 import { WySliderHandleComponent } from './wy-slider-handle.component';
 
 @NgModule({
-  declarations: [
+  declarations: [],
+  imports: [
+    CommonModule,
     WySliderComponent,
     WySliderTrackComponent,
     WySliderHandleComponent
   ],
-  imports: [CommonModule],
   exports: [WySliderComponent]
 })
 export class WySliderModule {}

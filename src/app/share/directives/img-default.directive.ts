@@ -1,7 +1,8 @@
 import { Directive, HostListener } from '@angular/core';
 
-@Directive({ standalone: false,
-  selector: '[appImgDefault]'
+@Directive({
+  selector: '[appImgDefault]',
+  standalone: true
 })
 export class ImgDefaultDirective {
   constructor() {}

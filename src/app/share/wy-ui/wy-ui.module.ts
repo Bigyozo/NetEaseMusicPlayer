@@ -8,8 +8,14 @@ import { WyPlayerModule } from './wy-player/wy-player.module';
 import { WySearchModule } from './wy-search/wy-search.module';
 
 @NgModule({
-  declarations: [SingleSheetComponent, PlayCountPipe, ImgDefaultDirective],
-  imports: [WyPlayerModule, WySearchModule, WyLayerModule],
+  declarations: [SingleSheetComponent],
+  imports: [
+    WyPlayerModule,
+    WySearchModule,
+    WyLayerModule,
+    PlayCountPipe,
+    ImgDefaultDirective
+  ],
   exports: [
     SingleSheetComponent,
     PlayCountPipe,
