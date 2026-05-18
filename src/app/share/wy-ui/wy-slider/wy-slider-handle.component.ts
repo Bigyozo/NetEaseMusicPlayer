@@ -6,13 +6,10 @@ import {
   OnInit,
   SimpleChanges
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { WySliderStyle } from './wy-slider-types';
 
 @Component({
   selector: 'app-wy-slider-handle',
-  standalone: true,
-  imports: [CommonModule],
   template: `<div class="wy-slider-handle" [ngStyle]="style"></div>`,
   changeDetection: ChangeDetectionStrategy.OnPush
 })

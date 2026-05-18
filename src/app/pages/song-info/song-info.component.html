@@ -38,14 +38,14 @@
           </div>
 
           <div class="btns">
-            <div class="ant-btn-group btn">
+            <nz-button-group class="btn">
               <button class="play" nz-button nzType="primary" (click)="onAddSong(song, true)">
                 <i nz-icon nzType="play-circle" nzTheme="outline"></i>
                 <!-- 播放 -->
                 {{ lanRes.C00032 }}
               </button>
               <button class="add" nz-button nzType="primary" (click)="onAddSong(song)">+</button>
-            </div>
+            </nz-button-group>
             <button class="btn like" nz-button (click)="onLikeSong(song.id.toString())">
               <span>
                 <!-- 收藏 -->

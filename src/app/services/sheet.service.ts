@@ -1,12 +1,12 @@
 import queryString from 'query-string';
 import { Observable } from 'rxjs';
-import { map, pluck, switchMap } from 'rxjs/operators';
+import { map, pluck, switchMap } from 'rxjs/internal/operators';
 
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 
 import { SheetList, Song, SongSheet } from './data.types/common.types';
-import { API_CONFIG } from './tokens';
+import { API_CONFIG, ServicesModule } from './services.module';
 import { SongService } from './song.service';
 
 export interface SheetParams {
@@ -17,7 +17,7 @@ export interface SheetParams {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: ServicesModule
 })
 export class SheetService {
   constructor(

@@ -1,28 +1,12 @@
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzProgressModule } from 'ng-zorro-antd/progress';
-import { NzLayoutModule } from 'ng-zorro-antd/layout';
-import { NzMenuModule } from 'ng-zorro-antd/menu';
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzAvatarModule } from 'ng-zorro-antd/avatar';
-import { NzFloatButtonModule } from 'ng-zorro-antd/float-button';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { interval, Observable, Subject } from 'rxjs';
-import { filter, map, mergeMap, takeUntil } from 'rxjs/operators';
+import { NzMessageService } from 'ng-zorro-antd';
+import { interval, Observable } from 'rxjs';
+import { filter, map, mergeMap, takeUntil } from 'rxjs/internal/operators';
 import { MemberState, ModalTypes, ShareInfo } from 'src/app/store/reducers/member.reducer';
-import { WySearchComponent } from './share/wy-ui/wy-search/wy-search.component';
-import { WyPlayerComponent } from './share/wy-ui/wy-player/wy-player.component';
-import { WyLayerModalComponent } from './share/wy-ui/wy-layer/wy-layer-modal/wy-layer-modal.component';
-import { WyLayerPhoneLoginComponent } from './share/wy-ui/wy-layer/wy-layer-phoneLogin/wy-layer-phoneLogin.component';
-import { WyLayerEmailLoginComponent } from './share/wy-ui/wy-layer/wy-layer-emailLogin/wy-layer-emailLogin.component';
-import { WyLayerLikeComponent } from './share/wy-ui/wy-layer/wy-layer-like/wy-layer-like.component';
-import { WyLayerShareComponent } from './share/wy-ui/wy-layer/wy-layer-share/wy-layer-share.component';
-import { WyLayerRegisterComponent } from './share/wy-ui/wy-layer/wy-layer-register/wy-layer-register.component';
-import { WyLayerDefaultComponent } from './share/wy-ui/wy-layer/wy-layer-default/wy-layer-default.component';
 
-import { CommonModule, DOCUMENT } from '@angular/common';
-import { Component, Inject, OnDestroy } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Component, Inject } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, NavigationEnd, NavigationStart, Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
 
 import { LANGUAGE_CH } from './language/ch';
@@ -47,32 +31,11 @@ interface StateArrType {
 }
 
 @Component({
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    NzProgressModule,
-    NzLayoutModule,
-    NzMenuModule,
-    NzIconModule,
-    NzAvatarModule,
-    NzFloatButtonModule,
-    NzButtonModule,
-    WySearchComponent,
-    WyPlayerComponent,
-    WyLayerModalComponent,
-    WyLayerPhoneLoginComponent,
-    WyLayerEmailLoginComponent,
-    WyLayerLikeComponent,
-    WyLayerShareComponent,
-    WyLayerRegisterComponent,
-    WyLayerDefaultComponent
-  ],
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.less']
 })
-export class AppComponent implements OnDestroy {
+export class AppComponent {
   lanRes: LanguageRes = LANGUAGE_CH;
   title = 'MusicPlayer by Bigyozo';
   menu = [
@@ -107,7 +70,6 @@ export class AppComponent implements OnDestroy {
   routeTitle = '';
   loadPercent = 0;
   private navEnd: Observable<NavigationEnd>;
-  private destroy$ = new Subject<void>();
 
   constructor(
     private searchService: SearchService,
@@ -139,17 +101,15 @@ export class AppComponent implements OnDestroy {
     }
     this.listenStates();
 
-    this.router.events
-      .pipe(filter((evt) => evt instanceof NavigationStart), takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.loadPercent = 0;
-        this.setTitle();
-      });
+    this.router.events.pipe(filter((evt) => evt instanceof NavigationStart)).subscribe(() => {
+      this.loadPercent = 0;
+      this.setTitle();
+    });
     this.navEnd = this.router.events.pipe(
       filter((evt) => evt instanceof NavigationEnd)
     ) as Observable<NavigationEnd>;
     this.setLoadIngBar();
-    this.languageService.language$.pipe(takeUntil(this.destroy$)).subscribe((item) => {
+    this.languageService.language$.subscribe((item) => {
       this.lanRes = item.res;
       this.menu = [
         {
@@ -164,11 +124,6 @@ export class AppComponent implements OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
   private setTitle() {
     this.navEnd
       .pipe(
@@ -179,8 +134,7 @@ export class AppComponent implements OnDestroy {
           }
           return route;
         }),
-        mergeMap((route) => route.data),
-        takeUntil(this.destroy$)
+        mergeMap((route) => route.data)
       )
       .subscribe((data) => {
         this.routeTitle = data.title;
@@ -194,7 +148,7 @@ export class AppComponent implements OnDestroy {
       .subscribe(() => {
         this.loadPercent = Math.max(95, ++this.loadPercent);
       });
-    this.navEnd.pipe(takeUntil(this.destroy$)).subscribe(() => {
+    this.navEnd.subscribe(() => {
       this.loadPercent = 100;
       //  this.doc.documentElement.scrollTop = 0;
     });
@@ -222,7 +176,7 @@ export class AppComponent implements OnDestroy {
     ];
 
     stateArr.forEach((item) => {
-      appStore$.pipe(select(item.type), takeUntil(this.destroy$)).subscribe(item.cb);
+      appStore$.pipe(select(item.type)).subscribe(item.cb);
     });
   }
 
@@ -366,7 +320,7 @@ export class AppComponent implements OnDestroy {
     );
   }
 
-  // 获取当前用户の歌单
+  // 获取当前用户的歌单
   onLoadMySheets() {
     if (this.user) {
       this.memberService
@@ -390,7 +344,7 @@ export class AppComponent implements OnDestroy {
       },
       (error) => {
         //Collect fail
-        this.alertMessage('error', error.message || this.lanRes.C00079);
+        this.alertMessage('error', error.msg || this.lanRes.C00079);
       }
     );
   }
@@ -402,7 +356,7 @@ export class AppComponent implements OnDestroy {
       },
       (error) => {
         //Create fail
-        this.alertMessage('error', error.message || this.lanRes.C00080);
+        this.alertMessage('error', error.msg || this.lanRes.C00080);
       }
     );
   }
@@ -420,7 +374,7 @@ export class AppComponent implements OnDestroy {
       },
       (error) => {
         //Share fail
-        this.alertMessage('error', error.message || this.lanRes.C00082);
+        this.alertMessage('error', error.msg || this.lanRes.C00082);
       }
     );
   }
