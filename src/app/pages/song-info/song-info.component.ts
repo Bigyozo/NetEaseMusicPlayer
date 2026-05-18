@@ -11,13 +11,19 @@ import { BatchActionsService } from 'src/app/store/batch-actions.service';
 import { PlayState } from 'src/app/store/reducers/player.reducer';
 
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { ImgDefaultDirective } from '../../share/directives/img-default.directive';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
 
 import { BaseLyricLine, WyLyric } from '../../share/wy-ui/wy-player/wy-player-panel/wy-lyric';
 import { getCurrentSong } from '../../store/selectors/play.selectors';
 
-@Component({ standalone: false,
+@Component({
+  standalone: true,
+  imports: [CommonModule, RouterModule, NzButtonModule, NzIconModule, ImgDefaultDirective],
   selector: 'app-song-info',
   templateUrl: './song-info.component.html',
   styleUrls: ['./song-info.component.less']

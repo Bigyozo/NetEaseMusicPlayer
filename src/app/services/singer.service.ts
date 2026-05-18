@@ -5,7 +5,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 
 import { Singer, SingerDetail } from './data.types/common.types';
-import { API_CONFIG, ServicesModule } from './services.module';
+import { API_CONFIG } from './tokens';
 
 type SingerParams = {
   offset: string;
@@ -22,7 +22,7 @@ const defaultParams: SingerParams = {
 };
 
 @Injectable({
-  providedIn: ServicesModule
+  providedIn: 'root'
 })
 export class SingerService {
   constructor(private http: HttpClient, @Inject(API_CONFIG) private uri: string) {}

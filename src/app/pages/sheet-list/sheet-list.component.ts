@@ -3,12 +3,19 @@ import { LanguageService } from 'src/app/services/language.service';
 
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
+import { NzPaginationModule } from 'ng-zorro-antd/pagination';
+import { SingleSheetComponent } from '../../share/wy-ui/single-sheet/single-sheet.component';
 
 import { LanguageRes, SheetList } from '../../services/data.types/common.types';
 import { SheetParams, SheetService } from '../../services/sheet.service';
 import { BatchActionsService } from '../../store/batch-actions.service';
 
-@Component({ standalone: false,
+@Component({
+  standalone: true,
+  imports: [CommonModule, FormsModule, NzRadioModule, NzPaginationModule, SingleSheetComponent],
   selector: 'app-sheet-list',
   templateUrl: './sheet-list.component.html',
   styleUrls: ['./sheet-list.component.less']

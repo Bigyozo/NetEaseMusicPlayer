@@ -6,7 +6,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 
 import { SheetList, Song, SongSheet } from './data.types/common.types';
-import { API_CONFIG, ServicesModule } from './services.module';
+import { API_CONFIG } from './tokens';
 import { SongService } from './song.service';
 
 export interface SheetParams {
@@ -17,7 +17,7 @@ export interface SheetParams {
 }
 
 @Injectable({
-  providedIn: ServicesModule
+  providedIn: 'root'
 })
 export class SheetService {
   constructor(

@@ -11,14 +11,22 @@ import { PlayState } from 'src/app/store/reducers/player.reducer';
 import { findIndex } from 'src/app/utils/array';
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { ImgDefaultDirective } from '../../../share/directives/img-default.directive';
+import { FormatTimePipe } from '../../../share/pipes/format-time.pipe';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
 
 import { LanguageRes, Singer, SingerDetail, Song } from '../../../services/data.types/common.types';
 import { MemberService } from '../../../services/member.service';
 import { getCurrentSong } from '../../../store/selectors/play.selectors';
 
-@Component({ standalone: false,
+@Component({
+  standalone: true,
+  imports: [CommonModule, RouterModule, NzButtonModule, NzIconModule, NzTableModule, ImgDefaultDirective, FormatTimePipe],
   selector: 'app-singer-detail',
   templateUrl: './singer-detail.component.html',
   styleUrls: ['./singer-detail.component.less']
