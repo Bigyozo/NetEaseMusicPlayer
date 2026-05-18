@@ -1,4 +1,4 @@
-import { DOCUMENT, CommonModule } from '@angular/common';
+import { DOCUMENT } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -22,7 +22,7 @@ import {
   map,
   pluck,
   tap
-} from 'rxjs/operators';
+} from 'rxjs/internal/operators';
 import { inArray } from 'src/app/utils/array';
 import {
   getPercent,
@@ -31,13 +31,9 @@ import {
 } from 'src/app/utils/number';
 import { getElementOffset, sliderEvent } from './wy-slider-helper';
 import { SliderEventObserverConfig, SliderValue } from './wy-slider-types';
-import { WySliderTrackComponent } from './wy-slider-track.component';
-import { WySliderHandleComponent } from './wy-slider-handle.component';
 
 @Component({
   selector: 'app-wy-slider',
-  standalone: true,
-  imports: [CommonModule, WySliderTrackComponent, WySliderHandleComponent],
   templateUrl: './wy-slider.component.html',
   styleUrls: ['./wy-slider.component.less'],
   encapsulation: ViewEncapsulation.None,

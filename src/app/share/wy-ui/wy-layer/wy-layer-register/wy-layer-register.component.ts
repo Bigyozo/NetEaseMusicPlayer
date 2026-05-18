@@ -1,6 +1,6 @@
-import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzMessageService } from 'ng-zorro-antd';
 import { interval } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { take } from 'rxjs/internal/operators';
 import { LANGUAGE_CH } from 'src/app/language/ch';
 import { LanguageRes } from 'src/app/services/data.types/common.types';
 import { LanguageService } from 'src/app/services/language.service';
@@ -10,12 +10,7 @@ import {
     ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit,
     Output, SimpleChanges
 } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { WyCheckCodeComponent } from '../wy-check-code/wy-check-code.component';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { MemberService } from '../../../../services/member.service';
 
@@ -25,8 +20,6 @@ enum Exist {
 }
 
 @Component({
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, NzFormModule, NzInputModule, NzButtonModule, WyCheckCodeComponent],
   selector: 'app-wy-layer-register',
   templateUrl: './wy-layer-register.component.html',
   styleUrls: ['./wy-layer-register.component.less'],

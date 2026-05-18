@@ -1,6 +1,6 @@
-import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzMessageService } from 'ng-zorro-antd';
 import { Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/internal/operators';
 import { LANGUAGE_CH } from 'src/app/language/ch';
 import { LanguageRes, Singer, Song } from 'src/app/services/data.types/common.types';
 import { LanguageService } from 'src/app/services/language.service';
@@ -11,19 +11,13 @@ import { BatchActionsService } from 'src/app/store/batch-actions.service';
 import { PlayState } from 'src/app/store/reducers/player.reducer';
 
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import { ImgDefaultDirective } from '../../share/directives/img-default.directive';
+import { ActivatedRoute } from '@angular/router';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
 
 import { BaseLyricLine, WyLyric } from '../../share/wy-ui/wy-player/wy-player-panel/wy-lyric';
 import { getCurrentSong } from '../../store/selectors/play.selectors';
 
 @Component({
-  standalone: true,
-  imports: [CommonModule, RouterModule, NzButtonModule, NzIconModule, ImgDefaultDirective],
   selector: 'app-song-info',
   templateUrl: './song-info.component.html',
   styleUrls: ['./song-info.component.less']

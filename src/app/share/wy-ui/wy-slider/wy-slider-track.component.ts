@@ -6,13 +6,10 @@ import {
   OnInit,
   SimpleChanges
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { WySliderStyle } from './wy-slider-types';
 
 @Component({
   selector: 'app-wy-slider-track',
-  standalone: true,
-  imports: [CommonModule],
   template: `<div
     class="wy-slider-track"
     [class.buffer]="wyBuffer"

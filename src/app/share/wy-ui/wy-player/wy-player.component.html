@@ -59,9 +59,9 @@
         <i [ngClass]="currentMode.type" [title]="currentMode.label" (click)="changeMode()"></i>
         <p
           nz-tooltip
-          [nzTooltipTitle]="controlTooltip.title"
-          [nzTooltipVisible]="controlTooltip.show"
-          nzTooltipOverlayClassName="tip-bg"
+          [nzTitle]="controlTooltip.title"
+          [nzVisible]="controlTooltip.show"
+          nzOverlayClassName="tip-bg"
           class="open"
           (click)="toggleListPanel()"
         >
