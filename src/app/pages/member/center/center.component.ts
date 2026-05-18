@@ -1,6 +1,6 @@
-import { NzMessageService } from 'ng-zorro-antd';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/internal/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import { LANGUAGE_CH } from 'src/app/language/ch';
 import { LanguageRes, Singer, Song } from 'src/app/services/data.types/common.types';
 import { RecordVal, User, UserSheet } from 'src/app/services/data.types/member.type';
@@ -17,12 +17,18 @@ import { findIndex } from 'src/app/utils/array';
 import {
     ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { ImgDefaultDirective } from '../../../share/directives/img-default.directive';
+import { SingleSheetComponent } from '../../../share/wy-ui/single-sheet/single-sheet.component';
+import { RecordsComponent } from '../components/records/records.component';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
 
 import { PlayState } from '../../../store/reducers/player.reducer';
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, RouterModule, ImgDefaultDirective, SingleSheetComponent, RecordsComponent],
   selector: 'app-center',
   templateUrl: './center.component.html',
   styleUrls: ['./center.component.less'],
@@ -36,7 +42,7 @@ export class CenterComponent implements OnInit, OnDestroy {
   recordType = RecordType.weekData;
   private currentSong: Song;
   currentIndex = -1;
-  private destory$ = new Subject();
+  private destory$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,

@@ -20,6 +20,7 @@ BScroll.use(ScrollBar);
 BScroll.use(MouseWheel);
 @Component({
   selector: 'app-wy-scroll',
+  standalone: true,
   template: `
     <div class="wy-scroll" #wrap>
       <ng-content></ng-content>

@@ -1,13 +1,20 @@
-import { NzMessageService } from 'ng-zorro-antd';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/internal/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import { LANGUAGE_CH } from 'src/app/language/ch';
 import { LanguageService } from 'src/app/services/language.service';
 import { SetShareInfo } from 'src/app/store/actions/member.action';
 import { PlayState } from 'src/app/store/reducers/player.reducer';
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { ImgDefaultDirective } from '../../share/directives/img-default.directive';
+import { FormatTimePipe } from '../../share/pipes/format-time.pipe';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
 
 import { LanguageRes, Singer, Song, SongSheet } from '../../services/data.types/common.types';
@@ -19,6 +26,8 @@ import { getCurrentSong } from '../../store/selectors/play.selectors';
 import { findIndex } from '../../utils/array';
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, RouterModule, NzButtonModule, NzIconModule, NzTagModule, NzTableModule, ImgDefaultDirective, FormatTimePipe],
   selector: 'app-sheet-info',
   templateUrl: './sheet-info.component.html',
   styleUrls: ['./sheet-info.component.less']

@@ -16,12 +16,17 @@ import {
   SimpleChanges,
   ViewChildren
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 import { WyScrollComponent } from '../wy-scroll/wy-scroll.component';
 import { BaseLyricLine, WyLyric } from './wy-lyric';
+import { FormatTimePipe } from '../../../pipes/format-time.pipe';
+import { ImgDefaultDirective } from '../../../directives/img-default.directive';
 
 @Component({
   selector: 'app-wy-player-panel',
+  standalone: true,
+  imports: [CommonModule, WyScrollComponent, FormatTimePipe, ImgDefaultDirective],
   templateUrl: './wy-player-panel.component.html',
   styleUrls: ['./wy-player-panel.component.less']
 })

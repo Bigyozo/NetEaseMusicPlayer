@@ -1,4 +1,4 @@
-import { NzModalService } from 'ng-zorro-antd';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { timer } from 'rxjs';
 import { LANGUAGE_CH } from 'src/app/language/ch';
 import { LanguageRes, Singer, Song } from 'src/app/services/data.types/common.types';
@@ -18,12 +18,21 @@ import { animate, AnimationEvent, state, style, transition, trigger } from '@ang
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
 
 import { BatchActionsService } from '../../../store/batch-actions.service';
 import { CurrentActions } from '../../../store/reducers/player.reducer';
 import { getCurrentAction } from '../../../store/selectors/play.selectors';
 import { PlayMode, StateArrType } from './player-types';
 import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.component';
+import { WySliderComponent } from '../wy-slider/wy-slider.component';
+import { FormatTimePipe } from '../../pipes/format-time.pipe';
+import { ClickoutsideDirective } from '../../directives/clickoutside.directive';
+import { ImgDefaultDirective } from '../../directives/img-default.directive';
 
 const modeTypes: PlayMode[] = [
   { type: 'loop', label: 'loop' },
@@ -33,10 +42,23 @@ const modeTypes: PlayMode[] = [
 
 enum TipTitles {
   Add = '已添加到列表',
-  Play = '已开始播放'
+  Play = '已開始播放'
 }
 @Component({
   selector: 'app-wy-player',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    NzIconModule,
+    NzModalModule,
+    NzTooltipModule,
+    WySliderComponent,
+    WyPlayerPanelComponent,
+    FormatTimePipe,
+    ClickoutsideDirective,
+    ImgDefaultDirective
+  ],
   templateUrl: './wy-player.component.html',
   styleUrls: ['./wy-player.component.less'],
   animations: [

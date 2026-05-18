@@ -13,11 +13,11 @@ import {
   SetPlayList,
   SetSongList
 } from './actions/player.action';
-import { AppStoreModule } from './index';
 import { MemberState, ModalTypes } from './reducers/member.reducer';
+import { AppStoreModule } from '.';
 
 @Injectable({
-  providedIn: AppStoreModule
+  providedIn: 'root'
 })
 export class BatchActionsService {
   playState: PlayState;

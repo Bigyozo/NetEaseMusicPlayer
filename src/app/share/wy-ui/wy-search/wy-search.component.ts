@@ -1,5 +1,5 @@
 import { fromEvent } from 'rxjs';
-import { debounceTime, distinctUntilChanged, pluck } from 'rxjs/internal/operators';
+import { debounceTime, distinctUntilChanged, pluck } from 'rxjs/operators';
 import { LANGUAGE_CH } from 'src/app/language/ch';
 import { LanguageService } from 'src/app/services/language.service';
 import { isEmptyObject } from 'src/app/utils/tools';
@@ -7,15 +7,22 @@ import { isEmptyObject } from 'src/app/utils/tools';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import {
-    AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output,
-    SimpleChanges, TemplateRef, ViewChild, ViewContainerRef
+  AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output,
+  SimpleChanges, TemplateRef, ViewChild, ViewContainerRef
 } from '@angular/core';
 
+import { CommonModule } from '@angular/common';
 import { LanguageRes, SearchResult } from '../../../services/data.types/common.types';
 import { WySearchPanelComponent } from './wy-search-panel/wy-search-panel.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-wy-search',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule
+  ],
   templateUrl: './wy-search.component.html',
   styleUrls: ['./wy-search.component.less']
 })
@@ -88,7 +95,7 @@ export class WySearchComponent implements OnInit, AfterViewInit, OnChanges {
       });
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   onFocus() {
     if (this.searchResult && !isEmptyObject(this.searchResult)) {

@@ -1,14 +1,14 @@
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/internal/operators';
+import { map } from 'rxjs/operators';
 
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 
 import { Lyric, Song, SongUrl } from './data.types/common.types';
-import { API_CONFIG, ServicesModule } from './services.module';
+import { API_CONFIG } from './tokens';
 
 @Injectable({
-  providedIn: ServicesModule
+  providedIn: 'root'
 })
 export class SongService {
   constructor(private http: HttpClient, @Inject(API_CONFIG) private uri: string) {}
@@ -34,7 +34,8 @@ export class SongService {
   private generateSongList(songArr: Song[], urls: SongUrl[]): Song[] {
     const result = [];
     songArr.forEach((song) => {
-      const url = urls.find((url) => url.id === song.id).url;
+      const found = urls.find((url) => url.id === song.id);
+      const url = found ? found.url : '';
       if (url) {
         result.push({ ...song, url });
       }

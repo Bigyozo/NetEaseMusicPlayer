@@ -1,14 +1,20 @@
 import { LANGUAGE_CH } from 'src/app/language/ch';
 import { LanguageRes } from 'src/app/services/data.types/common.types';
 import { LanguageService } from 'src/app/services/language.service';
+import { WyCodeComponent } from './wy-code/wy-code.component';
 
 import {
     ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit,
     Output, SimpleChanges
 } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, NzFormModule, NzButtonModule, WyCodeComponent],
   selector: 'app-wy-check-code',
   templateUrl: './wy-check-code.component.html',
   styleUrls: ['./wy-check-code.component.less'],

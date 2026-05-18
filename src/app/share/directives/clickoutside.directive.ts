@@ -4,7 +4,8 @@ import {
 } from '@angular/core';
 
 @Directive({
-  selector: '[appClickoutside]'
+  selector: '[appClickoutside]',
+  standalone: true
 })
 export class ClickoutsideDirective implements OnChanges {
   private handleClick: () => void;

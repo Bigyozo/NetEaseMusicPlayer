@@ -1,5 +1,5 @@
-import { forkJoin, Observable } from 'rxjs';
-import { first } from 'rxjs/internal/operators';
+import { EMPTY, forkJoin, Observable } from 'rxjs';
+import { first } from 'rxjs/operators';
 import { RecordVal, User } from 'src/app/services/data.types/member.type';
 
 import { Injectable } from '@angular/core';
@@ -22,6 +22,7 @@ export class RecordResolverService implements Resolve<RecordDataType> {
       ]).pipe(first());
     } else {
       this.router.navigate(['/home']);
+      return EMPTY;
     }
   }
 }

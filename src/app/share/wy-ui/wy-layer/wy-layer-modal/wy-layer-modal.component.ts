@@ -9,7 +9,7 @@ import {
   OverlayKeyboardDispatcher,
   OverlayRef
 } from '@angular/cdk/overlay';
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -25,6 +25,8 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 import { BatchActionsService } from '../../../../store/batch-actions.service';
 
@@ -34,6 +36,8 @@ interface SizeType {
 }
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, DragDropModule, NzSpinModule],
   selector: 'app-wy-layer-modal',
   templateUrl: './wy-layer-modal.component.html',
   styleUrls: ['./wy-layer-modal.component.less'],

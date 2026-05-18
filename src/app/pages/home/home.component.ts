@@ -1,5 +1,5 @@
-import { NzCarouselComponent } from 'ng-zorro-antd';
-import { map } from 'rxjs/internal/operators';
+import { NzCarouselComponent, NzCarouselModule } from 'ng-zorro-antd/carousel';
+import { map } from 'rxjs/operators';
 import { LANGUAGE_CH } from 'src/app/language/ch';
 import {
     Banner, HotTag, LanguageRes, Singer, SongSheet
@@ -9,9 +9,15 @@ import { LanguageService } from 'src/app/services/language.service';
 import { MemberService } from 'src/app/services/member.service';
 import { SheetService } from 'src/app/services/sheet.service';
 import { MemberState, ModalTypes } from 'src/app/store/reducers/member.reducer';
+import { SingleSheetComponent } from '../../share/wy-ui/single-sheet/single-sheet.component';
+import { ImgDefaultDirective } from '../../share/directives/img-default.directive';
+import { WyCarouselComponent } from './components/wy-carousel/wy-carousel.component';
+import { MemberCardComponent } from './components/member-card/member-card.component';
 
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
 
 import { BatchActionsService } from '../../store/batch-actions.service';
@@ -19,6 +25,17 @@ import { AppStoreModule } from '../../store/index';
 import { getUserId } from '../../store/selectors/member.selectors';
 
 @Component({
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    NzCarouselModule,
+    NzIconModule,
+    ImgDefaultDirective,
+    SingleSheetComponent,
+    WyCarouselComponent,
+    MemberCardComponent
+  ],
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.less']

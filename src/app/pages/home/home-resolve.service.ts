@@ -1,5 +1,5 @@
-import { forkJoin, Observable } from 'rxjs';
-import { first } from 'rxjs/internal/operators';
+import { forkJoin, Observable, of } from 'rxjs';
+import { catchError, first } from 'rxjs/operators';
 import { Banner, HotTag, Singer, SongSheet } from 'src/app/services/data.types/common.types';
 import { HomeService } from 'src/app/services/home.service';
 import { SingerService } from 'src/app/services/singer.service';
@@ -19,6 +19,9 @@ export class HomeResolverService implements Resolve<HomeDataType> {
       this.homeService.getHotTags(),
       this.homeService.getPersonalSheetList(),
       this.singerService.getEnterSinger()
-    ]).pipe(first());
+    ]).pipe(
+      first(),
+      catchError(() => of([[], [], [], []] as unknown as HomeDataType))
+    );
   }
 }
