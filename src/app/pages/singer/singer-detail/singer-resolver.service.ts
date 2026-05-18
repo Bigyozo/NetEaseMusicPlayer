@@ -8,7 +8,7 @@ import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router';
 import { SingerService } from '../../../services/singer.service';
 
 type SingerDetailData = [SingerDetail, Singer[]];
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class SingerResolverService implements Resolve<SingerDetailData> {
   constructor(private singerService: SingerService, private router: Router) {}
 

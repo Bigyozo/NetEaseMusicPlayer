@@ -17,9 +17,13 @@ import {
     ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { RecordsComponent } from '../components/records/records.component';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
 
-@Component({ standalone: false,
+@Component({
+  standalone: true,
+  imports: [CommonModule, RecordsComponent],
   selector: 'app-record-detail',
   templateUrl: './record-detail.component.html',
   styles: [

@@ -1,12 +1,28 @@
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzProgressModule } from 'ng-zorro-antd/progress';
+import { NzLayoutModule } from 'ng-zorro-antd/layout';
+import { NzMenuModule } from 'ng-zorro-antd/menu';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzAvatarModule } from 'ng-zorro-antd/avatar';
+import { NzFloatButtonModule } from 'ng-zorro-antd/float-button';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 import { interval, Observable, Subject } from 'rxjs';
 import { filter, map, mergeMap, takeUntil } from 'rxjs/operators';
 import { MemberState, ModalTypes, ShareInfo } from 'src/app/store/reducers/member.reducer';
+import { WySearchComponent } from './share/wy-ui/wy-search/wy-search.component';
+import { WyPlayerComponent } from './share/wy-ui/wy-player/wy-player.component';
+import { WyLayerModalComponent } from './share/wy-ui/wy-layer/wy-layer-modal/wy-layer-modal.component';
+import { WyLayerPhoneLoginComponent } from './share/wy-ui/wy-layer/wy-layer-phoneLogin/wy-layer-phoneLogin.component';
+import { WyLayerEmailLoginComponent } from './share/wy-ui/wy-layer/wy-layer-emailLogin/wy-layer-emailLogin.component';
+import { WyLayerLikeComponent } from './share/wy-ui/wy-layer/wy-layer-like/wy-layer-like.component';
+import { WyLayerShareComponent } from './share/wy-ui/wy-layer/wy-layer-share/wy-layer-share.component';
+import { WyLayerRegisterComponent } from './share/wy-ui/wy-layer/wy-layer-register/wy-layer-register.component';
+import { WyLayerDefaultComponent } from './share/wy-ui/wy-layer/wy-layer-default/wy-layer-default.component';
 
-import { DOCUMENT } from '@angular/common';
+import { CommonModule, DOCUMENT } from '@angular/common';
 import { Component, Inject, OnDestroy } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, NavigationStart, Router, RouterModule } from '@angular/router';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
 
 import { LANGUAGE_CH } from './language/ch';
@@ -30,7 +46,28 @@ interface StateArrType {
   cb: (param: any) => void;
 }
 
-@Component({ standalone: false,
+@Component({
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    NzProgressModule,
+    NzLayoutModule,
+    NzMenuModule,
+    NzIconModule,
+    NzAvatarModule,
+    NzFloatButtonModule,
+    NzButtonModule,
+    WySearchComponent,
+    WyPlayerComponent,
+    WyLayerModalComponent,
+    WyLayerPhoneLoginComponent,
+    WyLayerEmailLoginComponent,
+    WyLayerLikeComponent,
+    WyLayerShareComponent,
+    WyLayerRegisterComponent,
+    WyLayerDefaultComponent
+  ],
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.less']

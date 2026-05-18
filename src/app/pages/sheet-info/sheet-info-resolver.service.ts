@@ -7,7 +7,7 @@ import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router';
 
 import { SheetService } from '../../services/sheet.service';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class SheetInfoResolverService implements Resolve<SongSheet> {
   constructor(private sheetService: SheetService, private router: Router) {}
 

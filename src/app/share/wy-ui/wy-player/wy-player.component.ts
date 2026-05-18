@@ -21,6 +21,7 @@ import { createFeatureSelector, select, Store } from '@ngrx/store';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
 
 import { BatchActionsService } from '../../../store/batch-actions.service';
@@ -50,6 +51,7 @@ enum TipTitles {
     CommonModule,
     FormsModule,
     NzIconModule,
+    NzModalModule,
     NzTooltipModule,
     WySliderComponent,
     WyPlayerPanelComponent,

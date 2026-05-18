@@ -6,10 +6,17 @@ import { LanguageService } from 'src/app/services/language.service';
 import {
     ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { FormatTimePipe } from '../../../../share/pipes/format-time.pipe';
 
 import { RecordType } from '../../../../services/member.service';
 
-@Component({ standalone: false,
+@Component({
+  standalone: true,
+  imports: [CommonModule, RouterModule, NzTableModule, NzDividerModule, FormatTimePipe],
   selector: 'app-records',
   templateUrl: './records.component.html',
   styleUrls: ['./records.component.less'],

@@ -10,7 +10,7 @@ import { SongService } from '../../services/song.service';
 
 type SongDataModel = [Song, Lyric];
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class SongInfoResolverService implements Resolve<SongDataModel> {
   constructor(private songService: SongService, private router: Router) {}
 

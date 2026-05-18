@@ -8,8 +8,11 @@ import {
   TemplateRef,
   ViewChild
 } from '@angular/core';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
-@Component({ standalone: false,
+@Component({
+  standalone: true,
+  imports: [NzIconModule],
   selector: 'app-wy-carousel',
   templateUrl: './wy-carousel.component.html',
   styleUrls: ['./wy-carousel.component.less'],

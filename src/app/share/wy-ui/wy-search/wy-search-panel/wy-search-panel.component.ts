@@ -2,12 +2,15 @@ import { LANGUAGE_CH } from 'src/app/language/ch';
 import { LanguageService } from 'src/app/services/language.service';
 
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 import { LanguageRes, SearchResult } from '../../../../services/data.types/common.types';
+import { CommonModule } from '@angular/common';
 
-@Component({ standalone: false,
+@Component({
   selector: 'app-wy-search-panel',
+  standalone: true,
+  imports: [CommonModule, RouterModule],
   templateUrl: './wy-search-panel.component.html',
   styleUrls: ['./wy-search-panel.component.less']
 })
@@ -20,7 +23,7 @@ export class WySearchPanelComponent implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   toInfo(path: [string, number]) {
     if (path[1]) {

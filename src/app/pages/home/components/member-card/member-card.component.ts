@@ -6,10 +6,16 @@ import { User } from 'src/app/services/data.types/member.type';
 import { LanguageService } from 'src/app/services/language.service';
 
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
+import { ImgDefaultDirective } from '../../../../share/directives/img-default.directive';
 
 import { MemberService } from '../../../../services/member.service';
 
-@Component({ standalone: false,
+@Component({
+  standalone: true,
+  imports: [CommonModule, NzButtonModule, NzTooltipModule, ImgDefaultDirective],
   selector: 'app-member-card',
   templateUrl: './member-card.component.html',
   styleUrls: ['./member-card.component.less']

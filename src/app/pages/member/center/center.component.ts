@@ -17,12 +17,18 @@ import { findIndex } from 'src/app/utils/array';
 import {
     ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { ImgDefaultDirective } from '../../../share/directives/img-default.directive';
+import { SingleSheetComponent } from '../../../share/wy-ui/single-sheet/single-sheet.component';
+import { RecordsComponent } from '../components/records/records.component';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
 
 import { PlayState } from '../../../store/reducers/player.reducer';
 
-@Component({ standalone: false,
+@Component({
+  standalone: true,
+  imports: [CommonModule, RouterModule, ImgDefaultDirective, SingleSheetComponent, RecordsComponent],
   selector: 'app-center',
   templateUrl: './center.component.html',
   styleUrls: ['./center.component.less'],

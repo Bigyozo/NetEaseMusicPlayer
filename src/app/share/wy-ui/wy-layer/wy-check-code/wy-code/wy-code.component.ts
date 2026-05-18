@@ -13,11 +13,14 @@ import {
   OnInit,
   ViewChild
 } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 const CODELEN = 4;
 
-@Component({ standalone: false,
+@Component({
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
   selector: 'app-wy-code',
   templateUrl: './wy-code.component.html',
   styleUrls: ['./wy-code.component.less'],

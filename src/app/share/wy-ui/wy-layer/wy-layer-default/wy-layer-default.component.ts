@@ -1,12 +1,16 @@
 import { LANGUAGE_CH } from 'src/app/language/ch';
 import { LanguageRes } from 'src/app/services/data.types/common.types';
 import { LanguageService } from 'src/app/services/language.service';
+import { ImgDefaultDirective } from '../../../directives/img-default.directive';
 
 import {
     ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnInit, Output
 } from '@angular/core';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 
-@Component({ standalone: false,
+@Component({
+  standalone: true,
+  imports: [NzButtonModule, ImgDefaultDirective],
   selector: 'app-wy-layer-default',
   template: `
     <div class="cnzt">

@@ -8,9 +8,17 @@ import {
     ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit,
     Output, SimpleChanges
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { NzListModule } from 'ng-zorro-antd/list';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 
-@Component({ standalone: false,
+@Component({
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, NzListModule, NzFormModule, NzIconModule, NzInputModule, NzButtonModule],
   selector: 'app-wy-layer-like',
   templateUrl: './wy-layer-like.component.html',
   styleUrls: ['./wy-layer-like.component.less'],
