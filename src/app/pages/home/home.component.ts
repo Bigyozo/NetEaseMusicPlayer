@@ -1,6 +1,6 @@
 import { NzCarouselComponent, NzCarouselModule } from 'ng-zorro-antd/carousel';
 import { map } from 'rxjs/operators';
-import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LANGUAGE_JP } from 'src/app/language/jp';
 import {
     Banner, HotTag, LanguageRes, Singer, SongSheet
 } from 'src/app/services/data.types/common.types';
@@ -42,7 +42,7 @@ import { getUserId } from '../../store/selectors/member.selectors';
 })
 export class HomeComponent implements OnInit {
   carouselActiveIndex = 0;
-  lanRes: LanguageRes = LANGUAGE_CH;
+  lanRes: LanguageRes = LANGUAGE_JP;
   banners: Banner[];
   hotTags: HotTag[];
   songSheetList: SongSheet[];

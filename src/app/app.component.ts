@@ -20,12 +20,12 @@ import { WyLayerRegisterComponent } from './share/wy-ui/wy-layer/wy-layer-regist
 import { WyLayerDefaultComponent } from './share/wy-ui/wy-layer/wy-layer-default/wy-layer-default.component';
 
 import { CommonModule, DOCUMENT } from '@angular/common';
-import { Component, Inject, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, inject } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router, RouterModule } from '@angular/router';
 import { createFeatureSelector, select, Store } from '@ngrx/store';
 
-import { LANGUAGE_CH } from './language/ch';
+import { LANGUAGE_JP } from './language/jp';
 import { LanguageRes, SearchResult, SongSheet } from './services/data.types/common.types';
 import { EmailLoginParams, PhoneLoginParams, User } from './services/data.types/member.type';
 import { LanguageService } from './services/language.service';
@@ -73,21 +73,22 @@ interface StateArrType {
   styleUrls: ['./app.component.less']
 })
 export class AppComponent implements OnDestroy {
-  lanRes: LanguageRes = LANGUAGE_CH;
+  private doc = inject(DOCUMENT);
+  lanRes: LanguageRes = LANGUAGE_JP;
   title = 'MusicPlayer by Bigyozo';
   menu = [
     {
-      label: '发现',
+      label: '探索',
       path: '/home'
     },
     {
-      label: '歌单',
+      label: 'プレイリスト',
       path: '/sheet'
     }
   ];
 
   languages = [
-    { label: '中文', code: 'ch' },
+    { label: '日本語', code: 'jp' },
     { label: 'English', code: 'en' }
   ];
 
@@ -96,11 +97,11 @@ export class AppComponent implements OnDestroy {
   wyRememberPhoneLogin: PhoneLoginParams;
   wyRememberEmailLogin: EmailLoginParams;
   mySheets: SongSheet[];
-  // 被收藏歌曲ID
+  // お気に入り楽曲のID
   likeId: string;
-  // 弹框显示
+  // モーダルの表示状態
   visible: boolean;
-  // 弹窗loading
+  // モーダルのローディング状態
   showSpin = false;
   currentModalType: ModalTypes = ModalTypes.Default;
   shareInfo: ShareInfo;
@@ -119,8 +120,7 @@ export class AppComponent implements OnDestroy {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private titleSerivce: Title,
-    private languageService: LanguageService,
-    @Inject(DOCUMENT) private doc: Document
+    private languageService: LanguageService
   ) {
     const userId = this.storgeService.getStorage('wyUserID');
     if (userId) {
@@ -366,7 +366,7 @@ export class AppComponent implements OnDestroy {
     );
   }
 
-  // 获取当前用户の歌单
+  // 現在のユーザーのプレイリストを取得
   onLoadMySheets() {
     if (this.user) {
       this.memberService
@@ -380,7 +380,7 @@ export class AppComponent implements OnDestroy {
     }
   }
 
-  // 收藏歌曲
+  // 楽曲をお気に入り
   onLikeSong(args: LikeSongParams) {
     this.memberService.likeSong(args).subscribe(
       () => {
@@ -425,7 +425,7 @@ export class AppComponent implements OnDestroy {
     );
   }
 
-  // 注册账号
+  // アカウントを登録
   onRegister(phone: string) {
     //not support register
     this.alertMessage('error', this.lanRes.C00083);

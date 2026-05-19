@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { map, pluck, switchMap } from 'rxjs/operators';
 
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { SheetList, Song, SongSheet } from './data.types/common.types';
 import { API_CONFIG } from './tokens';
@@ -20,13 +20,13 @@ export interface SheetParams {
   providedIn: 'root'
 })
 export class SheetService {
+  private uri = inject(API_CONFIG);
   constructor(
     private http: HttpClient,
-    @Inject(API_CONFIG) private uri: string,
     private songService: SongService
   ) {}
 
-  // 获取歌单列表
+  // プレイリスト一覧を取得
   getSheets(args: SheetParams): Observable<SheetList> {
     const params = new HttpParams({ fromString: queryString.stringify(args) });
     return this.http

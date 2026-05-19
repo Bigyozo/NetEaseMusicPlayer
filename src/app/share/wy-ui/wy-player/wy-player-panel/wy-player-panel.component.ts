@@ -1,5 +1,5 @@
 import { timer } from 'rxjs';
-import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LANGUAGE_JP } from 'src/app/language/jp';
 import { LanguageRes, Song } from 'src/app/services/data.types/common.types';
 import { LanguageService } from 'src/app/services/language.service';
 import { SongService } from 'src/app/services/song.service';
@@ -31,7 +31,7 @@ import { ImgDefaultDirective } from '../../../directives/img-default.directive';
   styleUrls: ['./wy-player-panel.component.less']
 })
 export class WyPlayerPanelComponent implements OnInit, OnChanges {
-  lanRes: LanguageRes = LANGUAGE_CH;
+  lanRes: LanguageRes = LANGUAGE_JP;
   @Input() playing: boolean;
   @Input() songList: Song[];
   @Input() currentSong: Song;

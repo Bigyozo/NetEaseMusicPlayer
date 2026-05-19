@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 
 import { AnyJson } from './data.types/common.types';
 
@@ -7,10 +7,8 @@ import { AnyJson } from './data.types/common.types';
   providedIn: 'root'
 })
 export class StorageService {
-  private isBrowser: boolean;
-  constructor(@Inject(PLATFORM_ID) private plateformId: object) {
-    this.isBrowser = isPlatformBrowser(this.plateformId);
-  }
+  private plateformId = inject<object>(PLATFORM_ID);
+  private isBrowser = isPlatformBrowser(this.plateformId);
 
   getStorage(key: string, type = 'local'): string {
     if (this.isBrowser) {

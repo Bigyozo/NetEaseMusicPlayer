@@ -1,4 +1,4 @@
-import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LANGUAGE_JP } from 'src/app/language/jp';
 import { LanguageRes } from 'src/app/services/data.types/common.types';
 import { PhoneLoginParams } from 'src/app/services/data.types/member.type';
 import { LanguageService } from 'src/app/services/language.service';
@@ -24,7 +24,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WyLayerPhoneLoginComponent implements OnInit, OnChanges {
-  lanRes: LanguageRes = LANGUAGE_CH;
+  lanRes: LanguageRes = LANGUAGE_JP;
   @Input() wyRememberLogin: PhoneLoginParams;
   @Output() onChangeModalType = new EventEmitter<string | void>();
   @Output() onLogin = new EventEmitter<PhoneLoginParams>();

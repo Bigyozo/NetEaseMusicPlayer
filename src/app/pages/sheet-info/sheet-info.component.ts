@@ -1,7 +1,7 @@
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LANGUAGE_JP } from 'src/app/language/jp';
 import { LanguageService } from 'src/app/services/language.service';
 import { SetShareInfo } from 'src/app/store/actions/member.action';
 import { PlayState } from 'src/app/store/reducers/player.reducer';
@@ -33,7 +33,7 @@ import { findIndex } from '../../utils/array';
   styleUrls: ['./sheet-info.component.less']
 })
 export class SheetInfoComponent implements OnInit, OnDestroy {
-  lanRes: LanguageRes = LANGUAGE_CH;
+  lanRes: LanguageRes = LANGUAGE_JP;
   sheetInfo: SongSheet;
 
   description = {

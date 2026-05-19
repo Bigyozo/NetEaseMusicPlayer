@@ -131,7 +131,7 @@ export class WyLyric {
     this.timer$ && this.timer$.unsubscribe();
   }
 
-  // 歌词对应行数
+  // 歌詞の対応行数
   private findCurNum(startTime: number): number {
     const index = this.lines.findIndex((item) => startTime <= item.time);
     return index === -1 ? this.lines.length - 1 : index;
@@ -142,7 +142,7 @@ export class WyLyric {
     this.playing = playing;
     if (playing) {
       const startTime = (this.pauseStamp || now) - (this.startStamp || now);
-      // 暂停重新点击播放不执行callHandler发射数据
+      // 一時停止後に再生しても callHandler を発火しない
       this.play(startTime, true);
     } else {
       this.stop();

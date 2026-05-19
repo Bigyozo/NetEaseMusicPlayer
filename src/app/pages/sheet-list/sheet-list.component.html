@@ -10,24 +10,25 @@
         (ngModelChange)="onOrderChange($event)"
       >
         <label nz-radio-button nzValue="hot">
-          <!-- 人气 -->
+          <!-- 人気 -->
           {{ lanRes.C00042 }}
         </label>
         <label nz-radio-button nzValue="highquality">
-          <!-- 好评 -->
+          <!-- 高評価 -->
           {{ lanRes.C00043 }}
         </label>
       </nz-radio-group>
     </div>
 
     <div class="list">
-      <app-single-sheet
-        class="sheet-item"
-        *ngFor="let item of sheets?.playlists"
-        [sheet]="item"
-        (onPlay)="onPlaySheet($event)"
-        (click)="toInfo(item.id)"
-      ></app-single-sheet>
+      @for (item of sheets?.playlists; track item.id) {
+        <app-single-sheet
+          class="sheet-item"
+          [sheet]="item"
+          (onPlay)="onPlaySheet($event)"
+          (click)="toInfo(item.id)"
+        ></app-single-sheet>
+      }
     </div>
     <nz-pagination
       class="pagination"

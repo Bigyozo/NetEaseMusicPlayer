@@ -3,7 +3,7 @@ import { Observable, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { SampleBack, SongSheet } from './data.types/common.types';
 import {
@@ -31,7 +31,8 @@ export interface ShareParams {
   providedIn: 'root'
 })
 export class MemberService {
-  constructor(private http: HttpClient, @Inject(API_CONFIG) private uri: string) {}
+  private uri = inject(API_CONFIG);
+  constructor(private http: HttpClient) {}
 
   phoneLogin(formValue: PhoneLoginParams): Observable<User> {
     const params = new HttpParams({ fromString: queryString.stringify(formValue) });
@@ -70,13 +71,13 @@ export class MemberService {
     return this.http.get(this.uri + 'logout').pipe(map((res) => res as SampleBack));
   }
 
-  // 签到
+  // チェックイン
   signin(): Observable<Signin> {
     const params = new HttpParams({ fromString: queryString.stringify({ type: 1 }) });
     return this.http.get(this.uri + 'daily_signin', { params }).pipe(map((res) => res as Signin));
   }
 
-  // 听歌记录
+  // 再生履歴
   getUserRecord(uid: string, type = RecordType.weekData): Observable<RecordVal[]> {
     const params = new HttpParams({ fromString: queryString.stringify({ uid, type }) });
     return this.http
@@ -84,7 +85,7 @@ export class MemberService {
       .pipe(map((res: UserRecord) => res[RecordType[type]]));
   }
 
-  // 用户歌单
+  // ユーザーのプレイリスト
   getUserSheets(uid: string): Observable<UserSheet> {
     const params = new HttpParams({ fromString: queryString.stringify({ uid }) });
     return this.http.get(this.uri + 'user/playlist', { params }).pipe(
@@ -98,7 +99,7 @@ export class MemberService {
     );
   }
 
-  // 收藏歌曲
+  // 楽曲をお気に入り
   likeSong({ pid, tracks }: LikeSongParams) {
     const params = new HttpParams({
       fromString: queryString.stringify({ pid, tracks, op: 'add' })
@@ -108,7 +109,7 @@ export class MemberService {
       .pipe(map((res: SampleBack) => res.code));
   }
 
-  // 收藏歌单
+  // プレイリストをお気に入り
   likeSheet(id: string, t = 1): Observable<number> {
     const params = new HttpParams({
       fromString: queryString.stringify({ id, t })
@@ -118,7 +119,7 @@ export class MemberService {
       .pipe(map((res: SampleBack) => res.code));
   }
 
-  // 收藏歌手
+  // アーティストをお気に入り
   likeSinger(id: string, t = 1): Observable<number> {
     const params = new HttpParams({
       fromString: queryString.stringify({ id, t })
@@ -128,7 +129,7 @@ export class MemberService {
       .pipe(map((res: SampleBack) => res.code));
   }
 
-  // 新建歌单
+  // プレイリストを作成
   createSheet(name: string): Observable<string> {
     const params = new HttpParams({ fromString: queryString.stringify({ name }) });
     return this.http
@@ -136,7 +137,7 @@ export class MemberService {
       .pipe(map((res: SampleBack) => res.id.toString()));
   }
 
-  // 分享
+  // シェア
   shareResource({ id, msg, type }: ShareParams): Observable<number> {
     const params = new HttpParams({
       fromString: queryString.stringify({ id, msg, type })
@@ -146,7 +147,7 @@ export class MemberService {
       .pipe(map((res: SampleBack) => res.code));
   }
 
-  // 发送验证码
+  // 認証コードを送信
   sendCode(phone: number): Observable<number> {
     const params = new HttpParams({ fromString: queryString.stringify({ phone }) });
     return this.http
@@ -154,7 +155,7 @@ export class MemberService {
       .pipe(map((res: SampleBack) => res.code));
   }
 
-  // 验证验证码
+  // 認証コードを検証
   checkCode(phone: number, captcha: number): Observable<number> {
     const params = new HttpParams({ fromString: queryString.stringify({ phone, captcha }) });
     return this.http
@@ -162,7 +163,7 @@ export class MemberService {
       .pipe(map((res: SampleBack) => res.code));
   }
 
-  // 是否已注册
+  // 登録済みか確認
   checkExist(phone: number): Observable<number> {
     const params = new HttpParams({ fromString: queryString.stringify({ phone }) });
     return this.http

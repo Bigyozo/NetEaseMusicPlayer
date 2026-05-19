@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import {
-    Directive, ElementRef, EventEmitter, Inject, Input, OnChanges, Output, Renderer2, SimpleChanges
+    Directive, ElementRef, EventEmitter, Input, OnChanges, Output, Renderer2, SimpleChanges, inject
 } from '@angular/core';
 
 @Directive({
@@ -8,13 +8,13 @@ import {
   standalone: true
 })
 export class ClickoutsideDirective implements OnChanges {
+  private doc = inject(DOCUMENT);
   private handleClick: () => void;
   @Input() bindFlag = false;
   @Output() onClickOutside = new EventEmitter<void>();
   constructor(
     private el: ElementRef,
-    private rd: Renderer2,
-    @Inject(DOCUMENT) private doc: Document
+    private rd: Renderer2
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {

@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { HttpClient } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Banner, HotTag, SongSheet } from './data.types/common.types';
 import { API_CONFIG } from './tokens';
@@ -11,7 +11,8 @@ import { API_CONFIG } from './tokens';
   providedIn: 'root'
 })
 export class HomeService {
-  constructor(private http: HttpClient, @Inject(API_CONFIG) private uri: string) {}
+  private uri = inject(API_CONFIG);
+  constructor(private http: HttpClient) {}
 
   getBanners(): Observable<Banner[]> {
     return this.http

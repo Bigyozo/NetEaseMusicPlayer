@@ -1,5 +1,5 @@
 import { timer } from 'rxjs';
-import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LANGUAGE_JP } from 'src/app/language/jp';
 import { LanguageRes, SongSheet } from 'src/app/services/data.types/common.types';
 import { LanguageService } from 'src/app/services/language.service';
 import { LikeSongParams } from 'src/app/services/member.service';
@@ -25,7 +25,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WyLayerLikeComponent implements OnInit, OnChanges {
-  lanRes: LanguageRes = LANGUAGE_CH;
+  lanRes: LanguageRes = LANGUAGE_JP;
   @Input()
   mySheets: SongSheet[];
   @Input()

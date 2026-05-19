@@ -16,14 +16,14 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  Inject,
   Input,
   OnChanges,
   OnInit,
   PLATFORM_ID,
   Renderer2,
   SimpleChanges,
-  ViewChild
+  ViewChild,
+  inject
 } from '@angular/core';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
@@ -71,11 +71,11 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit, OnChanges {
   private overlayContainerEl: HTMLElement;
   @ViewChild('modalContainer', { static: false }) private modalRef: ElementRef;
 
+  private plateformId = inject<object>(PLATFORM_ID);
+  private doc = inject(DOCUMENT);
   private resizeHandler: () => void;
   private isBrowser: boolean;
   constructor(
-    @Inject(PLATFORM_ID) private plateformId: object,
-    @Inject(DOCUMENT) private doc: Document,
     private overlay: Overlay,
     private overlayKeyboardDispatcher: OverlayKeyboardDispatcher,
     private cdr: ChangeDetectorRef,
@@ -164,7 +164,7 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit, OnChanges {
     this.cdr.markForCheck();
   }
 
-  // 屏蔽点击事件
+  // クリックイベントをブロック
   private changePointerEvents(type: 'none' | 'auto') {
     if (this.overlayContainerEl) {
       this.overlayContainerEl.style.pointerEvents = type;

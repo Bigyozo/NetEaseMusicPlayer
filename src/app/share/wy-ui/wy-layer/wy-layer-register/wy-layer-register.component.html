@@ -1,66 +1,67 @@
 <div class="register modal-content">
-  <div class="modal-wrap" *ngIf="!showCode; else code">
-    <form nz-form nzLayout="vertical" [formGroup]="formModel" (ngSubmit)="onSubmit()">
-      <nz-form-item>
-        <nz-form-label>
-          <!-- 手机号 -->
-          {{ lanRes.C00066 }}
-        </nz-form-label>
-        <!-- 请填写正确的手机号 -->
-        <nz-form-control nzHasFeedback [nzErrorTip]="lanRes.C00067">
-          <nz-input-group nzPrefixIcon="mobile">
-            <!-- 请输入手机号 -->
-            <input type="tel" nz-input [placeholder]="lanRes.C00065" formControlName="phone" />
-          </nz-input-group>
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label>
-          <!-- 密码 -->
-          {{ lanRes.C00068 }}
-        </nz-form-label>
-        <!-- 请输入密码 -->
-        <nz-form-control nzHasFeedback [nzErrorTip]="lanRes.C00055">
-          <nz-input-group nzPrefixIcon="lock">
-            <!-- 请输入密码 -->
-            <input
-              type="password"
-              nz-input
-              [placeholder]="lanRes.C00055"
-              formControlName="password"
-            />
-          </nz-input-group>
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-control>
-          <button nz-button nzBlock nzType="primary" [disabled]="!formModel.valid">
-            <!-- 下一步 -->
-            {{ lanRes.C00051 }}
-          </button>
-        </nz-form-control>
-      </nz-form-item>
-    </form>
-  </div>
+  @if (!showCode) {
+    <div class="modal-wrap">
+      <form nz-form nzLayout="vertical" [formGroup]="formModel" (ngSubmit)="onSubmit()">
+        <nz-form-item>
+          <nz-form-label>
+            <!-- 電話番号 -->
+            {{ lanRes.C00066 }}
+          </nz-form-label>
+          <!-- 正しい電話番号を入力してください -->
+          <nz-form-control nzHasFeedback [nzErrorTip]="lanRes.C00067">
+            <nz-input-group nzPrefixIcon="mobile">
+              <!-- 電話番号を入力してください -->
+              <input type="tel" nz-input [placeholder]="lanRes.C00065" formControlName="phone" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label>
+            <!-- パスワード -->
+            {{ lanRes.C00068 }}
+          </nz-form-label>
+          <!-- パスワードを入力してください -->
+          <nz-form-control nzHasFeedback [nzErrorTip]="lanRes.C00055">
+            <nz-input-group nzPrefixIcon="lock">
+              <!-- パスワードを入力してください -->
+              <input
+                type="password"
+                nz-input
+                [placeholder]="lanRes.C00055"
+                formControlName="password"
+              />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control>
+            <button nz-button nzBlock nzType="primary" [disabled]="!formModel.valid">
+              <!-- 次へ -->
+              {{ lanRes.C00051 }}
+            </button>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </div>
+  } @else {
+    <div class="modal-wrap">
+      <app-wy-check-code
+        [phone]="formModel.get('phone').value"
+        [codePass]="codePass"
+        [timing]="timing"
+        (onCheckCode)="onCheckCode($event)"
+        (onRepeatSendCode)="sendCode()"
+        (onCheckExist)="onCheckExist()"
+      >
+      </app-wy-check-code>
+    </div>
+  }
 </div>
-<ng-template #code>
-  <div class="modal-wrap">
-    <app-wy-check-code
-      [phone]="formModel.get('phone').value"
-      [codePass]="codePass"
-      [timing]="timing"
-      (onCheckCode)="onCheckCode($event)"
-      (onRepeatSendCode)="sendCode()"
-      (onCheckExist)="onCheckExist()"
-    >
-    </app-wy-check-code>
-  </div>
-</ng-template>
 
 <div class="m-footer clearfix">
   <a (click)="changeType()"
     >&lt;
-    <!-- 其他登陆方式 -->
+    <!-- 他のログイン方法 -->
     {{ lanRes.C00057 }}
   </a>
 </div>

@@ -1,7 +1,7 @@
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LANGUAGE_JP } from 'src/app/language/jp';
 import { LanguageService } from 'src/app/services/language.service';
 import { SongService } from 'src/app/services/song.service';
 import { AppStoreModule } from 'src/app/store';
@@ -32,7 +32,7 @@ import { getCurrentSong } from '../../../store/selectors/play.selectors';
   styleUrls: ['./singer-detail.component.less']
 })
 export class SingerDetailComponent implements OnInit, OnDestroy {
-  lanRes: LanguageRes = LANGUAGE_CH;
+  lanRes: LanguageRes = LANGUAGE_JP;
   singerDetail: SingerDetail;
   currentSong: Song;
   currentIndex = -1;
@@ -111,7 +111,7 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
     this.batchActionsService.likeSong(id);
   }
 
-  // 批量收藏
+  // まとめてお気に入り
   onLikeSongs(songs: Song[]) {
     const ids = songs.map((item) => item.id).join(',');
     this.onLikeSong(ids);

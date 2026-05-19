@@ -1,7 +1,7 @@
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LANGUAGE_JP } from 'src/app/language/jp';
 import { LanguageRes, Singer, Song } from 'src/app/services/data.types/common.types';
 import { RecordVal, User, UserSheet } from 'src/app/services/data.types/member.type';
 import { LanguageService } from 'src/app/services/language.service';
@@ -35,7 +35,7 @@ import { PlayState } from '../../../store/reducers/player.reducer';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CenterComponent implements OnInit, OnDestroy {
-  lanRes: LanguageRes = LANGUAGE_CH;
+  lanRes: LanguageRes = LANGUAGE_JP;
   user: User;
   records: RecordVal[];
   userSheet: UserSheet;
@@ -117,7 +117,7 @@ export class CenterComponent implements OnInit, OnDestroy {
         if (list.length) {
           this.batchActionsService.insertSong(list[0], isPlay);
         } else {
-          //无URL
+          // URLなし
           this.nzMessageService.create('warning', this.lanRes.C00085);
         }
       });
@@ -125,7 +125,7 @@ export class CenterComponent implements OnInit, OnDestroy {
   }
 
   onShareSong(resource: Song, type = 'song') {
-    //歌曲
+    // 楽曲
     const txt = this.makeTxt(this.lanRes.C00046, resource.name, resource.ar);
     this.store$.dispatch(SetShareInfo({ info: { id: resource.id.toString(), type, txt } }));
   }

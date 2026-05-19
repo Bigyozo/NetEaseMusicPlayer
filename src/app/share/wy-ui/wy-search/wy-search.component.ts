@@ -1,6 +1,6 @@
 import { fromEvent } from 'rxjs';
 import { debounceTime, distinctUntilChanged, pluck } from 'rxjs/operators';
-import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LANGUAGE_JP } from 'src/app/language/jp';
 import { LanguageService } from 'src/app/services/language.service';
 import { isEmptyObject } from 'src/app/utils/tools';
 
@@ -27,7 +27,7 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./wy-search.component.less']
 })
 export class WySearchComponent implements OnInit, AfterViewInit, OnChanges {
-  lanRes: LanguageRes = LANGUAGE_CH;
+  lanRes: LanguageRes = LANGUAGE_JP;
   @Input() customView: TemplateRef<any>;
   @Input() searchResult: SearchResult;
   @Input() connectedRef: ElementRef;

@@ -1,4 +1,4 @@
-import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LANGUAGE_JP } from 'src/app/language/jp';
 import { LanguageRes, Song } from 'src/app/services/data.types/common.types';
 import { RecordVal } from 'src/app/services/data.types/member.type';
 import { LanguageService } from 'src/app/services/language.service';
@@ -23,7 +23,7 @@ import { RecordType } from '../../../../services/member.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RecordsComponent implements OnInit {
-  lanRes: LanguageRes = LANGUAGE_CH;
+  lanRes: LanguageRes = LANGUAGE_JP;
   @Input() records: RecordVal[];
   @Input() recordType = RecordType.weekData;
   @Input() listenSongs = 0;

@@ -1,28 +1,33 @@
 <div id="app">
-  <nz-progress
-    *ngIf="loadPercent < 100"
-    nzStrokeWidth="5"
-    [nzShowInfo]="false"
-    nzStatus="active"
-    [nzPercent]="loadPercent"
-  ></nz-progress>
+  @if (loadPercent < 100) {
+    <nz-progress
+      nzStrokeWidth="5"
+      [nzShowInfo]="false"
+      nzStatus="active"
+      [nzPercent]="loadPercent"
+    ></nz-progress>
+  }
   <nz-layout class="layout">
     <nz-header class="header">
       <div class="wrap">
         <div class="language">
           <ul nz-menu nzTheme="dark" nzMode="horizontal">
-            <li nz-menu-item *ngFor="let item of languages" (click)="onChangeLanguage(item.code)">
-              {{ item.label }}
-            </li>
+            @for (item of languages; track item.code) {
+              <li nz-menu-item (click)="onChangeLanguage(item.code)">
+                {{ item.label }}
+              </li>
+            }
           </ul>
         </div>
         <div class="left">
-          <!-- 网易云音乐 -->
+          <!-- ネットイース クラウドミュージック -->
           <h1>{{ lanRes.C00001 }}</h1>
           <ul nz-menu nzTheme="dark" nzMode="horizontal">
-            <li nz-menu-item *ngFor="let item of menu" [routerLink]="item.path">
-              {{ item.label }}
-            </li>
+            @for (item of menu; track item.path) {
+              <li nz-menu-item [routerLink]="item.path">
+                {{ item.label }}
+              </li>
+            }
           </ul>
         </div>
         <div class="right">
@@ -32,35 +37,36 @@
           ></app-wy-search>
         </div>
         <div class="member">
-          <div class="no-login" *ngIf="!user; else logined">
-            <ul nz-menu nzTheme="dark" nzMode="horizontal">
-              <li nz-submenu>
-                <div title>
-                  <!-- 登录 -->
-                  <span>{{ lanRes.C00004 }}</span>
-                  <i nz-icon nzType="down" nzTheme="outline"></i>
-                </div>
-                <ul>
-                  <li nz-menu-item (click)="openModalByMenu('loginByPhone')">
-                    <i nz-icon nzType="mobile" nzTheme="outline"></i>
-                    <!-- 手机登陆 -->
-                    {{ lanRes.C00005 }}
-                  </li>
-                  <li nz-menu-item (click)="openModalByMenu('loginByEmail')">
-                    <i nz-icon nzType="mail" nzTheme="outline"></i>
-                    <!-- 邮箱登陆 -->
-                    {{ lanRes.C00006 }}
-                  </li>
-                  <li nz-menu-item (click)="openModalByMenu('register')">
-                    <i nz-icon nzType="user-add" nzTheme="outline"></i>
-                    <!-- 注册 -->
-                    {{ lanRes.C00007 }}
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </div>
-          <ng-template #logined>
+          @if (!user) {
+            <div class="no-login">
+              <ul nz-menu nzTheme="dark" nzMode="horizontal">
+                <li nz-submenu>
+                  <div title>
+                    <!-- ログイン -->
+                    <span>{{ lanRes.C00004 }}</span>
+                    <i nz-icon nzType="down" nzTheme="outline"></i>
+                  </div>
+                  <ul>
+                    <li nz-menu-item (click)="openModalByMenu('loginByPhone')">
+                      <i nz-icon nzType="mobile" nzTheme="outline"></i>
+                      <!-- 電話番号でログイン -->
+                      {{ lanRes.C00005 }}
+                    </li>
+                    <li nz-menu-item (click)="openModalByMenu('loginByEmail')">
+                      <i nz-icon nzType="mail" nzTheme="outline"></i>
+                      <!-- メールアドレスでログイン -->
+                      {{ lanRes.C00006 }}
+                    </li>
+                    <li nz-menu-item (click)="openModalByMenu('register')">
+                      <i nz-icon nzType="user-add" nzTheme="outline"></i>
+                      <!-- 登録 -->
+                      {{ lanRes.C00007 }}
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          } @else {
             <div class="login">
               <ul nz-menu nzMode="horizontal" nzTheme="dark">
                 <li nz-submenu>
@@ -71,19 +77,19 @@
                   <ul>
                     <li nz-menu-item [routerLink]="['/member', user.profile.userId]">
                       <i nz-icon nzType="user" nzTheme="outline"></i>
-                      <!-- 我的主页 -->
+                      <!-- マイページ -->
                       {{ lanRes.C00008 }}
                     </li>
                     <li nz-menu-item (click)="onLogout()">
                       <i nz-icon nzType="close-circle" nzTheme="outline"></i>
-                      <!-- 退出 -->
+                      <!-- ログアウト -->
                       {{ lanRes.C00009 }}
                     </li>
                   </ul>
                 </li>
               </ul>
             </div>
-          </ng-template>
+          }
         </div>
         <a class="git-link" href="https://github.com/bigyozo/NetEaseMusicPlayer"></a>
       </div>
@@ -136,7 +142,7 @@
   </app-wy-layer-register>
   <app-wy-layer-default (onChangeModalType)="onChangeModalType($event)"></app-wy-layer-default>
 </app-wy-layer-modal>
-<!-- 置顶组件 -->
+<!-- トップへ戻るボタン -->
 <nz-float-button-top [nzTemplate]="tpl">
   <ng-template #tpl>
     <div class="ant-back-top-inner">

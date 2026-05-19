@@ -1,7 +1,7 @@
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LANGUAGE_JP } from 'src/app/language/jp';
 import { LanguageRes, Singer, Song } from 'src/app/services/data.types/common.types';
 import { LanguageService } from 'src/app/services/language.service';
 import { SongService } from 'src/app/services/song.service';
@@ -29,7 +29,7 @@ import { getCurrentSong } from '../../store/selectors/play.selectors';
   styleUrls: ['./song-info.component.less']
 })
 export class SongInfoComponent implements OnInit {
-  lanRes: LanguageRes = LANGUAGE_CH;
+  lanRes: LanguageRes = LANGUAGE_JP;
   song: Song;
   lyric: BaseLyricLine[];
   private destroy$ = new Subject<void>();

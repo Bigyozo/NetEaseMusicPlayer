@@ -1,4 +1,4 @@
-import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LANGUAGE_JP } from 'src/app/language/jp';
 import { LanguageService } from 'src/app/services/language.service';
 
 import { Component, OnInit } from '@angular/core';
@@ -21,7 +21,7 @@ import { BatchActionsService } from '../../store/batch-actions.service';
   styleUrls: ['./sheet-list.component.less']
 })
 export class SheetListComponent implements OnInit {
-  lanRes: LanguageRes = LANGUAGE_CH;
+  lanRes: LanguageRes = LANGUAGE_JP;
   listParams: SheetParams = {
     cat: '全部',
     order: 'hot',

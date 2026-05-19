@@ -1,7 +1,7 @@
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { interval } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LANGUAGE_JP } from 'src/app/language/jp';
 import { LanguageRes } from 'src/app/services/data.types/common.types';
 import { LanguageService } from 'src/app/services/language.service';
 import { ModalTypes } from 'src/app/store/reducers/member.reducer';
@@ -33,7 +33,7 @@ enum Exist {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WyLayerRegisterComponent implements OnInit, OnChanges {
-  lanRes: LanguageRes = LANGUAGE_CH;
+  lanRes: LanguageRes = LANGUAGE_JP;
   @Input() visible = false;
   @Output() onChangeModalType = new EventEmitter<string>();
   showCode = false;

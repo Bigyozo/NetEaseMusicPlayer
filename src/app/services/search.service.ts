@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { SearchResult } from './data.types/common.types';
 import { API_CONFIG } from './tokens';
@@ -11,7 +11,8 @@ import { API_CONFIG } from './tokens';
   providedIn: 'root'
 })
 export class SearchService {
-  constructor(private http: HttpClient, @Inject(API_CONFIG) private uri: string) {}
+  private uri = inject(API_CONFIG);
+  constructor(private http: HttpClient) {}
 
   search(keywords: string): Observable<SearchResult> {
     const params = new HttpParams().set('keywords', keywords);

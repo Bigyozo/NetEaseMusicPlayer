@@ -2,22 +2,22 @@
   <div class="u-title wy-sec-wrap clearfix">
     <h3 class="wy-sec-tit">
       <span class="f-ff2">
-        <!-- 听歌排行 -->
+        <!-- 再生ランキング -->
         {{ lanRes.C00023 }}
       </span>
     </h3>
     <span class="sub s-fc3">
-      <!-- 累计听歌数 -->
+      <!-- 累計再生数 -->
       {{ lanRes.C00024 }}{{ listenSongs }}
     </span>
     <div class="more tab-type">
       <span [class.active]="recordType === 1" (click)="onChangeType.emit(1)">
-        <!-- 最近一周 -->
+        <!-- 直近1週間 -->
         {{ lanRes.C00025 }}
       </span>
       <nz-divider nzType="vertical"></nz-divider>
       <span [class.active]="recordType === 0" (click)="onChangeType.emit(0)">
-        <!-- 所有时间 -->
+        <!-- 全期間 -->
         {{ lanRes.C00026 }}
       </span>
     </div>
@@ -30,66 +30,68 @@
     nzBordered
     [nzNoResult]="lanRes.C00027"
   >
-    <!-- 暂无音乐！ -->
+    <!-- 音楽がありません！ -->
     <thead>
       <tr>
         <th nzWidth="80px"></th>
         <th>
-          <!-- 标题 -->
+          <!-- タイトル -->
           {{ lanRes.C00028 }}
         </th>
         <th nzWidth="120px">
-          <!-- 时长 -->
+          <!-- 時間 -->
           {{ lanRes.C00029 }}
         </th>
         <th nzWidth="80px">
-          <!-- 歌手 -->
+          <!-- アーティスト -->
           {{ lanRes.C00030 }}
         </th>
         <th>
-          <!-- 播放次数 -->
+          <!-- 再生回数 -->
           {{ lanRes.C00031 }}
         </th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of basicTable.data; index as i">
-        <td class="first-col">
-          <span>{{ i + 1 }}</span>
-          <!-- 播放 -->
-          <i
-            class="ico play-song"
-            [title]="lanRes.C00032"
-            [class.current]="currentIndex === i"
-            (click)="onAddSong.emit([item.song, true])"
-          ></i>
-        </td>
-        <td class="song-name">
-          <a [routerLink]="['/songInfo', item.song.id]">{{ item.song.name }}</a>
-        </td>
-        <td class="time-col">
-          <span>{{ item.song.dt / 1000 | formatTime }}</span>
-          <p class="icons">
-            <!-- 添加 -->
+      @for (item of basicTable.data; track $index; let i = $index) {
+        <tr>
+          <td class="first-col">
+            <span>{{ i + 1 }}</span>
+            <!-- 再生 -->
             <i
-              class="ico add"
-              [title]="lanRes.C00033"
-              (click)="onAddSong.emit([item.song, false])"
+              class="ico play-song"
+              [title]="lanRes.C00032"
+              [class.current]="currentIndex === i"
+              (click)="onAddSong.emit([item.song, true])"
             ></i>
-            <!-- 收藏 -->
-            <i class="ico like" [title]="lanRes.C00034" (click)="onLikeSong.emit(item.song.id)"></i>
-            <!-- 分享 -->
-            <i class="ico share" [title]="lanRes.C00035" (click)="onShareSong.emit(item.song)"></i>
-          </p>
-        </td>
-        <td>
-          <ng-container *ngFor="let singer of item.song.ar; last as isLast">
-            <a [routerLink]="['/singer', singer.id]">{{ singer.name }}</a>
-            <em [hidden]="isLast">/</em>
-          </ng-container>
-        </td>
-        <td>{{ item.playCount }}</td>
-      </tr>
+          </td>
+          <td class="song-name">
+            <a [routerLink]="['/songInfo', item.song.id]">{{ item.song.name }}</a>
+          </td>
+          <td class="time-col">
+            <span>{{ item.song.dt / 1000 | formatTime }}</span>
+            <p class="icons">
+              <!-- 追加 -->
+              <i
+                class="ico add"
+                [title]="lanRes.C00033"
+                (click)="onAddSong.emit([item.song, false])"
+              ></i>
+              <!-- お気に入り -->
+              <i class="ico like" [title]="lanRes.C00034" (click)="onLikeSong.emit(item.song.id)"></i>
+              <!-- シェア -->
+              <i class="ico share" [title]="lanRes.C00035" (click)="onShareSong.emit(item.song)"></i>
+            </p>
+          </td>
+          <td>
+            @for (singer of item.song.ar; track singer.id; let isLast = $last) {
+              <a [routerLink]="['/singer', singer.id]">{{ singer.name }}</a>
+              <em [hidden]="isLast">/</em>
+            }
+          </td>
+          <td>{{ item.playCount }}</td>
+        </tr>
+      }
     </tbody>
   </nz-table>
 </div>

@@ -7,25 +7,25 @@ export interface Signin {
 }
 
 export interface User {
-  // 用户等级
+  // ユーザーレベル
   level?: number;
   listenSongs?: number;
   cookie: string;
   profile: {
     userId: number;
     nickname: string;
-    // 头像
+    // アバター
     avatarUrl: string;
     backgroundUrl: string;
-    // 个人简介
+    // 自己紹介
     signature: string;
-    // 性别
+    // 性別
     gender: number;
-    // 粉丝
+    // フォロワー
     followeds: number;
-    // 关注
+    // フォロー
     follows: number;
-    // 动态
+    // アクティビティ
     eventCount: number;
   };
 }

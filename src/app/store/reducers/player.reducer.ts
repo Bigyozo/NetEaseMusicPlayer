@@ -21,7 +21,7 @@ export interface PlayState {
   songList: Song[];
   playList: Song[];
   currentIndex: number;
-  // 当前操作
+  // 現在の操作
   currentAction: CurrentActions;
 }
 

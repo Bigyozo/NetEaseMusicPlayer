@@ -1,4 +1,4 @@
-import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LANGUAGE_JP } from 'src/app/language/jp';
 import { LanguageRes } from 'src/app/services/data.types/common.types';
 import { LanguageService } from 'src/app/services/language.service';
 import { WyCodeComponent } from './wy-code/wy-code.component';
@@ -21,7 +21,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WyCheckCodeComponent implements OnInit, OnChanges {
-  lanRes: LanguageRes = LANGUAGE_CH;
+  lanRes: LanguageRes = LANGUAGE_JP;
   private phoneHideStr = '';
   formModel: FormGroup;
   showRepeatBtn = false;
@@ -75,7 +75,7 @@ export class WyCheckCodeComponent implements OnInit, OnChanges {
   ngOnInit() {}
 
   onSubmit() {
-    // 注册
+    // 登録
     if (this.formModel.valid && this.codePass) {
       this.onCheckExist.emit();
     }

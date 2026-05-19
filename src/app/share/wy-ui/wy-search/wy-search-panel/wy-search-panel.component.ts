@@ -1,4 +1,4 @@
-import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LANGUAGE_JP } from 'src/app/language/jp';
 import { LanguageService } from 'src/app/services/language.service';
 
 import { Component, OnInit } from '@angular/core';
@@ -15,7 +15,7 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./wy-search-panel.component.less']
 })
 export class WySearchPanelComponent implements OnInit {
-  lanRes: LanguageRes = LANGUAGE_CH;
+  lanRes: LanguageRes = LANGUAGE_JP;
   searchResult: SearchResult;
   constructor(private router: Router, private languageService: LanguageService) {
     this.languageService.language$.subscribe((item) => {

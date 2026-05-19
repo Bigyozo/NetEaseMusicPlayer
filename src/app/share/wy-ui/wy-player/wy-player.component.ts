@@ -1,6 +1,6 @@
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { timer } from 'rxjs';
-import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LANGUAGE_JP } from 'src/app/language/jp';
 import { LanguageRes, Singer, Song } from 'src/app/services/data.types/common.types';
 import { LanguageService } from 'src/app/services/language.service';
 import { AppStoreModule } from 'src/app/store';
@@ -71,14 +71,14 @@ enum TipTitles {
   ]
 })
 export class WyPlayerComponent implements OnInit {
-  lanRes: LanguageRes = LANGUAGE_CH;
+  lanRes: LanguageRes = LANGUAGE_JP;
   controlTooltip = {
     title: '',
     show: false
   };
   showPlayer = 'hide';
   isLocked = false;
-  // 是否正在动画
+  // アニメーション中か
   isAnimating = false;
 
   sliderValue = 0;
@@ -98,10 +98,10 @@ export class WyPlayerComponent implements OnInit {
 
   volume = 7;
 
-  // 是否显示音量面板
+  // 音量パネルを表示中か
   showVolumePanel = false;
   showListPanel = false;
-  // 是否绑定Clickoutside
+  // Clickoutside がバインドされているか
   bindFlag = false;
 
   currentMode: PlayMode;
@@ -223,7 +223,7 @@ export class WyPlayerComponent implements OnInit {
     }
   }
 
-  // 播放，暂停
+  // 再生・一時停止
   onToggle() {
     if (!this.currentSong) {
       if (this.playList.length) {
@@ -266,7 +266,7 @@ export class WyPlayerComponent implements OnInit {
     }
   }
 
-  // 播放错误（无歌曲）
+  // 再生エラー（楽曲なし）
   onError() {
     this.isPlaying = false;
     this.bufferOffset = 0;
@@ -330,12 +330,12 @@ export class WyPlayerComponent implements OnInit {
     }
   }
 
-  // 控制音量面板
+  // 音量パネルを制御
   toggleVolPanel() {
     this.togglePanel('showVolumePanel');
   }
 
-  // 控制音量面板
+  // 音量パネルを制御
   toggleListPanel() {
     if (this.songList.length) {
       this.togglePanel('showListPanel');
@@ -387,7 +387,7 @@ export class WyPlayerComponent implements OnInit {
   }
 
   onClearSong() {
-    //确认清空列表？
+    // プレイリストをクリアしますか？
     this.nzModalService.confirm({
       nzTitle: this.lanRes.C00084,
       nzOnOk: () => {
@@ -423,7 +423,7 @@ export class WyPlayerComponent implements OnInit {
   }
 
   onShareSong(resource: Song, type = 'song') {
-    //歌曲
+    // 楽曲
     const txt = this.makeTxt(this.lanRes.C00046, resource.name, resource.ar);
     this.store$.dispatch(SetShareInfo({ info: { id: resource.id.toString(), type, txt } }));
   }

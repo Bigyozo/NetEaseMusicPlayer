@@ -30,10 +30,12 @@
             {{ currentSong?.name }}
           </p>
           <ul class="songs clearfix margin-bottom-none">
-            <li *ngFor="let item of currentSong?.ar; last as isLast">
-              <a (click)="toInfo(['/singer', item.id])">{{ item.name }}</a>
-              <span [hidden]="isLast">/</span>
-            </li>
+            @for (item of currentSong?.ar; track item.id; let isLast = $last) {
+              <li>
+                <a (click)="toInfo(['/singer', item.id])">{{ item.name }}</a>
+                <span [hidden]="isLast">/</span>
+              </li>
+            }
           </ul>
         </div>
         <div class="bar">

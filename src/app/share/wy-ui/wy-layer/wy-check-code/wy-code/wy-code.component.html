@@ -1,5 +1,7 @@
 <div class="code-wrap clearfix" #codeWrap>
-  <div class="u-word" *ngFor="let item of inputArr; index as i" [class.focus]="result[i]">
-    <input class="item" maxlength="1" />
-  </div>
+  @for (item of inputArr; track $index; let i = $index) {
+    <div class="u-word" [class.focus]="result[i]">
+      <input class="item" maxlength="1" />
+    </div>
+  }
 </div>

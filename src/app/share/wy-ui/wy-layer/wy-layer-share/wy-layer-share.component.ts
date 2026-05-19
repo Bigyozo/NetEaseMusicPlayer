@@ -1,4 +1,4 @@
-import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LANGUAGE_JP } from 'src/app/language/jp';
 import { LanguageRes } from 'src/app/services/data.types/common.types';
 import { LanguageService } from 'src/app/services/language.service';
 import { ShareParams } from 'src/app/services/member.service';
@@ -24,7 +24,7 @@ const MAX_MSG = 140;
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WyLayerShareComponent implements OnInit, OnChanges {
-  lanRes: LanguageRes = LANGUAGE_CH;
+  lanRes: LanguageRes = LANGUAGE_JP;
   @Input() shareInfo: ShareInfo;
   @Output() onCancel = new EventEmitter<void>();
   @Output() onShare = new EventEmitter<ShareParams>();

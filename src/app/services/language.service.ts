@@ -2,7 +2,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 import { Injectable } from '@angular/core';
 
-import { LANGUAGE_CH } from '../language/ch';
+import { LANGUAGE_JP } from '../language/jp';
 import { LANGUAGE_EN } from '../language/en';
 import { Language } from './data.types/common.types';
 
@@ -13,17 +13,17 @@ export class LanguageService {
   constructor() {}
 
   private languageSubject = new BehaviorSubject<Language>({
-    code: 'ch',
-    res: LANGUAGE_CH
+    code: 'jp',
+    res: LANGUAGE_JP
   });
 
   public language$: Observable<Language> = this.languageSubject.asObservable();
 
   public changeLanguage(code) {
-    if (code == 'ch') {
+    if (code == 'jp') {
       this.languageSubject.next({
-        code: 'ch',
-        res: LANGUAGE_CH
+        code: 'jp',
+        res: LANGUAGE_JP
       });
     } else if (code == 'en') {
       this.languageSubject.next({
