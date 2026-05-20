@@ -4,7 +4,7 @@ import { take } from 'rxjs/operators';
 import { LANGUAGE_JP } from 'src/app/language/jp';
 import { LanguageRes } from 'src/app/services/data.types/common.types';
 import { LanguageService } from 'src/app/services/language.service';
-import { ModalTypes } from 'src/app/store/reducers/member.reducer';
+import { ModalTypes } from 'src/app/store/member-store.service';
 
 import {
     ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, effect, input, output

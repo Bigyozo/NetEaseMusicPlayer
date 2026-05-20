@@ -1,25 +1,21 @@
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { LANGUAGE_JP } from 'src/app/language/jp';
 import { LanguageRes, Singer, Song } from 'src/app/services/data.types/common.types';
 import { LanguageService } from 'src/app/services/language.service';
 import { SongService } from 'src/app/services/song.service';
-import { AppStoreModule } from 'src/app/store';
-import { SetShareInfo } from 'src/app/store/actions/member.action';
 import { BatchActionsService } from 'src/app/store/batch-actions.service';
-import { PlayState } from 'src/app/store/reducers/player.reducer';
+import { MemberStoreService } from 'src/app/store/member-store.service';
+import { PlayerStoreService } from 'src/app/store/player-store.service';
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, effect } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { ImgDefaultDirective } from '../../share/directives/img-default.directive';
-import { createFeatureSelector, select, Store } from '@ngrx/store';
 
 import { BaseLyricLine, WyLyric } from '../../share/wy-ui/wy-player/wy-player-panel/wy-lyric';
-import { getCurrentSong } from '../../store/selectors/play.selectors';
 
 @Component({
   standalone: true,
@@ -32,17 +28,17 @@ export class SongInfoComponent implements OnInit {
   lanRes: LanguageRes = LANGUAGE_JP;
   song: Song;
   lyric: BaseLyricLine[];
-  private destroy$ = new Subject<void>();
   currentSong: Song;
   controlLyric = {
     isExpand: false,
-    label: '展开',
+    label: '展開',
     iconCls: 'down'
   };
   constructor(
     private route: ActivatedRoute,
     private songService: SongService,
-    private store$: Store<AppStoreModule>,
+    private playerStore: PlayerStoreService,
+    private memberStore: MemberStoreService,
     private batchActionsService: BatchActionsService,
     private nzMessageService: NzMessageService,
     private languageService: LanguageService
@@ -50,7 +46,9 @@ export class SongInfoComponent implements OnInit {
     this.route.data.pipe(map((res) => res.songInfo)).subscribe(([song, lryic]) => {
       this.song = song;
       this.lyric = new WyLyric(lryic).lines;
-      this.listenCurrent();
+    });
+    effect(() => {
+      this.currentSong = this.playerStore.currentSong();
     });
     this.languageService.language$.subscribe((item) => {
       this.lanRes = item.res;
@@ -65,26 +63,14 @@ export class SongInfoComponent implements OnInit {
       this.controlLyric.label = '收起';
       this.controlLyric.iconCls = 'up';
     } else {
-      this.controlLyric.label = '展开';
+      this.controlLyric.label = '展開';
       this.controlLyric.iconCls = 'down';
     }
   }
 
-  private listenCurrent() {
-    this.store$
-      .pipe(
-        select(createFeatureSelector<PlayState>('player')),
-        select(getCurrentSong),
-        takeUntil(this.destroy$)
-      )
-      .subscribe((song) => {
-        this.currentSong = song;
-      });
-  }
-
   onShareSong(resource: Song, type = 'song') {
     const txt = this.makeTxt('歌曲', resource.name, resource.ar);
-    this.store$.dispatch(SetShareInfo({ info: { id: resource.id.toString(), type, txt } }));
+    this.memberStore.shareInfo.set({ id: resource.id.toString(), type, txt });
   }
 
   private makeTxt(type: string, name: string, makeBy: Singer[]): string {

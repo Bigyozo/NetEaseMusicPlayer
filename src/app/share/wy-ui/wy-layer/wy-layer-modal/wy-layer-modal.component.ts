@@ -1,4 +1,4 @@
-import { ModalTypes } from 'src/app/store/reducers/member.reducer';
+import { ModalTypes } from 'src/app/store/member-store.service';
 
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ESCAPE } from '@angular/cdk/keycodes';
