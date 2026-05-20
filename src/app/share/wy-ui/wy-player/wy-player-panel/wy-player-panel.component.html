@@ -1,10 +1,10 @@
-<div class="play-panel" [class.show]="show">
+<div class="play-panel" [class.show]="show()">
   <div class="hd">
     <div class="hdc">
       <h4>
         <!-- プレイリスト -->
         {{ lanRes.C00071 }}
-        (<span>{{ songList.length }}</span
+        (<span>{{ songList().length }}</span
         >)
       </h4>
       <div class="add-all">
@@ -18,7 +18,7 @@
         <!-- クリア -->
         {{ lanRes.C00073 }}
       </div>
-      <p class="playing-name">{{ currentSong?.name }}</p>
+      <p class="playing-name">{{ currentSong()?.name }}</p>
       <i class="icon close" (click)="onClose.emit()"></i>
     </div>
   </div>
@@ -26,9 +26,9 @@
   <div class="bd">
     <img appImgDefault src="//music.163.com/api/img/blur/109951163826278397" class="imgbg" />
     <div class="msk"></div>
-    <app-wy-scroll class="list-wrap" [data]="songList" (onScrollEnd)="scrollY = $event">
+    <app-wy-scroll class="list-wrap" [data]="songList()" (onScrollEnd)="scrollY = $event">
       <ul>
-        @for (item of songList; track item.id; let i = $index) {
+        @for (item of songList(); track item.id; let i = $index) {
           <li
             [class.current]="currentIndex === i"
             (click)="onChangeSong.emit(item)"

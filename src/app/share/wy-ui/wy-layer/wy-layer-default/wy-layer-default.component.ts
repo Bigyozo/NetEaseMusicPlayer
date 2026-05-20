@@ -4,7 +4,7 @@ import { LanguageService } from 'src/app/services/language.service';
 import { ImgDefaultDirective } from '../../../directives/img-default.directive';
 
 import {
-    ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnInit, Output
+    ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, output
 } from '@angular/core';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 
@@ -53,7 +53,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 })
 export class WyLayerDefaultComponent implements OnInit {
   lanRes: LanguageRes = LANGUAGE_JP;
-  @Output() onChangeModalType = new EventEmitter<string | void>();
+  onChangeModalType = output<string | void>();
   constructor(private languageService: LanguageService, private cdr: ChangeDetectorRef) {
     this.languageService.language$.subscribe((item) => {
       this.lanRes = item.res;

@@ -4,7 +4,7 @@
       <!-- 電話番号: -->
       {{ lanRes.C00047 }}
       <strong class="s-fc1">
-        <span class="js-mob"> {{ phone }} </span>
+        <span class="js-mob"> {{ phoneHideStr() }} </span>
       </strong>
     </p>
     <p class="s-fc4">
@@ -23,7 +23,7 @@
               {{ lanRes.C00049 }}
             </span>
             @if (!showRepeatBtn) {
-              <span class="txt">{{ timing }}s</span>
+              <span class="txt">{{ timing() }}s</span>
             } @else {
               <span class="txt repeat" (click)="onRepeatSendCode.emit()">
                 <!-- 再送信 -->

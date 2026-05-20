@@ -8,15 +8,15 @@
     </h3>
     <span class="sub s-fc3">
       <!-- 累計再生数 -->
-      {{ lanRes.C00024 }}{{ listenSongs }}
+      {{ lanRes.C00024 }}{{ listenSongs() }}
     </span>
     <div class="more tab-type">
-      <span [class.active]="recordType === 1" (click)="onChangeType.emit(1)">
+      <span [class.active]="recordType() === 1" (click)="onChangeType.emit(1)">
         <!-- 直近1週間 -->
         {{ lanRes.C00025 }}
       </span>
       <nz-divider nzType="vertical"></nz-divider>
-      <span [class.active]="recordType === 0" (click)="onChangeType.emit(0)">
+      <span [class.active]="recordType() === 0" (click)="onChangeType.emit(0)">
         <!-- 全期間 -->
         {{ lanRes.C00026 }}
       </span>
@@ -25,7 +25,7 @@
   <nz-table
     class="wy-table"
     #basicTable
-    [nzData]="records"
+    [nzData]="records()"
     [nzFrontPagination]="false"
     nzBordered
     [nzNoResult]="lanRes.C00027"
@@ -61,7 +61,7 @@
             <i
               class="ico play-song"
               [title]="lanRes.C00032"
-              [class.current]="currentIndex === i"
+              [class.current]="currentIndex() === i"
               (click)="onAddSong.emit([item.song, true])"
             ></i>
           </td>

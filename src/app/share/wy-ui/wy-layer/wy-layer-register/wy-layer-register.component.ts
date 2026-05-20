@@ -7,8 +7,7 @@ import { LanguageService } from 'src/app/services/language.service';
 import { ModalTypes } from 'src/app/store/reducers/member.reducer';
 
 import {
-    ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit,
-    Output, SimpleChanges
+    ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, effect, input, output
 } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -20,8 +19,8 @@ import { WyCheckCodeComponent } from '../wy-check-code/wy-check-code.component';
 import { MemberService } from '../../../../services/member.service';
 
 enum Exist {
-  '存在' = 1,
-  '不存在' = -1
+  Exists = 1,
+  NotExists = -1
 }
 
 @Component({
@@ -32,16 +31,16 @@ enum Exist {
   styleUrls: ['./wy-layer-register.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class WyLayerRegisterComponent implements OnInit, OnChanges {
+export class WyLayerRegisterComponent implements OnInit {
   lanRes: LanguageRes = LANGUAGE_JP;
-  @Input() visible = false;
-  @Output() onChangeModalType = new EventEmitter<string>();
+  visible = input(false);
+  onChangeModalType = output<string>();
   showCode = false;
   formModel: FormGroup;
   timing: number;
   codePass = false;
-  @Output()
-  onRegister = new EventEmitter<string>();
+  onRegister = output<string>();
+  private visibleFirstRun = true;
   constructor(
     private fb: FormBuilder,
     private memberService: MemberService,
@@ -57,16 +56,15 @@ export class WyLayerRegisterComponent implements OnInit, OnChanges {
       this.lanRes = item.res;
       this.cdr.markForCheck();
     });
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    const visible = changes.visible;
-    if (visible && !visible.firstChange) {
-      if (!this.visible) {
+    effect(() => {
+      const v = this.visible();
+      if (this.visibleFirstRun) { this.visibleFirstRun = false; return; }
+      if (!v) {
         this.showCode = false;
+        this.formModel.reset();
+        this.cdr.markForCheck();
       }
-      this.formModel.markAllAsTouched();
-    }
+    });
   }
 
   ngOnInit() {}
@@ -78,8 +76,8 @@ export class WyLayerRegisterComponent implements OnInit, OnChanges {
   }
 
   sendCode() {
-    this.memberService.sendCode(this.formModel.get('phone').value).subscribe(
-      () => {
+    this.memberService.sendCode(this.formModel.get('phone').value).subscribe({
+      next: () => {
         this.timing = 60;
         if (!this.showCode) {
           this.showCode = true;
@@ -92,10 +90,10 @@ export class WyLayerRegisterComponent implements OnInit, OnChanges {
             this.cdr.markForCheck();
           });
       },
-      (error) => {
-        this.messageService.error(error.message);
+      error: (err) => {
+        this.messageService.error(err.message);
       }
-    );
+    });
   }
 
   changeType(type = ModalTypes.Default) {
@@ -105,24 +103,24 @@ export class WyLayerRegisterComponent implements OnInit, OnChanges {
   }
 
   onCheckCode(code: string) {
-    this.memberService.checkCode(this.formModel.get('phone').value, Number(code)).subscribe(
-      () => {
+    this.memberService.checkCode(this.formModel.get('phone').value, Number(code)).subscribe({
+      next: () => {
         this.codePass = true;
       },
-      () => {
+      error: () => {
         this.codePass = false;
       },
-      () => {
+      complete: () => {
         this.cdr.markForCheck();
       }
-    );
+    });
   }
 
   onCheckExist() {
     const phone = this.formModel.get('phone').value;
     this.memberService.checkExist(Number(phone)).subscribe((res) => {
-      if (Exist[res] === '存在') {
-        this.messageService.error('账号已存在，可直接登陆');
+      if (res === Exist.Exists) {
+        this.messageService.error(this.lanRes.C00083);
         this.changeType(ModalTypes.LoginByPhone);
       } else {
         this.onRegister.emit(phone);

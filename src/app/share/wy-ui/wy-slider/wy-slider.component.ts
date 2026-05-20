@@ -4,15 +4,14 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  EventEmitter,
   forwardRef,
-  Input,
   OnDestroy,
   OnInit,
-  Output,
   ViewChild,
   ViewEncapsulation,
-  inject
+  inject,
+  input,
+  output
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { fromEvent, merge, Observable, Subscription } from 'rxjs';
@@ -54,16 +53,16 @@ export class WySliderComponent
   implements OnInit, OnDestroy, ControlValueAccessor {
   private doc = inject(DOCUMENT);
   // スライダーが垂直か
-  @Input() wyVertical = false;
+  wyVertical = input(false);
   // スライダーの最小値
-  @Input() wyMin = 0;
+  wyMin = input(0);
   // スライダーの最大値
-  @Input() wyMax = 100;
+  wyMax = input(100);
   // バッファバー
-  @Input() bufferOffset: SliderValue = 0;
+  bufferOffset = input<SliderValue>(0);
   private slideDom: HTMLDivElement;
 
-  @Output() wyOnAfterChange = new EventEmitter<SliderValue>();
+  wyOnAfterChange = output<SliderValue>();
 
   @ViewChild('wySlider', { static: true }) private wySlider: ElementRef;
   // スライダーがドラッグ中か
@@ -91,7 +90,7 @@ export class WySliderComponent
   }
 
   private createDraggingObservables() {
-    const orientField = this.wyVertical ? 'pageY' : 'pageX';
+    const orientField = this.wyVertical() ? 'pageY' : 'pageX';
     const mouse: SliderEventObserverConfig = {
       start: 'mousedown',
       move: 'mousemove',
@@ -141,15 +140,15 @@ export class WySliderComponent
       0,
       1
     );
-    const realRatio = this.wyVertical ? 1 - ratio : ratio;
-    return realRatio * (this.wyMax - this.wyMin) + this.wyMin;
+    const realRatio = this.wyVertical() ? 1 - ratio : ratio;
+    return realRatio * (this.wyMax() - this.wyMin()) + this.wyMin();
   }
   private getSliderStartPosition() {
     const offset = getElementOffset(this.slideDom);
-    return this.wyVertical ? offset.top : offset.left;
+    return this.wyVertical() ? offset.top : offset.left;
   }
   private getSliderLength() {
-    return this.wyVertical
+    return this.wyVertical()
       ? this.slideDom.clientHeight
       : this.slideDom.clientWidth;
   }
@@ -227,9 +226,9 @@ export class WySliderComponent
   private formatValue(value: SliderValue): SliderValue {
     let res = value;
     if (this.assertValueValid(value)) {
-      res = this.wyMin;
+      res = this.wyMin();
     } else {
-      res = limitNumberRange(value, this.wyMin, this.wyMax);
+      res = limitNumberRange(value, this.wyMin(), this.wyMax());
     }
     return res;
   }
@@ -244,7 +243,7 @@ export class WySliderComponent
   }
 
   private getValueToOffset(value: SliderValue): SliderValue {
-    return getPercent(value, this.wyMin, this.wyMax);
+    return getPercent(value, this.wyMin(), this.wyMax());
   }
 
   ngOnDestroy(): void {

@@ -3,7 +3,7 @@ import { ImgDefaultDirective } from '../../directives/img-default.directive';
 import { PlayCountPipe } from '../../pipes/play-count.pipe';
 
 import {
-    ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output
+    ChangeDetectionStrategy, Component, OnInit, input, output
 } from '@angular/core';
 
 @Component({
@@ -15,8 +15,8 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SingleSheetComponent implements OnInit {
-  @Input() sheet: SongSheet;
-  @Output() onPlay = new EventEmitter<number>();
+  sheet = input.required<SongSheet>();
+  onPlay = output<number>();
 
   constructor() {}
 
@@ -28,6 +28,6 @@ export class SingleSheetComponent implements OnInit {
   }
 
   get coverImg(): string {
-    return this.sheet.picUrl || this.sheet.coverImgUrl;
+    return this.sheet().picUrl || this.sheet().coverImgUrl;
   }
 }

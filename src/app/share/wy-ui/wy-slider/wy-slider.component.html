@@ -1,15 +1,15 @@
-<div class="wy-slider" #wySlider [class.wy-slider-vertical]="wyVertical">
+<div class="wy-slider" #wySlider [class.wy-slider-vertical]="wyVertical()">
   <app-wy-slider-track
-    [wyVertical]="wyVertical"
-    [wyLength]="bufferOffset"
+    [wyVertical]="wyVertical()"
+    [wyLength]="bufferOffset()"
     [wyBuffer]="true"
   ></app-wy-slider-track>
   <app-wy-slider-track
-    [wyVertical]="wyVertical"
+    [wyVertical]="wyVertical()"
     [wyLength]="offset"
   ></app-wy-slider-track>
   <app-wy-slider-handle
-    [wyVertical]="wyVertical"
+    [wyVertical]="wyVertical()"
     [wyOffset]="offset"
   ></app-wy-slider-handle>
 </div>

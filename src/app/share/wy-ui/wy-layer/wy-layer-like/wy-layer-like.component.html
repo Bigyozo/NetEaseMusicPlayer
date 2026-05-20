@@ -8,7 +8,7 @@
           {{ lanRes.C00059 }}
         </span>
       </div>
-      <nz-list [nzDataSource]="mySheets" [nzRenderItem]="itemTpl">
+      <nz-list [nzDataSource]="mySheets()" [nzRenderItem]="itemTpl">
         <ng-template #itemTpl let-item>
           <nz-list-item class="list-item" (click)="onLike(item.id.toString())">
             <nz-list-item-meta

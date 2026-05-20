@@ -6,11 +6,9 @@ import {
   ViewChild,
   ElementRef,
   AfterViewInit,
-  Input,
-  OnChanges,
-  SimpleChanges,
-  Output,
-  EventEmitter
+  effect,
+  input,
+  output
 } from '@angular/core';
 import BScroll from '@better-scroll/core';
 import MouseWheel from '@better-scroll/mouse-wheel';
@@ -38,23 +36,22 @@ BScroll.use(MouseWheel);
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class WyScrollComponent implements OnInit, AfterViewInit, OnChanges {
-  @Input() data: any[];
+export class WyScrollComponent implements OnInit, AfterViewInit {
+  data = input<any[]>();
 
   private bs: BScroll;
 
-  @Output() private onScrollEnd = new EventEmitter<number>();
+  onScrollEnd = output<number>();
 
   @ViewChild('wrap', { static: true }) private wrapRef: ElementRef;
-  constructor(readonly el: ElementRef) {}
+  constructor(readonly el: ElementRef) {
+    effect(() => {
+      this.data();
+      this.refreshScroll();
+    });
+  }
 
   ngOnInit() {}
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.data) {
-      this.refreshScroll();
-    }
-  }
 
   ngAfterViewInit(): void {
     this.bs = new BScroll(this.wrapRef.nativeElement, {

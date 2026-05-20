@@ -82,7 +82,7 @@ export class AppComponent implements OnDestroy {
       path: '/home'
     },
     {
-      label: 'プレイリスト',
+      label: 'ソングシート',
       path: '/sheet'
     }
   ];

@@ -14,4 +14,4 @@
   </div>
 </ng-template>
 
-<ng-container *ngTemplateOutlet="customView ? customView : defaultView"></ng-container>
+<ng-container *ngTemplateOutlet="customView() ? customView() : defaultView"></ng-container>

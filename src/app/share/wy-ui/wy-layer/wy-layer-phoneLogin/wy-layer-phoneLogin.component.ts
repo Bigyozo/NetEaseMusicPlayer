@@ -5,8 +5,7 @@ import { LanguageService } from 'src/app/services/language.service';
 import { codeJson } from 'src/app/utils/base64';
 
 import {
-    ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit,
-    Output, SimpleChanges
+    ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, effect, input, output
 } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -23,13 +22,14 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
   styleUrls: ['./wy-layer-phoneLogin.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class WyLayerPhoneLoginComponent implements OnInit, OnChanges {
+export class WyLayerPhoneLoginComponent implements OnInit {
   lanRes: LanguageRes = LANGUAGE_JP;
-  @Input() wyRememberLogin: PhoneLoginParams;
-  @Output() onChangeModalType = new EventEmitter<string | void>();
-  @Output() onLogin = new EventEmitter<PhoneLoginParams>();
-  @Input() visible = false;
+  wyRememberLogin = input.required<PhoneLoginParams>();
+  onChangeModalType = output<string | void>();
+  onLogin = output<PhoneLoginParams>();
+  visible = input(false);
   formModel: FormGroup;
+  private visibleFirstRun = true;
   constructor(
     private fb: FormBuilder,
     private languageService: LanguageService,
@@ -44,29 +44,27 @@ export class WyLayerPhoneLoginComponent implements OnInit, OnChanges {
       this.lanRes = item.res;
       this.cdr.markForCheck();
     });
-  }
-
-  ngOnInit() {}
-
-  ngOnChanges(changes: SimpleChanges): void {
-    const userLoginParams = changes.wyRememberLogin;
-    const visible = changes.visible;
-    if (userLoginParams) {
+    effect(() => {
+      const params = this.wyRememberLogin();
       let phone = '';
       let password = '';
       let remember = false;
-      if (userLoginParams.currentValue) {
-        const value = codeJson(userLoginParams.currentValue, 'decode');
+      if (params) {
+        const value = codeJson(params, 'decode');
         phone = value.phone;
         password = value.password;
         remember = value.remember;
       }
       this.setModel({ phone, password, remember });
-      if (visible && !visible.firstChange) {
-        this.formModel.markAllAsTouched();
-      }
-    }
+    });
+    effect(() => {
+      this.visible();
+      if (this.visibleFirstRun) { this.visibleFirstRun = false; return; }
+      this.formModel.markAllAsTouched();
+    });
   }
+
+  ngOnInit() {}
 
   private setModel({ phone, password, remember }) {
     this.formModel = this.fb.group({
