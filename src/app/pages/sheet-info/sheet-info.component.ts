@@ -71,8 +71,8 @@ export class SheetInfoComponent implements OnInit {
         this.currentIndex = -1;
       }
     });
-    this.languageService.language$.subscribe((item) => {
-      this.lanRes = item.res;
+    effect(() => {
+      this.lanRes = this.languageService.language().res;
     });
   }
 

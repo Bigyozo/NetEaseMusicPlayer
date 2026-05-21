@@ -40,8 +40,8 @@ export class WyLayerEmailLoginComponent{
       password: ['', [Validators.required, Validators.minLength(6)]],
       remember: [false]
     });
-    this.languageService.language$.subscribe((item) => {
-      this.lanRes = item.res;
+    effect(() => {
+      this.lanRes = this.languageService.language().res;
       this.cdr.markForCheck();
     });
     effect(() => {

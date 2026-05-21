@@ -3,7 +3,7 @@ import { LanguageRes } from '../services/data.types/common.types';
 export const LANGUAGE_JP: LanguageRes = {
   C00001: 'ネットイース クラウドミュージック',
   C00002: '探索',
-  C00003: 'プレイリスト',
+  C00003: 'ソングシート',
   C00004: 'ログイン',
   C00005: '電話番号でログイン',
   C00006: 'メールアドレスでログイン',

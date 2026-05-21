@@ -57,8 +57,8 @@ export class WyPlayerPanelComponent implements OnInit {
   private showFirstRun = true;
 
   constructor(private songService: SongService, private languageService: LanguageService) {
-    this.languageService.language$.subscribe((item) => {
-      this.lanRes = item.res;
+    effect(() => {
+      this.lanRes = this.languageService.language().res;
     });
     effect(() => {
       const p = this.playing();

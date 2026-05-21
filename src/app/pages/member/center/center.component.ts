@@ -66,8 +66,8 @@ export class CenterComponent implements OnInit {
       }
       this.cdr.markForCheck();
     });
-    this.languageService.language$.subscribe((item) => {
-      this.lanRes = item.res;
+    effect(() => {
+      this.lanRes = this.languageService.language().res;
       this.cdr.markForCheck();
     });
   }

@@ -38,8 +38,8 @@ export class WyCheckCodeComponent implements OnInit {
   private codePassFirstRun = true;
 
   constructor(private languageService: LanguageService, private cdr: ChangeDetectorRef) {
-    this.languageService.language$.subscribe((item) => {
-      this.lanRes = item.res;
+    effect(() => {
+      this.lanRes = this.languageService.language().res;
       this.cdr.markForCheck();
     });
     this.formModel = new FormGroup({

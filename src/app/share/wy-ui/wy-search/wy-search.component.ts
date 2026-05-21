@@ -48,8 +48,8 @@ export class WySearchComponent implements OnInit, AfterViewInit {
     private viewContainerRef: ViewContainerRef,
     private languageService: LanguageService
   ) {
-    this.languageService.language$.subscribe((item) => {
-      this.lanRes = item.res;
+    effect(() => {
+      this.lanRes = this.languageService.language().res;
     });
     effect(() => {
       this.searchResult();

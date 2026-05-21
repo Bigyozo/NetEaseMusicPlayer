@@ -1,7 +1,7 @@
 import { LANGUAGE_JP } from 'src/app/language/jp';
 import { LanguageService } from 'src/app/services/language.service';
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, effect } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -40,8 +40,8 @@ export class SheetListComponent implements OnInit {
   ) {
     this.listParams.cat = this.route.snapshot.queryParamMap.get('cat') || '全部';
     this.getList();
-    this.languageService.language$.subscribe((item) => {
-      this.lanRes = item.res;
+    effect(() => {
+      this.lanRes = this.languageService.language().res;
     });
   }
 

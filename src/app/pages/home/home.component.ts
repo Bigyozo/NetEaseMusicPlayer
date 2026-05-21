@@ -76,8 +76,8 @@ export class HomeComponent implements OnInit {
         this.user = null;
       }
     });
-    this.languageService.language$.subscribe((item) => {
-      this.lanRes = item.res;
+    effect(() => {
+      this.lanRes = this.languageService.language().res;
     });
   }
 

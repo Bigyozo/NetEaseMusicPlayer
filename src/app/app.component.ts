@@ -138,8 +138,8 @@ export class AppComponent implements OnDestroy {
       filter((evt) => evt instanceof NavigationEnd)
     ) as Observable<NavigationEnd>;
     this.setLoadIngBar();
-    this.languageService.language$.pipe(takeUntil(this.destroy$)).subscribe((item) => {
-      this.lanRes = item.res;
+    effect(() => {
+      this.lanRes = this.languageService.language().res;
       this.menu = [
         {
           label: this.lanRes.C00002,

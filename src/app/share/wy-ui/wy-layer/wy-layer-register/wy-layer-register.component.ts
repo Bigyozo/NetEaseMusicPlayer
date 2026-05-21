@@ -52,8 +52,8 @@ export class WyLayerRegisterComponent implements OnInit {
       phone: ['', [Validators.required, Validators.pattern(/^1\d{10}$/)]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
-    this.languageService.language$.subscribe((item) => {
-      this.lanRes = item.res;
+    effect(() => {
+      this.lanRes = this.languageService.language().res;
       this.cdr.markForCheck();
     });
     effect(() => {

@@ -114,8 +114,8 @@ export class WyPlayerComponent implements OnInit {
     effect(() => this.watchCurrentSong(this.playerStore.currentSong()));
     effect(() => this.watchCurrentAction(this.playerStore.currentAction()));
 
-    this.languageService.language$.subscribe((item) => {
-      this.lanRes = item.res;
+    effect(() => {
+      this.lanRes = this.languageService.language().res;
     });
   }
 

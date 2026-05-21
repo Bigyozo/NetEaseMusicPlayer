@@ -42,8 +42,8 @@ export class WyLayerLikeComponent implements OnInit {
     this.formModel = this.fb.group({
       sheetName: ['', [Validators.required]]
     });
-    this.languageService.language$.subscribe((item) => {
-      this.lanRes = item.res;
+    effect(() => {
+      this.lanRes = this.languageService.language().res;
       this.cdr.markForCheck();
     });
     effect(() => {

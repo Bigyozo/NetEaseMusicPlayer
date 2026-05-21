@@ -38,8 +38,8 @@ export class WyLayerShareComponent implements OnInit {
     this.formModel.get('msg').valueChanges.subscribe((msg) => {
       this.surplusMsgCount = MAX_MSG - msg.length;
     });
-    this.languageService.language$.subscribe((item) => {
-      this.lanRes = item.res;
+    effect(() => {
+      this.lanRes = this.languageService.language().res;
       this.cdr.markForCheck();
     });
     effect(() => {

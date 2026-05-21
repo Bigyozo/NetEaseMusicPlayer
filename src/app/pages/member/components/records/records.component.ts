@@ -4,7 +4,7 @@ import { RecordVal } from 'src/app/services/data.types/member.type';
 import { LanguageService } from 'src/app/services/language.service';
 
 import {
-    ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, input, output
+    ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, effect, input, output
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -33,8 +33,8 @@ export class RecordsComponent implements OnInit {
   onLikeSong = output<string>();
   onShareSong = output<Song>();
   constructor(private languageService: LanguageService, private cdr: ChangeDetectorRef) {
-    this.languageService.language$.subscribe((item) => {
-      this.lanRes = item.res;
+    effect(() => {
+      this.lanRes = this.languageService.language().res;
       this.cdr.markForCheck();
     });
   }

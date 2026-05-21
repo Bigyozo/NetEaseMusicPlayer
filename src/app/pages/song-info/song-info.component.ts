@@ -50,8 +50,8 @@ export class SongInfoComponent implements OnInit {
     effect(() => {
       this.currentSong = this.playerStore.currentSong();
     });
-    this.languageService.language$.subscribe((item) => {
-      this.lanRes = item.res;
+    effect(() => {
+      this.lanRes = this.languageService.language().res;
     });
   }
 
