@@ -1,14 +1,14 @@
 <div class="check-code">
   <div class="js-mobwrap">
     <p class="s-fc3">
-      <!-- 你的手机号: -->
+      <!-- 電話番号: -->
       {{ lanRes.C00047 }}
       <strong class="s-fc1">
-        <span class="js-mob"> {{ phone }} </span>
+        <span class="js-mob"> {{ phoneHideStr() }} </span>
       </strong>
     </p>
     <p class="s-fc4">
-      <!-- 我们会给您发送短信验证码 -->
+      <!-- SMS認証コードを送信します -->
       {{ lanRes.C00048 }}
     </p>
   </div>
@@ -19,23 +19,24 @@
           <app-wy-code formControlName="code"></app-wy-code>
           <div class="send clearfix">
             <span class="err" [hidden]="!showErrorTip">
-              <!-- 验证码不正确 -->
+              <!-- 認証コードが正しくありません -->
               {{ lanRes.C00049 }}
             </span>
-            <span class="txt" *ngIf="!showRepeatBtn; else repeatBtn">{{ timing }}s</span>
-            <ng-template #repeatBtn>
+            @if (!showRepeatBtn) {
+              <span class="txt">{{ timing() }}s</span>
+            } @else {
               <span class="txt repeat" (click)="onRepeatSendCode.emit()">
-                <!-- 重新发送 -->
+                <!-- 再送信 -->
                 {{ lanRes.C00050 }}
               </span>
-            </ng-template>
+            }
           </div>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
         <nz-form-control>
           <button nz-button nzType="primary" nzBlock>
-            <!-- 下一步 -->
+            <!-- 次へ -->
             {{ lanRes.C00051 }}
           </button>
         </nz-form-control>

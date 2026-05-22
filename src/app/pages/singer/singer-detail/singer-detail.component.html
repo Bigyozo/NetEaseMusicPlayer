@@ -31,7 +31,7 @@
               (click)="onAddSongs(singerDetail.hotSongs, true)"
             >
               <i nz-icon nzType="play-circle" nzTheme="outline"></i>
-              <!-- 播放 -->
+              <!-- 再生 -->
               {{ lanRes.C00032 }}
             </button>
             <button
@@ -45,12 +45,12 @@
           </div>
           <button class="btn like" nz-button (click)="onLikeSongs(singerDetail.hotSongs)">
             <span>
-              <!-- 收藏 -->
+              <!-- お気に入り -->
               {{ lanRes.C00034 }} </span
             >{{ singerDetail.hotSongs.length }}
           </button>
         </div>
-        <!-- 暂无音乐！ -->
+        <!-- 音楽がありません！ -->
         <nz-table
           class="wy-table"
           #basicTable
@@ -63,47 +63,49 @@
             <tr>
               <th nzWidth="80px"></th>
               <th>
-                <!-- 标题 -->
+                <!-- タイトル -->
                 {{ lanRes.C00028 }}
               </th>
               <th nzWidth="120px">
-                <!-- 时长 -->
+                <!-- 時間 -->
                 {{ lanRes.C00029 }}
               </th>
               <th>
-                <!-- 专辑 -->
+                <!-- アルバム -->
                 {{ lanRes.C00041 }}
               </th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let item of basicTable.data; index as i">
-              <td class="first-col">
-                <span>{{ i + 1 }}</span>
-                <!-- 播放 -->
-                <i
-                  class="ico play-song"
-                  [title]="lanRes.C00032"
-                  [class.current]="currentIndex === i"
-                  (click)="onAddSong(item, true)"
-                ></i>
-              </td>
-              <td class="song-name">
-                <a [routerLink]="['/songInfo', item.id]">{{ item.name }}</a>
-              </td>
-              <td class="time-col">
-                <span>{{ item.dt / 1000 | formatTime }}</span>
-                <p class="icons">
-                  <!-- 添加 -->
-                  <i class="ico add" [title]="lanRes.C00033" (click)="onAddSong(item)"></i>
-                  <!-- 收藏 -->
-                  <i class="ico like" [title]="lanRes.C00034" (click)="onLikeSong(item.id)"></i>
-                  <!-- 分享 -->
-                  <i class="ico share" [title]="lanRes.C00035" (click)="onShareSong(item)"></i>
-                </p>
-              </td>
-              <td>{{ item.al.name }}</td>
-            </tr>
+            @for (item of basicTable.data; track item.id; let i = $index) {
+              <tr>
+                <td class="first-col">
+                  <span>{{ i + 1 }}</span>
+                  <!-- 再生 -->
+                  <i
+                    class="ico play-song"
+                    [title]="lanRes.C00032"
+                    [class.current]="currentIndex === i"
+                    (click)="onAddSong(item, true)"
+                  ></i>
+                </td>
+                <td class="song-name">
+                  <a [routerLink]="['/songInfo', item.id]">{{ item.name }}</a>
+                </td>
+                <td class="time-col">
+                  <span>{{ item.dt / 1000 | formatTime }}</span>
+                  <p class="icons">
+                    <!-- 追加 -->
+                    <i class="ico add" [title]="lanRes.C00033" (click)="onAddSong(item)"></i>
+                    <!-- お気に入り -->
+                    <i class="ico like" [title]="lanRes.C00034" (click)="onLikeSong(item.id)"></i>
+                    <!-- シェア -->
+                    <i class="ico share" [title]="lanRes.C00035" (click)="onShareSong(item)"></i>
+                  </p>
+                </td>
+                <td>{{ item.al.name }}</td>
+              </tr>
+            }
           </tbody>
         </nz-table>
       </div>
@@ -113,16 +115,18 @@
   <div class="dt-right">
     <div class="right-wrap">
       <h3>
-        <!-- 相似歌手 -->
+        <!-- 似たアーティスト -->
         {{ lanRes.C00044 }}
       </h3>
       <ul class="clearfix">
-        <li *ngFor="let item of simiSingers" [routerLink]="['/singer', item.id]">
-          <div class="pic">
-            <img appImgDefault [src]="item.picUrl" [alt]="item.name" />
-          </div>
-          <p class="ellipsis">{{ item.name }}</p>
-        </li>
+        @for (item of simiSingers; track item.id) {
+          <li [routerLink]="['/singer', item.id]">
+            <div class="pic">
+              <img appImgDefault [src]="item.picUrl" [alt]="item.name" />
+            </div>
+            <p class="ellipsis">{{ item.name }}</p>
+          </li>
+        }
       </ul>
     </div>
   </div>

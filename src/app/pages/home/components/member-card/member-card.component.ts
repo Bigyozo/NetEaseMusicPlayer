@@ -1,11 +1,11 @@
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { timer } from 'rxjs';
-import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LANGUAGE_JP } from 'src/app/language/jp';
 import { LanguageRes } from 'src/app/services/data.types/common.types';
 import { User } from 'src/app/services/data.types/member.type';
 import { LanguageService } from 'src/app/services/language.service';
 
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, OnInit, effect, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
@@ -22,18 +22,18 @@ import { MemberService } from '../../../../services/member.service';
 })
 export class MemberCardComponent implements OnInit {
   tipTitle = '';
-  lanRes: LanguageRes = LANGUAGE_CH;
+  lanRes: LanguageRes = LANGUAGE_JP;
   showTip = false;
-  @Input() user: User;
-  @Output() openModal = new EventEmitter<void>();
+  user = input.required<User>();
+  openModal = output<void>();
 
   constructor(
     private memberService: MemberService,
     private messageService: NzMessageService,
     private languageService: LanguageService
   ) {
-    this.languageService.language$.subscribe((item) => {
-      this.lanRes = item.res;
+    effect(() => {
+      this.lanRes = this.languageService.language().res;
     });
   }
 

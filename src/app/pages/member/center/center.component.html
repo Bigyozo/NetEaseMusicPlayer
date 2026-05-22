@@ -19,21 +19,21 @@
           <li class="fst">
             <strong class="ellipsis">{{ user.profile.eventCount }}</strong>
             <span>
-              <!-- 动态 -->
+              <!-- アクティビティ -->
               {{ lanRes.C00017 }}
             </span>
           </li>
           <li>
             <strong class="ellipsis">{{ user.profile.follows }}</strong>
             <span>
-              <!-- 关注 -->
+              <!-- フォロー -->
               {{ lanRes.C00018 }}
             </span>
           </li>
           <li class="lst">
             <strong class="ellipsis">{{ user.profile.followeds }}</strong>
             <span>
-              <!-- 粉丝数 -->
+              <!-- フォロワー -->
               {{ lanRes.C00019 }}
             </span>
           </li>
@@ -54,7 +54,7 @@
     >
     </app-records>
     <a class="look-more" [routerLink]="['/records', user.profile.userId]">
-      <!-- 查看更多 -->
+      <!-- もっと見る -->
       {{ lanRes.C00020 }}
       &gt;
     </a>
@@ -63,7 +63,7 @@
       <div class="u-title wy-sec-wrap clearfix">
         <h3 class="wy-sec-tit">
           <span class="f-ff2">
-            <!-- 我创建的歌单 -->
+            <!-- 作成したプレイリスト -->
             {{ lanRes.C00021 }}
           </span>
           <span class="sub s-fc3">{{ userSheet.self.length }}</span>
@@ -71,14 +71,15 @@
       </div>
 
       <div class="sheet-list clearfix">
-        <app-single-sheet
-          class="sheet-item"
-          *ngFor="let item of userSheet.self"
-          [sheet]="item"
-          [routerLink]="['/sheetInfo', item.id]"
-          (onPlay)="onPlaySheet($event)"
-        >
-        </app-single-sheet>
+        @for (item of userSheet.self; track item.id) {
+          <app-single-sheet
+            class="sheet-item"
+            [sheet]="item"
+            [routerLink]="['/sheetInfo', item.id]"
+            (onPlay)="onPlaySheet($event)"
+          >
+          </app-single-sheet>
+        }
       </div>
     </div>
 
@@ -86,7 +87,7 @@
       <div class="u-title wy-sec-wrap clearfix">
         <h3 class="wy-sec-tit">
           <span class="f-ff2">
-            <!-- 我收藏的歌单 -->
+            <!-- お気に入りのプレイリスト -->
             {{ lanRes.C00022 }}
           </span>
           <span class="sub s-fc3">{{ userSheet.subscribed.length }}</span>
@@ -94,14 +95,15 @@
       </div>
 
       <div class="sheet-list clearfix">
-        <app-single-sheet
-          class="sheet-item"
-          *ngFor="let item of userSheet.subscribed"
-          [sheet]="item"
-          [routerLink]="['/sheetInfo', item.id]"
-          (onPlay)="onPlaySheet($event)"
-        >
-        </app-single-sheet>
+        @for (item of userSheet.subscribed; track item.id) {
+          <app-single-sheet
+            class="sheet-item"
+            [sheet]="item"
+            [routerLink]="['/sheetInfo', item.id]"
+            (onPlay)="onPlaySheet($event)"
+          >
+          </app-single-sheet>
+        }
       </div>
     </div>
   </div>

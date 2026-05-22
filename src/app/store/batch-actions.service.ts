@@ -1,56 +1,40 @@
 import { timer } from 'rxjs';
-import { CurrentActions, PlayState } from 'src/app/store/reducers/player.reducer';
 
 import { Injectable } from '@angular/core';
-import { createFeatureSelector, select, Store } from '@ngrx/store';
 
 import { Song } from '../services/data.types/common.types';
 import { findIndex, shuffle } from '../utils/array';
-import { SetLikeId, SetModalType, SetModalVisible } from './actions/member.action';
-import {
-  SetCurrentAction,
-  SetCurrentIndex,
-  SetPlayList,
-  SetSongList
-} from './actions/player.action';
-import { MemberState, ModalTypes } from './reducers/member.reducer';
-import { AppStoreModule } from '.';
+import { CurrentActions, PlayerStoreService } from './player-store.service';
+import { MemberStoreService, ModalTypes } from './member-store.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BatchActionsService {
-  playState: PlayState;
-  memberState: MemberState;
+  constructor(
+    private playerStore: PlayerStoreService,
+    private memberStore: MemberStoreService
+  ) {}
 
-  constructor(private store$: Store<AppStoreModule>) {
-    this.store$
-      .pipe(select(createFeatureSelector<PlayState>('player')))
-      .subscribe((res) => (this.playState = res));
-    this.store$
-      .pipe(select(createFeatureSelector<MemberState>('member')))
-      .subscribe((res) => (this.memberState = res));
-  }
-
-  // 播放列表
+  // プレイリスト
   selectPlayList({ list, index }: { list: Song[]; index: number }) {
-    this.store$.dispatch(SetSongList({ songList: list }));
+    this.playerStore.songList.set(list);
     let trueIndex = index;
     let trueList = list.slice();
-    if (this.playState.playMode.type === 'random') {
+    if (this.playerStore.playMode().type === 'random') {
       trueList = shuffle(list || []);
       trueIndex = findIndex(trueList, list[trueIndex]);
     }
-    this.store$.dispatch(SetPlayList({ playList: trueList }));
-    this.store$.dispatch(SetCurrentIndex({ currentIndex: trueIndex }));
-    this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Play }));
+    this.playerStore.playList.set(trueList);
+    this.playerStore.currentIndex.set(trueIndex);
+    this.playerStore.currentAction.set(CurrentActions.Play);
   }
 
-  // 添加歌曲
+  // 楽曲を追加
   insertSong(song: Song, isPlay: boolean) {
-    const songList = this.playState.songList.slice();
-    let playList = this.playState.playList.slice();
-    let insertIndex = this.playState.currentIndex;
+    const songList = this.playerStore.songList().slice();
+    let playList = this.playerStore.playList().slice();
+    let insertIndex = this.playerStore.currentIndex();
     const pIndex = findIndex(playList, song);
     if (pIndex > -1) {
       if (isPlay) {
@@ -61,45 +45,44 @@ export class BatchActionsService {
       if (isPlay) {
         insertIndex = songList.length - 1;
       }
-      if (this.playState.playMode.type === 'random') {
+      if (this.playerStore.playMode().type === 'random') {
         playList = shuffle(songList);
       } else {
         playList.push(song);
       }
-      this.store$.dispatch(SetSongList({ songList }));
-      this.store$.dispatch(SetPlayList({ playList }));
+      this.playerStore.songList.set(songList);
+      this.playerStore.playList.set(playList);
     }
-    if (insertIndex !== this.playState.currentIndex) {
-      this.store$.dispatch(SetCurrentIndex({ currentIndex: insertIndex }));
-      this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Play }));
+    if (insertIndex !== this.playerStore.currentIndex()) {
+      this.playerStore.currentIndex.set(insertIndex);
+      this.playerStore.currentAction.set(CurrentActions.Play);
     } else {
-      this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Add }));
+      this.playerStore.currentAction.set(CurrentActions.Add);
     }
   }
 
-  // 添加多首歌曲
+  // 複数の楽曲を追加
   insertSongs(songs: Song[]) {
-    let songList = this.playState.songList.slice();
-    let playList = this.playState.playList.slice();
+    let songList = this.playerStore.songList().slice();
+    let playList = this.playerStore.playList().slice();
     const validSongs = songs.filter((item) => findIndex(playList, item) === -1);
     if (validSongs.length) {
       songList = songList.concat(validSongs);
-      let songPlayList = validSongs.slice();
-      playList = playList.concat(songPlayList);
-      if (this.playState.playMode.type === 'random') {
+      playList = playList.concat(validSongs.slice());
+      if (this.playerStore.playMode().type === 'random') {
         playList = shuffle(songList);
       }
-      this.store$.dispatch(SetSongList({ songList }));
-      this.store$.dispatch(SetPlayList({ playList }));
+      this.playerStore.songList.set(songList);
+      this.playerStore.playList.set(playList);
     }
-    this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Add }));
+    this.playerStore.currentAction.set(CurrentActions.Add);
   }
 
-  // 删除歌曲
+  // 楽曲を削除
   deleteSong(song: Song) {
-    const songList = this.playState.songList.slice();
-    const playList = this.playState.playList.slice();
-    let currentIndex = this.playState.currentIndex;
+    const songList = this.playerStore.songList().slice();
+    const playList = this.playerStore.playList().slice();
+    let currentIndex = this.playerStore.currentIndex();
     const sIndex = findIndex(songList, song);
     songList.splice(sIndex, 1);
     const pIndex = findIndex(playList, song);
@@ -107,36 +90,36 @@ export class BatchActionsService {
     if (currentIndex > pIndex || currentIndex === playList.length) {
       currentIndex--;
     }
-    this.store$.dispatch(SetSongList({ songList }));
-    this.store$.dispatch(SetPlayList({ playList }));
-    this.store$.dispatch(SetCurrentIndex({ currentIndex }));
-    this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Delete }));
+    this.playerStore.songList.set(songList);
+    this.playerStore.playList.set(playList);
+    this.playerStore.currentIndex.set(currentIndex);
+    this.playerStore.currentAction.set(CurrentActions.Delete);
   }
 
-  // 清空歌曲列表
+  // 曲リストをクリア
   clearSong() {
-    this.store$.dispatch(SetSongList({ songList: [] }));
-    this.store$.dispatch(SetPlayList({ playList: [] }));
-    this.store$.dispatch(SetCurrentIndex({ currentIndex: -1 }));
-    this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Clear }));
+    this.playerStore.songList.set([]);
+    this.playerStore.playList.set([]);
+    this.playerStore.currentIndex.set(-1);
+    this.playerStore.currentAction.set(CurrentActions.Clear);
   }
 
-  // 会员弹窗显示隐藏/类型
+  // メンバーモーダルの表示/非表示・タイプ
   controlModal(modalVisible = true, modalType?: ModalTypes) {
     if (modalType) {
-      this.store$.dispatch(SetModalType({ modalType }));
+      this.memberStore.modalType.set(modalType);
     }
-    this.store$.dispatch(SetModalVisible({ modalVisible }));
+    this.memberStore.modalVisible.set(modalVisible);
     if (!modalVisible) {
       timer(500).subscribe(() => {
-        this.store$.dispatch(SetModalType({ modalType: ModalTypes.Default }));
+        this.memberStore.modalType.set(ModalTypes.Default);
       });
     }
   }
 
-  // 收藏歌曲
+  // 楽曲をお気に入り
   likeSong(id: string) {
-    this.store$.dispatch(SetModalType({ modalType: ModalTypes.Like }));
-    this.store$.dispatch(SetLikeId({ likeId: id }));
+    this.memberStore.modalType.set(ModalTypes.Like);
+    this.memberStore.likeId.set(id);
   }
 }

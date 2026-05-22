@@ -1,10 +1,10 @@
-import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LANGUAGE_JP } from 'src/app/language/jp';
 import { LanguageRes, Song } from 'src/app/services/data.types/common.types';
 import { RecordVal } from 'src/app/services/data.types/member.type';
 import { LanguageService } from 'src/app/services/language.service';
 
 import {
-    ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output
+    ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, effect, input, output
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -23,18 +23,18 @@ import { RecordType } from '../../../../services/member.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RecordsComponent implements OnInit {
-  lanRes: LanguageRes = LANGUAGE_CH;
-  @Input() records: RecordVal[];
-  @Input() recordType = RecordType.weekData;
-  @Input() listenSongs = 0;
-  @Input() currentIndex = -1;
-  @Output() onChangeType = new EventEmitter<RecordType>();
-  @Output() onAddSong = new EventEmitter<[Song, boolean]>();
-  @Output() onLikeSong = new EventEmitter<string>();
-  @Output() onShareSong = new EventEmitter<Song>();
+  lanRes: LanguageRes = LANGUAGE_JP;
+  records = input.required<RecordVal[]>();
+  recordType = input(RecordType.weekData);
+  listenSongs = input(0);
+  currentIndex = input(-1);
+  onChangeType = output<RecordType>();
+  onAddSong = output<[Song, boolean]>();
+  onLikeSong = output<string>();
+  onShareSong = output<Song>();
   constructor(private languageService: LanguageService, private cdr: ChangeDetectorRef) {
-    this.languageService.language$.subscribe((item) => {
-      this.lanRes = item.res;
+    effect(() => {
+      this.lanRes = this.languageService.language().res;
       this.cdr.markForCheck();
     });
   }

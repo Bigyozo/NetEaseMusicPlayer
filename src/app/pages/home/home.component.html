@@ -10,11 +10,13 @@
       [nzDotRender]="wyCarousel.dotRef"
       (nzBeforeChange)="onBeforeChange($event)"
     >
-      <div class="carousel-item" nz-carousel-content *ngFor="let item of banners">
-        <a [href]="item.url" target="_blank" class="banner-item">
-          <img appImgDefault [src]="item.imageUrl" />
-        </a>
-      </div>
+      @for (item of banners; track item.imageUrl) {
+        <div class="carousel-item" nz-carousel-content>
+          <a [href]="item.url" target="_blank" class="banner-item">
+            <img appImgDefault [src]="item.imageUrl" />
+          </a>
+        </div>
+      }
     </nz-carousel>
   </app-wy-carousel>
 
@@ -27,34 +29,32 @@
               <h2>
                 <i></i>
                 <a>
-                  <!-- 推荐 -->
+                  <!-- おすすめ -->
                   {{ lanRes.C00010 }}
                 </a>
               </h2>
               <nav>
-                <a
-                  *ngFor="let item of hotTags"
-                  routerLink="/sheet"
-                  [queryParams]="{ cat: item.name }"
-                  >{{ item.name }}</a
-                >
+                @for (item of hotTags; track item.name) {
+                  <a routerLink="/sheet" [queryParams]="{ cat: item.name }">{{ item.name }}</a>
+                }
               </nav>
             </div>
             <a>
-              <!-- 更多 -->
+              <!-- もっと見る -->
               {{ lanRes.C00011 }}
               <i nz-icon nzType="arrow-right" theme="outline"> </i>
             </a>
           </div>
           <div class="down">
             <div class="down-wrap">
-              <app-single-sheet
-                class="sheet-item"
-                *ngFor="let item of songSheetList"
-                [sheet]="item"
-                (onPlay)="onPlaySheet($event)"
-                (click)="toInfo(item.id)"
-              ></app-single-sheet>
+              @for (item of songSheetList; track item.id) {
+                <app-single-sheet
+                  class="sheet-item"
+                  [sheet]="item"
+                  (onPlay)="onPlaySheet($event)"
+                  (click)="toInfo(item.id)"
+                ></app-single-sheet>
+              }
             </div>
           </div>
         </div>
@@ -64,24 +64,26 @@
         <div class="settled-singer">
           <div class="tit">
             <b>
-              <!-- 歌手 -->
+              <!-- アーティスト -->
               {{ lanRes.C00012 }}
             </b>
           </div>
           <div class="list">
-            <div class="card" *ngFor="let item of singerList" [routerLink]="['/singer', item.id]">
-              <div class="pic">
-                <img appImgDefault [src]="item.picUrl" [alt]="item.name" />
+            @for (item of singerList; track item.id) {
+              <div class="card" [routerLink]="['/singer', item.id]">
+                <div class="pic">
+                  <img appImgDefault [src]="item.picUrl" [alt]="item.name" />
+                </div>
+                <div class="txt">
+                  <b class="ellipsis">{{ item.name }}</b>
+                  <span>
+                    <!-- アルバム数： -->
+                    {{ lanRes.C00013 }}
+                    {{ item.albumSize }}</span
+                  >
+                </div>
               </div>
-              <div class="txt">
-                <b class="ellipsis">{{ item.name }}</b>
-                <span>
-                  <!-- 专辑数： -->
-                  {{ lanRes.C00013 }}
-                  {{ item.albumSize }}</span
-                >
-              </div>
-            </div>
+            }
           </div>
         </div>
       </div>

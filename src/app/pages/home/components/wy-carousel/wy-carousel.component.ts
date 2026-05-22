@@ -1,12 +1,11 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
-  Input,
   OnInit,
-  Output,
   TemplateRef,
-  ViewChild
+  ViewChild,
+  input,
+  output
 } from '@angular/core';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 
@@ -19,9 +18,9 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WyCarouselComponent implements OnInit {
-  @Input() activeIndex = 0;
+  activeIndex = input(0);
 
-  @Output() changeSlide = new EventEmitter<'pre' | 'next'>();
+  changeSlide = output<'pre' | 'next'>();
 
   @ViewChild('dot', { static: true }) dotRef: TemplateRef<any>;
 

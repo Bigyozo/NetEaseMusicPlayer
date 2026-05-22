@@ -57,4 +57,4 @@ Thumbs.db
 
 # Proxy config (environment-specific, use proxyconfig.js with env vars instead)
 proxyconfig.json
-.vscode/settings.json
+proxyconfig.js

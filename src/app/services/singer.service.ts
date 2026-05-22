@@ -2,7 +2,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Singer, SingerDetail } from './data.types/common.types';
 import { API_CONFIG } from './tokens';
@@ -25,7 +25,8 @@ const defaultParams: SingerParams = {
   providedIn: 'root'
 })
 export class SingerService {
-  constructor(private http: HttpClient, @Inject(API_CONFIG) private uri: string) {}
+  private uri = inject(API_CONFIG);
+  constructor(private http: HttpClient) {}
 
   getEnterSinger(args: SingerParams = defaultParams): Observable<Singer[]> {
     return this.http
@@ -33,13 +34,13 @@ export class SingerService {
       .pipe(map((res: { artists: Singer[] }) => res.artists));
   }
 
-  // 获取歌手详情和热门歌曲
+  // アーティスト詳細と人気曲を取得
   getSingerDetail(id: string): Observable<SingerDetail> {
     const params = new HttpParams().set('id', id);
     return this.http.get(this.uri + 'artists', { params }).pipe(map((res) => res as SingerDetail));
   }
 
-  // 获取相似歌手详情
+  // 似たアーティストの詳細を取得
   getSimilarSinger(id: string): Observable<Singer[]> {
     const params = new HttpParams().set('id', id);
     return this.http.get(this.uri + 'simi/artist', { params }).pipe(

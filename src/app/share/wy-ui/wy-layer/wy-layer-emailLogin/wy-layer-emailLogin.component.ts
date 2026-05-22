@@ -1,12 +1,11 @@
-import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LANGUAGE_JP } from 'src/app/language/jp';
 import { LanguageRes } from 'src/app/services/data.types/common.types';
 import { EmailLoginParams, PhoneLoginParams } from 'src/app/services/data.types/member.type';
 import { LanguageService } from 'src/app/services/language.service';
 import { codeJson } from 'src/app/utils/base64';
 
 import {
-    ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit,
-    Output, SimpleChanges
+    ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, effect, input, output
 } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -23,13 +22,14 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
   styleUrls: ['./wy-layer-emailLogin.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class WyLayerEmailLoginComponent implements OnInit, OnChanges {
-  lanRes: LanguageRes = LANGUAGE_CH;
-  @Input() wyRememberLogin: EmailLoginParams;
-  @Output() onChangeModalType = new EventEmitter<string | void>();
-  @Input() visible = false;
-  @Output() onLogin = new EventEmitter<PhoneLoginParams>();
+export class WyLayerEmailLoginComponent{
+  lanRes: LanguageRes = LANGUAGE_JP;
+  wyRememberLogin = input.required<EmailLoginParams>();
+  onChangeModalType = output<string | void>();
+  visible = input(false);
+  onLogin = output<PhoneLoginParams>();
   formModel: FormGroup;
+  private visibleFirstRun = true;
   constructor(
     private fb: FormBuilder,
     private languageService: LanguageService,
@@ -40,33 +40,30 @@ export class WyLayerEmailLoginComponent implements OnInit, OnChanges {
       password: ['', [Validators.required, Validators.minLength(6)]],
       remember: [false]
     });
-    this.languageService.language$.subscribe((item) => {
-      this.lanRes = item.res;
+    effect(() => {
+      this.lanRes = this.languageService.language().res;
       this.cdr.markForCheck();
     });
-  }
-
-  ngOnInit() {}
-
-  ngOnChanges(changes: SimpleChanges): void {
-    const userLoginParams = changes.wyRememberLogin;
-    const visible = changes.visible;
-    if (userLoginParams) {
+    effect(() => {
+      const params = this.wyRememberLogin();
       let email = '';
       let password = '';
       let remember = false;
-      if (userLoginParams.currentValue) {
-        const value = codeJson(userLoginParams.currentValue, 'decode');
+      if (params) {
+        const value = codeJson(params, 'decode');
         email = value.email;
         password = value.password;
         remember = value.remember;
       }
       this.setModel({ email, password, remember });
-    }
-    if (visible && !visible.firstChange) {
+    });
+    effect(() => {
+      this.visible();
+      if (this.visibleFirstRun) { this.visibleFirstRun = false; return; }
       this.formModel.markAllAsTouched();
-    }
+    });
   }
+
 
   private setModel({ email, password, remember }) {
     this.formModel = this.fb.group({

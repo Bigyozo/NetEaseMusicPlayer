@@ -1,25 +1,21 @@
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Singer, Song } from 'src/app/services/data.types/common.types';
 import { RecordVal, User } from 'src/app/services/data.types/member.type';
 import { MemberService, RecordType } from 'src/app/services/member.service';
 import { SheetService } from 'src/app/services/sheet.service';
 import { SongService } from 'src/app/services/song.service';
-import { AppStoreModule } from 'src/app/store';
-import { SetShareInfo } from 'src/app/store/actions/member.action';
 import { BatchActionsService } from 'src/app/store/batch-actions.service';
-import { PlayState } from 'src/app/store/reducers/player.reducer';
-import { getCurrentSong } from 'src/app/store/selectors/play.selectors';
+import { MemberStoreService } from 'src/app/store/member-store.service';
+import { PlayerStoreService } from 'src/app/store/player-store.service';
 import { findIndex } from 'src/app/utils/array';
 
 import {
-    ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit
+    ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, effect
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RecordsComponent } from '../components/records/records.component';
-import { createFeatureSelector, select, Store } from '@ngrx/store';
 
 @Component({
   standalone: true,
@@ -35,13 +31,12 @@ import { createFeatureSelector, select, Store } from '@ngrx/store';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RecordDetailComponent implements OnInit, OnDestroy {
+export class RecordDetailComponent implements OnInit {
   user: User;
   records: RecordVal[];
   recordType = RecordType.weekData;
   private currentSong: Song;
   currentIndex = -1;
-  private destory$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
@@ -50,41 +45,28 @@ export class RecordDetailComponent implements OnInit, OnDestroy {
     private memberService: MemberService,
     private songService: SongService,
     private nzMessageService: NzMessageService,
-    private store$: Store<AppStoreModule>,
+    private playerStore: PlayerStoreService,
+    private memberStore: MemberStoreService,
     private cdr: ChangeDetectorRef
   ) {
     this.route.data.pipe(map((res) => res.user)).subscribe(([user, userRecord]) => {
       this.user = user;
       this.records = userRecord;
-      this.listenCurrentSong();
+    });
+    effect(() => {
+      const song = this.playerStore.currentSong();
+      this.currentSong = song;
+      if (song && this.records) {
+        const songs = this.records.map((item) => item.song);
+        this.currentIndex = findIndex(songs, song);
+      } else {
+        this.currentIndex = -1;
+      }
+      this.cdr.markForCheck();
     });
   }
 
   ngOnInit() {}
-
-  ngOnDestroy(): void {
-    this.destory$.next();
-    this.destory$.complete();
-  }
-
-  private listenCurrentSong() {
-    this.store$
-      .pipe(
-        select(createFeatureSelector<PlayState>('player')),
-        select(getCurrentSong),
-        takeUntil(this.destory$)
-      )
-      .subscribe((song) => {
-        this.currentSong = song;
-        if (song) {
-          const songs = this.records.map((item) => item.song);
-          this.currentIndex = findIndex(songs, song);
-        } else {
-          this.currentIndex = -1;
-        }
-        this.cdr.markForCheck();
-      });
-  }
 
   onPlaySheet(id: number) {
     this.sheetService.playsheet(id).subscribe((list) => {
@@ -118,7 +100,7 @@ export class RecordDetailComponent implements OnInit, OnDestroy {
 
   onShareSong(resource: Song, type = 'song') {
     const txt = this.makeTxt('歌曲', resource.name, resource.ar);
-    this.store$.dispatch(SetShareInfo({ info: { id: resource.id.toString(), type, txt } }));
+    this.memberStore.shareInfo.set({ id: resource.id.toString(), type, txt });
   }
 
   private makeTxt(type: string, name: string, makeBy: Singer[]): string {

@@ -1,12 +1,11 @@
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
-import { LANGUAGE_CH } from 'src/app/language/ch';
+import { map } from 'rxjs/operators';
+import { LANGUAGE_JP } from 'src/app/language/jp';
 import { LanguageService } from 'src/app/services/language.service';
-import { SetShareInfo } from 'src/app/store/actions/member.action';
-import { PlayState } from 'src/app/store/reducers/player.reducer';
+import { MemberStoreService } from 'src/app/store/member-store.service';
+import { PlayerStoreService } from 'src/app/store/player-store.service';
 
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit, effect } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -15,14 +14,11 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { ImgDefaultDirective } from '../../share/directives/img-default.directive';
 import { FormatTimePipe } from '../../share/pipes/format-time.pipe';
-import { createFeatureSelector, select, Store } from '@ngrx/store';
 
 import { LanguageRes, Singer, Song, SongSheet } from '../../services/data.types/common.types';
 import { MemberService } from '../../services/member.service';
 import { SongService } from '../../services/song.service';
 import { BatchActionsService } from '../../store/batch-actions.service';
-import { AppStoreModule } from '../../store/index';
-import { getCurrentSong } from '../../store/selectors/play.selectors';
 import { findIndex } from '../../utils/array';
 
 @Component({
@@ -32,8 +28,8 @@ import { findIndex } from '../../utils/array';
   templateUrl: './sheet-info.component.html',
   styleUrls: ['./sheet-info.component.less']
 })
-export class SheetInfoComponent implements OnInit, OnDestroy {
-  lanRes: LanguageRes = LANGUAGE_CH;
+export class SheetInfoComponent implements OnInit {
+  lanRes: LanguageRes = LANGUAGE_JP;
   sheetInfo: SongSheet;
 
   description = {
@@ -48,12 +44,12 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
   };
 
   currentSong: Song;
-  private destroy$ = new Subject<void>();
   currentIndex = -1;
 
   constructor(
     private route: ActivatedRoute,
-    private store$: Store<AppStoreModule>,
+    private playerStore: PlayerStoreService,
+    private memberStore: MemberStoreService,
     private songService: SongService,
     private batchActionsService: BatchActionsService,
     private memberService: MemberService,
@@ -65,33 +61,19 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
       if (res.description) {
         this.changeDesc(res.description);
       }
-      this.listenCurrent();
     });
-    this.languageService.language$.subscribe((item) => {
-      this.lanRes = item.res;
+    effect(() => {
+      const song = this.playerStore.currentSong();
+      this.currentSong = song;
+      if (song && this.sheetInfo) {
+        this.currentIndex = findIndex(this.sheetInfo.tracks, song);
+      } else {
+        this.currentIndex = -1;
+      }
     });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  private listenCurrent() {
-    this.store$
-      .pipe(
-        select(createFeatureSelector<PlayState>('player')),
-        select(getCurrentSong),
-        takeUntil(this.destroy$)
-      )
-      .subscribe((song) => {
-        this.currentSong = song;
-        if (song) {
-          this.currentIndex = findIndex(this.sheetInfo.tracks, song);
-        } else {
-          this.currentIndex = -1;
-        }
-      });
+    effect(() => {
+      this.lanRes = this.languageService.language().res;
+    });
   }
 
   private changeDesc(desc: string) {
@@ -168,7 +150,7 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
     } else {
       txt = this.makeTxt('歌曲', resource.name, (resource as Song).ar);
     }
-    this.store$.dispatch(SetShareInfo({ info: { id: resource.id.toString(), type, txt } }));
+    this.memberStore.shareInfo.set({ id: resource.id.toString(), type, txt });
   }
 
   private makeTxt(type: string, name: string, makeBy: string | Singer[]): string {

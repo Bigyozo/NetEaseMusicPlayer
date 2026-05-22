@@ -1,10 +1,10 @@
-import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LANGUAGE_JP } from 'src/app/language/jp';
 import { LanguageRes } from 'src/app/services/data.types/common.types';
 import { LanguageService } from 'src/app/services/language.service';
 import { ImgDefaultDirective } from '../../../directives/img-default.directive';
 
 import {
-    ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnInit, Output
+    ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, effect, output
 } from '@angular/core';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 
@@ -26,7 +26,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
               nzBlock
               (click)="onChangeModalType.emit('loginByPhone')"
             >
-              <!-- 手机登陆 -->
+              <!-- 電話番号でログイン -->
               {{ lanRes.C00005 }}
             </button>
             <button
@@ -36,11 +36,11 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
               nzBlock
               (click)="onChangeModalType.emit('loginByEmail')"
             >
-              <!-- 邮箱登陆 -->
+              <!-- メールアドレスでログイン -->
               {{ lanRes.C00006 }}
             </button>
             <button nz-button nzSize="large" nzBlock (click)="onChangeModalType.emit('register')">
-              <!-- 注册 -->
+              <!-- 登録 -->
               {{ lanRes.C00007 }}
             </button>
           </div>
@@ -52,11 +52,11 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WyLayerDefaultComponent implements OnInit {
-  lanRes: LanguageRes = LANGUAGE_CH;
-  @Output() onChangeModalType = new EventEmitter<string | void>();
+  lanRes: LanguageRes = LANGUAGE_JP;
+  onChangeModalType = output<string | void>();
   constructor(private languageService: LanguageService, private cdr: ChangeDetectorRef) {
-    this.languageService.language$.subscribe((item) => {
-      this.lanRes = item.res;
+    effect(() => {
+      this.lanRes = this.languageService.language().res;
       this.cdr.markForCheck();
     });
   }

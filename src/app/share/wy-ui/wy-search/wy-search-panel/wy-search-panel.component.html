@@ -4,17 +4,18 @@
       <div class="hd">
         <i class="ico ico-song"></i>
         <span>
-          <!-- 单曲 -->
+          <!-- 楽曲 -->
           {{ lanRes.C00074 }}
         </span>
       </div>
       <ul>
-        <li
-          class="ellipsis"
-          *ngFor="let item of searchResult?.songs"
-          (mousedown)="toInfo(['/songInfo', item.id])"
-          [innerHTML]="item.name"
-        ></li>
+        @for (item of searchResult?.songs; track item.id) {
+          <li
+            class="ellipsis"
+            (mousedown)="toInfo(['/songInfo', item.id])"
+            [innerHTML]="item.name"
+          ></li>
+        }
       </ul>
     </div>
 
@@ -22,17 +23,18 @@
       <div class="hd">
         <i class="ico ico-singer"></i>
         <span>
-          <!-- 歌手 -->
+          <!-- アーティスト -->
           {{ lanRes.C00012 }}
         </span>
       </div>
       <ul>
-        <li
-          class="ellipsis"
-          *ngFor="let item of searchResult?.artists"
-          (mousedown)="toInfo(['/singer', item.id])"
-          [innerHTML]="item.name"
-        ></li>
+        @for (item of searchResult?.artists; track item.id) {
+          <li
+            class="ellipsis"
+            (mousedown)="toInfo(['/singer', item.id])"
+            [innerHTML]="item.name"
+          ></li>
+        }
       </ul>
     </div>
 
@@ -40,17 +42,18 @@
       <div class="hd">
         <i class="ico ico-sheet"></i>
         <span>
-          <!-- 歌单 -->
+          <!-- プレイリスト -->
           {{ lanRes.C00003 }}
         </span>
       </div>
       <ul>
-        <li
-          class="ellipsis"
-          *ngFor="let item of searchResult?.playlists"
-          (mousedown)="toInfo(['/sheetInfo', item.id])"
-          [innerHTML]="item.name"
-        ></li>
+        @for (item of searchResult?.playlists; track item.id) {
+          <li
+            class="ellipsis"
+            (mousedown)="toInfo(['/sheetInfo', item.id])"
+            [innerHTML]="item.name"
+          ></li>
+        }
       </ul>
     </div>
   </div>

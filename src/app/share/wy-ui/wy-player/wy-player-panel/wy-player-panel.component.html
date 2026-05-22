@@ -1,24 +1,24 @@
-<div class="play-panel" [class.show]="show">
+<div class="play-panel" [class.show]="show()">
   <div class="hd">
     <div class="hdc">
       <h4>
-        <!-- 播放列表 -->
+        <!-- プレイリスト -->
         {{ lanRes.C00071 }}
-        (<span>{{ songList.length }}</span
+        (<span>{{ songList().length }}</span
         >)
       </h4>
       <div class="add-all">
         <i class="icon" title="Collect All"></i>
-        <!-- 收藏全部 -->
+        <!-- 全てお気に入り -->
         {{ lanRes.C00072 }}
       </div>
       <span class="line"></span>
       <div class="clear-all" (click)="onClearSong.emit()">
         <i class="icon trush" title="clear"></i>
-        <!-- 清空 -->
+        <!-- クリア -->
         {{ lanRes.C00073 }}
       </div>
-      <p class="playing-name">{{ currentSong?.name }}</p>
+      <p class="playing-name">{{ currentSong()?.name }}</p>
       <i class="icon close" (click)="onClose.emit()"></i>
     </div>
   </div>
@@ -26,44 +26,49 @@
   <div class="bd">
     <img appImgDefault src="//music.163.com/api/img/blur/109951163826278397" class="imgbg" />
     <div class="msk"></div>
-    <app-wy-scroll class="list-wrap" [data]="songList" (onScrollEnd)="scrollY = $event">
+    <app-wy-scroll class="list-wrap" [data]="songList()" (onScrollEnd)="scrollY = $event">
       <ul>
-        <li
-          *ngFor="let item of songList; index as i"
-          [class.current]="currentIndex === i"
-          (click)="onChangeSong.emit(item)"
-        >
-          <i class="col arrow"></i>
-          <div class="col name ellipsis">{{ item.name }}</div>
-          <div class="col icons">
-            <i class="ico like" title="Collect" (click)="likeSong($event, item.id)"></i>
-            <i class="ico share" title="Share" (click)="shareSong($event, item)"></i>
-            <i
-              class="ico trush"
-              title="Delete"
-              data-act="delete"
-              (click)="onDeleteSong.emit(item)"
-            ></i>
-          </div>
-          <div class="singers clearfix ellipsis">
-            <div class="singer-item" *ngFor="let singer of item.ar; last as isLast">
-              <a class="col ellipsis" (click)="toInfo($event, ['/singer', singer.id])">{{
-                singer.name
-              }}</a>
-              <span [hidden]="isLast">/</span>
+        @for (item of songList(); track item.id; let i = $index) {
+          <li
+            [class.current]="currentIndex === i"
+            (click)="onChangeSong.emit(item)"
+          >
+            <i class="col arrow"></i>
+            <div class="col name ellipsis">{{ item.name }}</div>
+            <div class="col icons">
+              <i class="ico like" title="Collect" (click)="likeSong($event, item.id)"></i>
+              <i class="ico share" title="Share" (click)="shareSong($event, item)"></i>
+              <i
+                class="ico trush"
+                title="Delete"
+                data-act="delete"
+                (click)="onDeleteSong.emit(item)"
+              ></i>
             </div>
-          </div>
-          <div class="col duration">{{ item.dt / 1000 | formatTime }}</div>
-          <div class="col link" (click)="toInfo($event, ['/songInfo', item.id])"></div>
-        </li>
+            <div class="singers clearfix ellipsis">
+              @for (singer of item.ar; track singer.id; let isLast = $last) {
+                <div class="singer-item">
+                  <a class="col ellipsis" (click)="toInfo($event, ['/singer', singer.id])">{{
+                    singer.name
+                  }}</a>
+                  <span [hidden]="isLast">/</span>
+                </div>
+              }
+            </div>
+            <div class="col duration">{{ item.dt / 1000 | formatTime }}</div>
+            <div class="col link" (click)="toInfo($event, ['/songInfo', item.id])"></div>
+          </li>
+        }
       </ul>
       <ul></ul>
     </app-wy-scroll>
     <app-wy-scroll class="list-lyric" [data]="currentLyric">
       <ul>
-        <li *ngFor="let item of currentLyric; index as i" [class.current]="currentLineNum === i">
-          {{ item.txt }}<br />{{ item.txtCn }}
-        </li>
+        @for (item of currentLyric; track $index; let i = $index) {
+          <li [class.current]="currentLineNum === i">
+            {{ item.txt }}<br />{{ item.txtCn }}
+          </li>
+        }
       </ul>
     </app-wy-scroll>
   </div>

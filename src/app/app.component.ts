@@ -8,7 +8,6 @@ import { NzFloatButtonModule } from 'ng-zorro-antd/float-button';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { interval, Observable, Subject } from 'rxjs';
 import { filter, map, mergeMap, takeUntil } from 'rxjs/operators';
-import { MemberState, ModalTypes, ShareInfo } from 'src/app/store/reducers/member.reducer';
 import { WySearchComponent } from './share/wy-ui/wy-search/wy-search.component';
 import { WyPlayerComponent } from './share/wy-ui/wy-player/wy-player.component';
 import { WyLayerModalComponent } from './share/wy-ui/wy-layer/wy-layer-modal/wy-layer-modal.component';
@@ -19,32 +18,22 @@ import { WyLayerShareComponent } from './share/wy-ui/wy-layer/wy-layer-share/wy-
 import { WyLayerRegisterComponent } from './share/wy-ui/wy-layer/wy-layer-register/wy-layer-register.component';
 import { WyLayerDefaultComponent } from './share/wy-ui/wy-layer/wy-layer-default/wy-layer-default.component';
 
-import { CommonModule, DOCUMENT } from '@angular/common';
-import { Component, Inject, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, OnDestroy, effect } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router, RouterModule } from '@angular/router';
-import { createFeatureSelector, select, Store } from '@ngrx/store';
 
-import { LANGUAGE_CH } from './language/ch';
+import { LANGUAGE_JP } from './language/jp';
 import { LanguageRes, SearchResult, SongSheet } from './services/data.types/common.types';
 import { EmailLoginParams, PhoneLoginParams, User } from './services/data.types/member.type';
 import { LanguageService } from './services/language.service';
 import { LikeSongParams, MemberService, ShareParams } from './services/member.service';
 import { SearchService } from './services/search.service';
 import { StorageService } from './services/storage.service';
-import { SetModalType, SetModalVisible, SetUserId } from './store/actions/member.action';
 import { BatchActionsService } from './store/batch-actions.service';
-import { AppStoreModule } from './store/index';
-import {
-    getLikeId, getModalType, getModalVisible, getShareInfo
-} from './store/selectors/member.selectors';
+import { MemberStoreService, ModalTypes, ShareInfo } from './store/member-store.service';
 import { codeJson } from './utils/base64';
 import { isEmptyObject } from './utils/tools';
-
-interface StateArrType {
-  type: any;
-  cb: (param: any) => void;
-}
 
 @Component({
   standalone: true,
@@ -73,21 +62,21 @@ interface StateArrType {
   styleUrls: ['./app.component.less']
 })
 export class AppComponent implements OnDestroy {
-  lanRes: LanguageRes = LANGUAGE_CH;
+  lanRes: LanguageRes = LANGUAGE_JP;
   title = 'MusicPlayer by Bigyozo';
   menu = [
     {
-      label: '发现',
+      label: '探索',
       path: '/home'
     },
     {
-      label: '歌单',
+      label: 'ソングシート',
       path: '/sheet'
     }
   ];
 
   languages = [
-    { label: '中文', code: 'ch' },
+    { label: '日本語', code: 'jp' },
     { label: 'English', code: 'en' }
   ];
 
@@ -96,11 +85,8 @@ export class AppComponent implements OnDestroy {
   wyRememberPhoneLogin: PhoneLoginParams;
   wyRememberEmailLogin: EmailLoginParams;
   mySheets: SongSheet[];
-  // 被收藏歌曲ID
   likeId: string;
-  // 弹框显示
   visible: boolean;
-  // 弹窗loading
   showSpin = false;
   currentModalType: ModalTypes = ModalTypes.Default;
   shareInfo: ShareInfo;
@@ -111,7 +97,7 @@ export class AppComponent implements OnDestroy {
 
   constructor(
     private searchService: SearchService,
-    private store$: Store<AppStoreModule>,
+    private memberStore: MemberStoreService,
     private batchActionsService: BatchActionsService,
     private memberService: MemberService,
     private messageService: NzMessageService,
@@ -119,15 +105,14 @@ export class AppComponent implements OnDestroy {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private titleSerivce: Title,
-    private languageService: LanguageService,
-    @Inject(DOCUMENT) private doc: Document
+    private languageService: LanguageService
   ) {
     const userId = this.storgeService.getStorage('wyUserID');
     if (userId) {
       this.memberService.getUserDetail(userId).subscribe((user) => {
         this.user = user;
       });
-      this.store$.dispatch(SetUserId({ userId }));
+      this.memberStore.userId.set(userId);
     }
     const wyRememberPhoneLogin = this.storgeService.getStorage('wyRememberPhoneLogin');
     if (wyRememberPhoneLogin) {
@@ -137,7 +122,11 @@ export class AppComponent implements OnDestroy {
     if (wyRememberEmailLogin) {
       this.wyRememberEmailLogin = JSON.parse(wyRememberEmailLogin);
     }
-    this.listenStates();
+
+    effect(() => this.watchLikeId(this.memberStore.likeId()));
+    effect(() => this.watchModalVisible(this.memberStore.modalVisible()));
+    effect(() => this.watchModalType(this.memberStore.modalType()));
+    effect(() => this.watchShareInfo(this.memberStore.shareInfo()));
 
     this.router.events
       .pipe(filter((evt) => evt instanceof NavigationStart), takeUntil(this.destroy$))
@@ -149,8 +138,8 @@ export class AppComponent implements OnDestroy {
       filter((evt) => evt instanceof NavigationEnd)
     ) as Observable<NavigationEnd>;
     this.setLoadIngBar();
-    this.languageService.language$.pipe(takeUntil(this.destroy$)).subscribe((item) => {
-      this.lanRes = item.res;
+    effect(() => {
+      this.lanRes = this.languageService.language().res;
       this.menu = [
         {
           label: this.lanRes.C00002,
@@ -196,33 +185,6 @@ export class AppComponent implements OnDestroy {
       });
     this.navEnd.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.loadPercent = 100;
-      //  this.doc.documentElement.scrollTop = 0;
-    });
-  }
-
-  private listenStates() {
-    const appStore$ = this.store$.pipe(select(createFeatureSelector<MemberState>('member')));
-    const stateArr: StateArrType[] = [
-      {
-        type: getLikeId,
-        cb: (id) => this.watchLikeId(id)
-      },
-      {
-        type: getModalVisible,
-        cb: (visible) => this.watchModalVisible(visible)
-      },
-      {
-        type: getModalType,
-        cb: (type) => this.watchModalType(type)
-      },
-      {
-        type: getShareInfo,
-        cb: (info) => this.watchShareInfo(info)
-      }
-    ];
-
-    stateArr.forEach((item) => {
-      appStore$.pipe(select(item.type), takeUntil(this.destroy$)).subscribe(item.cb);
     });
   }
 
@@ -237,7 +199,7 @@ export class AppComponent implements OnDestroy {
     }
   }
 
-  private watchLikeId(id: any) {
+  private watchLikeId(id: string) {
     if (id) {
       this.likeId = id;
     }
@@ -287,7 +249,7 @@ export class AppComponent implements OnDestroy {
   }
 
   onChangeModalType(type = ModalTypes.Default) {
-    this.store$.dispatch(SetModalType({ modalType: type }));
+    this.memberStore.modalType.set(type);
   }
 
   openModal(type: ModalTypes, isOpen = true) {
@@ -300,10 +262,9 @@ export class AppComponent implements OnDestroy {
       (user) => {
         this.user = user;
         this.batchActionsService.controlModal(false);
-        //Login success
         this.alertMessage('success', this.lanRes.C00076);
         this.storgeService.setStorage({ key: 'wyUserID', value: user.profile.userId });
-        this.store$.dispatch(SetUserId({ userId: user.profile.userId.toString() }));
+        this.memberStore.userId.set(user.profile.userId.toString());
         if (params.remember) {
           this.storgeService.setStorage({
             key: 'wyRememberPhoneLogin',
@@ -316,7 +277,6 @@ export class AppComponent implements OnDestroy {
       },
       (error) => {
         this.showSpin = false;
-        //Login fail
         this.alertMessage('error', error.message || this.lanRes.C00077);
       }
     );
@@ -330,8 +290,7 @@ export class AppComponent implements OnDestroy {
         this.batchActionsService.controlModal(false);
         this.alertMessage('success', 'Login success');
         this.storgeService.setStorage({ key: 'wyUserID', value: user.profile.userId });
-        //  this.storgeService.setStorage({ key: 'cookie', value: user.cookie });
-        this.store$.dispatch(SetUserId({ userId: user.profile.userId.toString() }));
+        this.memberStore.userId.set(user.profile.userId.toString());
         if (params.remember) {
           this.storgeService.setStorage({
             key: 'wyRememberEmailLogin',
@@ -344,7 +303,6 @@ export class AppComponent implements OnDestroy {
       },
       (error) => {
         this.showSpin = false;
-        //'Login fail'
         this.alertMessage('error', error.message || this.lanRes.C00077);
       }
     );
@@ -355,41 +313,35 @@ export class AppComponent implements OnDestroy {
       () => {
         this.user = null;
         this.storgeService.removeStorge('wyUserID');
-        //  this.storgeService.removeStorge('cookie');
-        this.store$.dispatch(SetUserId({ userId: '' }));
+        this.memberStore.userId.set('');
         this.alertMessage('success', 'Logout success');
       },
       (error) => {
-        //'Login fail'
         this.alertMessage('error', error.message || this.lanRes.C00077);
       }
     );
   }
 
-  // 获取当前用户の歌单
   onLoadMySheets() {
     if (this.user) {
       this.memberService
         .getUserSheets(this.user.profile.userId.toString())
         .subscribe((userSheet) => {
           this.mySheets = userSheet.self;
-          this.store$.dispatch(SetModalVisible({ modalVisible: true }));
+          this.memberStore.modalVisible.set(true);
         });
     } else {
       this.openModal(ModalTypes.Default);
     }
   }
 
-  // 收藏歌曲
   onLikeSong(args: LikeSongParams) {
     this.memberService.likeSong(args).subscribe(
       () => {
         this.batchActionsService.controlModal(false);
-        //Collect success
         this.alertMessage('success', this.lanRes.C00078);
       },
       (error) => {
-        //Collect fail
         this.alertMessage('error', error.message || this.lanRes.C00079);
       }
     );
@@ -401,7 +353,6 @@ export class AppComponent implements OnDestroy {
         this.onLikeSong({ pid, tracks: this.likeId });
       },
       (error) => {
-        //Create fail
         this.alertMessage('error', error.message || this.lanRes.C00080);
       }
     );
@@ -415,19 +366,15 @@ export class AppComponent implements OnDestroy {
     this.memberService.shareResource(args).subscribe(
       () => {
         this.openModal(ModalTypes.Share, false);
-        //Share succes
         this.alertMessage('success', this.lanRes.C00081);
       },
       (error) => {
-        //Share fail
         this.alertMessage('error', error.message || this.lanRes.C00082);
       }
     );
   }
 
-  // 注册账号
   onRegister(phone: string) {
-    //not support register
     this.alertMessage('error', this.lanRes.C00083);
   }
 

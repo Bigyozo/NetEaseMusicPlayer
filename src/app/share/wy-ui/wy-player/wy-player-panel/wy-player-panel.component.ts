@@ -1,5 +1,5 @@
 import { timer } from 'rxjs';
-import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LANGUAGE_JP } from 'src/app/language/jp';
 import { LanguageRes, Song } from 'src/app/services/data.types/common.types';
 import { LanguageService } from 'src/app/services/language.service';
 import { SongService } from 'src/app/services/song.service';
@@ -7,14 +7,13 @@ import { findIndex } from 'src/app/utils/array';
 
 import {
   Component,
-  EventEmitter,
-  Input,
-  OnChanges,
   OnInit,
-  Output,
   QueryList,
-  SimpleChanges,
-  ViewChildren
+  ViewChildren,
+  effect,
+  input,
+  output,
+  untracked
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -30,21 +29,21 @@ import { ImgDefaultDirective } from '../../../directives/img-default.directive';
   templateUrl: './wy-player-panel.component.html',
   styleUrls: ['./wy-player-panel.component.less']
 })
-export class WyPlayerPanelComponent implements OnInit, OnChanges {
-  lanRes: LanguageRes = LANGUAGE_CH;
-  @Input() playing: boolean;
-  @Input() songList: Song[];
-  @Input() currentSong: Song;
+export class WyPlayerPanelComponent implements OnInit {
+  lanRes: LanguageRes = LANGUAGE_JP;
+  playing = input.required<boolean>();
+  songList = input.required<Song[]>();
+  currentSong = input.required<Song>();
   currentIndex: number;
-  @Input() show: boolean;
+  show = input.required<boolean>();
 
-  @Output() onClose = new EventEmitter<void>();
-  @Output() onChangeSong = new EventEmitter<Song>();
-  @Output() onDeleteSong = new EventEmitter<Song>();
-  @Output() onClearSong = new EventEmitter<void>();
-  @Output() onToInfo = new EventEmitter<[string, number]>();
-  @Output() onLikeSong = new EventEmitter<string>();
-  @Output() onShareSong = new EventEmitter<Song>();
+  onClose = output<void>();
+  onChangeSong = output<Song>();
+  onDeleteSong = output<Song>();
+  onClearSong = output<void>();
+  onToInfo = output<[string, number]>();
+  onLikeSong = output<string>();
+  onShareSong = output<Song>();
 
   scrollY = 0;
   currentLyric: BaseLyricLine[];
@@ -54,46 +53,45 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
   currentLineNum = 0;
   private startLine = 2;
   lyricRefs: NodeList;
+  private playingFirstRun = true;
+  private showFirstRun = true;
 
   constructor(private songService: SongService, private languageService: LanguageService) {
-    this.languageService.language$.subscribe((item) => {
-      this.lanRes = item.res;
+    effect(() => {
+      this.lanRes = this.languageService.language().res;
     });
-  }
-
-  ngOnInit() {}
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.playing) {
-      if (!changes.playing.firstChange) {
-        this.lyric && this.lyric.togglePlay(this.playing);
+    effect(() => {
+      const p = this.playing();
+      if (this.playingFirstRun) { this.playingFirstRun = false; return; }
+      this.lyric && this.lyric.togglePlay(p);
+    });
+    effect(() => {
+      const sl = this.songList();
+      const cs = untracked(() => this.currentSong());
+      if (cs) {
+        this.currentIndex = findIndex(sl, cs);
       }
-    }
-
-    if (changes.songList) {
-      if (this.currentSong) {
-        this.updateCurrentIndex();
-      }
-    }
-
-    if (changes.currentSong) {
-      if (this.currentSong) {
-        this.currentIndex = findIndex(this.songList, this.currentSong);
+    });
+    effect(() => {
+      const cs = this.currentSong();
+      if (cs) {
+        this.currentIndex = findIndex(untracked(() => this.songList()), cs);
         this.updateLyric();
-        if (this.show) {
+        if (untracked(() => this.show())) {
           this.scrollToCurrent();
         }
       } else {
         this.resetLyric();
       }
-    }
-
-    if (changes.show) {
-      if (!changes.show.firstChange && this.show) {
+    });
+    effect(() => {
+      const s = this.show();
+      if (this.showFirstRun) { this.showFirstRun = false; return; }
+      if (s) {
         this.wyScroll.first.refreshScroll();
         this.wyScroll.last.refreshScroll();
         timer(80).subscribe(() => {
-          if (this.currentSong) {
+          if (this.currentSong()) {
             this.scrollToCurrent(0);
           }
           if (this.lyricRefs) {
@@ -101,23 +99,25 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
           }
         });
       }
-    }
+    });
   }
 
+  ngOnInit() {}
+
   private updateCurrentIndex() {
-    this.currentIndex = findIndex(this.songList, this.currentSong);
+    this.currentIndex = findIndex(this.songList(), this.currentSong());
   }
 
   private updateLyric() {
     this.resetLyric();
-    this.songService.getLyric(this.currentSong.id).subscribe((res) => {
+    this.songService.getLyric(this.currentSong().id).subscribe((res) => {
       this.lyric = new WyLyric(res);
       this.currentLyric = this.lyric.lines;
       this.startLine = res.tlyric ? 1 : 2;
       this.handleLyric();
       this.wyScroll.last.scrollTo(0, 0);
 
-      if (this.playing) {
+      if (this.playing()) {
         this.lyric.play();
       }
     });

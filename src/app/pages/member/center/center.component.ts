@@ -1,30 +1,25 @@
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
-import { LANGUAGE_CH } from 'src/app/language/ch';
+import { map } from 'rxjs/operators';
+import { LANGUAGE_JP } from 'src/app/language/jp';
 import { LanguageRes, Singer, Song } from 'src/app/services/data.types/common.types';
 import { RecordVal, User, UserSheet } from 'src/app/services/data.types/member.type';
 import { LanguageService } from 'src/app/services/language.service';
 import { MemberService, RecordType } from 'src/app/services/member.service';
 import { SheetService } from 'src/app/services/sheet.service';
 import { SongService } from 'src/app/services/song.service';
-import { AppStoreModule } from 'src/app/store';
-import { SetShareInfo } from 'src/app/store/actions/member.action';
 import { BatchActionsService } from 'src/app/store/batch-actions.service';
-import { getCurrentSong } from 'src/app/store/selectors/play.selectors';
+import { MemberStoreService } from 'src/app/store/member-store.service';
+import { PlayerStoreService } from 'src/app/store/player-store.service';
 import { findIndex } from 'src/app/utils/array';
 
 import {
-    ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit
+    ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, effect
 } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ImgDefaultDirective } from '../../../share/directives/img-default.directive';
 import { SingleSheetComponent } from '../../../share/wy-ui/single-sheet/single-sheet.component';
 import { RecordsComponent } from '../components/records/records.component';
-import { createFeatureSelector, select, Store } from '@ngrx/store';
-
-import { PlayState } from '../../../store/reducers/player.reducer';
 
 @Component({
   standalone: true,
@@ -34,15 +29,14 @@ import { PlayState } from '../../../store/reducers/player.reducer';
   styleUrls: ['./center.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CenterComponent implements OnInit, OnDestroy {
-  lanRes: LanguageRes = LANGUAGE_CH;
+export class CenterComponent implements OnInit {
+  lanRes: LanguageRes = LANGUAGE_JP;
   user: User;
   records: RecordVal[];
   userSheet: UserSheet;
   recordType = RecordType.weekData;
   private currentSong: Song;
   currentIndex = -1;
-  private destory$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
@@ -51,7 +45,8 @@ export class CenterComponent implements OnInit, OnDestroy {
     private memberService: MemberService,
     private songService: SongService,
     private nzMessageService: NzMessageService,
-    private store$: Store<AppStoreModule>,
+    private playerStore: PlayerStoreService,
+    private memberStore: MemberStoreService,
     private cdr: ChangeDetectorRef,
     private languageService: LanguageService
   ) {
@@ -59,36 +54,22 @@ export class CenterComponent implements OnInit, OnDestroy {
       this.user = user;
       this.records = userRecord.slice(0, 10);
       this.userSheet = userSheet;
-      this.listenCurrentSong();
     });
-    this.languageService.language$.subscribe((item) => {
-      this.lanRes = item.res;
+    effect(() => {
+      const song = this.playerStore.currentSong();
+      this.currentSong = song;
+      if (song && this.records) {
+        const songs = this.records.map((item) => item.song);
+        this.currentIndex = findIndex(songs, song);
+      } else {
+        this.currentIndex = -1;
+      }
       this.cdr.markForCheck();
     });
-  }
-
-  ngOnDestroy(): void {
-    this.destory$.next();
-    this.destory$.complete();
-  }
-
-  private listenCurrentSong() {
-    this.store$
-      .pipe(
-        select(createFeatureSelector<PlayState>('player')),
-        select(getCurrentSong),
-        takeUntil(this.destory$)
-      )
-      .subscribe((song) => {
-        this.currentSong = song;
-        if (song) {
-          const songs = this.records.map((item) => item.song);
-          this.currentIndex = findIndex(songs, song);
-        } else {
-          this.currentIndex = -1;
-        }
-        this.cdr.markForCheck();
-      });
+    effect(() => {
+      this.lanRes = this.languageService.language().res;
+      this.cdr.markForCheck();
+    });
   }
 
   ngOnInit() {}
@@ -117,7 +98,6 @@ export class CenterComponent implements OnInit, OnDestroy {
         if (list.length) {
           this.batchActionsService.insertSong(list[0], isPlay);
         } else {
-          //无URL
           this.nzMessageService.create('warning', this.lanRes.C00085);
         }
       });
@@ -125,9 +105,8 @@ export class CenterComponent implements OnInit, OnDestroy {
   }
 
   onShareSong(resource: Song, type = 'song') {
-    //歌曲
     const txt = this.makeTxt(this.lanRes.C00046, resource.name, resource.ar);
-    this.store$.dispatch(SetShareInfo({ info: { id: resource.id.toString(), type, txt } }));
+    this.memberStore.shareInfo.set({ id: resource.id.toString(), type, txt });
   }
 
   private makeTxt(type: string, name: string, makeBy: Singer[]): string {

@@ -1,23 +1,13 @@
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { timer } from 'rxjs';
-import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LANGUAGE_JP } from 'src/app/language/jp';
 import { LanguageRes, Singer, Song } from 'src/app/services/data.types/common.types';
 import { LanguageService } from 'src/app/services/language.service';
-import { AppStoreModule } from 'src/app/store';
-import { SetShareInfo } from 'src/app/store/actions/member.action';
-import {
-    SetCurrentAction, SetCurrentIndex, SetPlayList, SetPlayMode
-} from 'src/app/store/actions/player.action';
-import { PlayState } from 'src/app/store/reducers/player.reducer';
-import {
-    getCurrentIndex, getCurrentSong, getPlayList, getPlayMode, getSongList
-} from 'src/app/store/selectors/play.selectors';
 import { findIndex, shuffle } from 'src/app/utils/array';
 
 import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, effect } from '@angular/core';
 import { Router } from '@angular/router';
-import { createFeatureSelector, select, Store } from '@ngrx/store';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -25,8 +15,8 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
 
 import { BatchActionsService } from '../../../store/batch-actions.service';
-import { CurrentActions } from '../../../store/reducers/player.reducer';
-import { getCurrentAction } from '../../../store/selectors/play.selectors';
+import { CurrentActions, PlayerStoreService } from '../../../store/player-store.service';
+import { MemberStoreService } from '../../../store/member-store.service';
 import { PlayMode, StateArrType } from './player-types';
 import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.component';
 import { WySliderComponent } from '../wy-slider/wy-slider.component';
@@ -71,14 +61,13 @@ enum TipTitles {
   ]
 })
 export class WyPlayerComponent implements OnInit {
-  lanRes: LanguageRes = LANGUAGE_CH;
+  lanRes: LanguageRes = LANGUAGE_JP;
   controlTooltip = {
     title: '',
     show: false
   };
   showPlayer = 'hide';
   isLocked = false;
-  // 是否正在动画
   isAnimating = false;
 
   sliderValue = 0;
@@ -98,17 +87,12 @@ export class WyPlayerComponent implements OnInit {
 
   volume = 7;
 
-  // 是否显示音量面板
   showVolumePanel = false;
   showListPanel = false;
-  // 是否绑定Clickoutside
   bindFlag = false;
 
   currentMode: PlayMode;
-
   modeCount = 0;
-
-  // private winClick: Subscription;
 
   @ViewChild('audio', { static: true }) private audio: ElementRef;
   private audioEl: HTMLAudioElement;
@@ -116,47 +100,22 @@ export class WyPlayerComponent implements OnInit {
   private playerPanel: WyPlayerPanelComponent;
 
   constructor(
-    private store$: Store<AppStoreModule>,
+    private playerStore: PlayerStoreService,
+    private memberStore: MemberStoreService,
     private nzModalService: NzModalService,
     private batchActionsService: BatchActionsService,
     private router: Router,
     private languageService: LanguageService
   ) {
-    const appstore$ = this.store$.pipe(select(createFeatureSelector<PlayState>('player')));
+    effect(() => this.watchPlayMode(this.playerStore.playMode()));
+    effect(() => this.watchList(this.playerStore.songList(), 'songList'));
+    effect(() => this.watchList(this.playerStore.playList(), 'playList'));
+    effect(() => this.watchCurrentIndex(this.playerStore.currentIndex()));
+    effect(() => this.watchCurrentSong(this.playerStore.currentSong()));
+    effect(() => this.watchCurrentAction(this.playerStore.currentAction()));
 
-    const stateArr: StateArrType[] = [
-      {
-        type: getPlayMode,
-        cb: (mode) => this.watchPlayMode(mode)
-      },
-      {
-        type: getSongList,
-        cb: (list) => this.watchList(list, 'songList')
-      },
-      {
-        type: getPlayList,
-        cb: (list) => this.watchList(list, 'playList')
-      },
-      {
-        type: getCurrentIndex,
-        cb: (index) => this.watchCurrentIndex(index)
-      },
-      {
-        type: getCurrentSong,
-        cb: (song) => this.watchCurrentSong(song)
-      },
-      {
-        type: getCurrentAction,
-        cb: (currentAction) => this.watchCurrentAction(currentAction)
-      }
-    ];
-
-    stateArr.forEach((item) => {
-      appstore$.pipe(select(item.type)).subscribe(item.cb);
-    });
-
-    this.languageService.language$.subscribe((item) => {
-      this.lanRes = item.res;
+    effect(() => {
+      this.lanRes = this.languageService.language().res;
     });
   }
 
@@ -170,7 +129,7 @@ export class WyPlayerComponent implements OnInit {
         this.showToolTip();
       }
     }
-    this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Other }));
+    this.playerStore.currentAction.set(CurrentActions.Other);
   }
 
   private showToolTip() {
@@ -199,13 +158,13 @@ export class WyPlayerComponent implements OnInit {
         list = shuffle(this.songList);
       }
       this.updateCurrentIndex(list, this.currentSong);
-      this.store$.dispatch(SetPlayList({ playList: list }));
+      this.playerStore.playList.set(list);
     }
   }
 
   private updateCurrentIndex(list: Song[], currentSong: Song) {
     const newIndex = findIndex(list, currentSong);
-    this.store$.dispatch(SetCurrentIndex({ currentIndex: newIndex }));
+    this.playerStore.currentIndex.set(newIndex);
   }
 
   private watchList(list: Song[], type: string) {
@@ -223,11 +182,11 @@ export class WyPlayerComponent implements OnInit {
     }
   }
 
-  // 播放，暂停
+  // 再生・一時停止
   onToggle() {
     if (!this.currentSong) {
       if (this.playList.length) {
-        this.store$.dispatch(SetCurrentIndex({ currentIndex: 0 }));
+        this.playerStore.currentIndex.set(0);
         this.songReady = false;
       }
     } else {
@@ -266,7 +225,7 @@ export class WyPlayerComponent implements OnInit {
     }
   }
 
-  // 播放错误（无歌曲）
+  // 再生エラー（楽曲なし）
   onError() {
     this.isPlaying = false;
     this.bufferOffset = 0;
@@ -281,7 +240,7 @@ export class WyPlayerComponent implements OnInit {
   }
 
   private updateIndex(index: number) {
-    this.store$.dispatch(SetCurrentIndex({ currentIndex: index }));
+    this.playerStore.currentIndex.set(index);
     this.songReady = false;
   }
 
@@ -300,7 +259,7 @@ export class WyPlayerComponent implements OnInit {
   }
 
   changeMode() {
-    this.store$.dispatch(SetPlayMode({ playMode: modeTypes[++this.modeCount % 3] }));
+    this.playerStore.playMode.set(modeTypes[++this.modeCount % 3]);
   }
 
   ngOnInit() {
@@ -330,12 +289,10 @@ export class WyPlayerComponent implements OnInit {
     }
   }
 
-  // 控制音量面板
   toggleVolPanel() {
     this.togglePanel('showVolumePanel');
   }
 
-  // 控制音量面板
   toggleListPanel() {
     if (this.songList.length) {
       this.togglePanel('showListPanel');
@@ -346,26 +303,6 @@ export class WyPlayerComponent implements OnInit {
     this[type] = !this[type];
     this.bindFlag = this.showVolumePanel || this.showListPanel;
   }
-
-  // private bindDocumentClickListener() {
-  //   if (!this.winClick) {
-  //     this.winClick = fromEvent(this.doc, 'click').subscribe(() => {
-  //       if (!this.selfClick) {
-  //         this.showVolumePanel = false;
-  //         this.showListPanel = false;
-  //         this.unbindDocumentClickListener();
-  //       }
-  //       this.selfClick = false;
-  //     });
-  //   }
-  // }
-
-  // private unbindDocumentClickListener() {
-  //   if (this.winClick) {
-  //     this.winClick.unsubscribe();
-  //     this.winClick = null;
-  //   }
-  // }
 
   private play() {
     this.audioEl.play();
@@ -387,7 +324,6 @@ export class WyPlayerComponent implements OnInit {
   }
 
   onClearSong() {
-    //确认清空列表？
     this.nzModalService.confirm({
       nzTitle: this.lanRes.C00084,
       nzOnOk: () => {
@@ -423,9 +359,8 @@ export class WyPlayerComponent implements OnInit {
   }
 
   onShareSong(resource: Song, type = 'song') {
-    //歌曲
     const txt = this.makeTxt(this.lanRes.C00046, resource.name, resource.ar);
-    this.store$.dispatch(SetShareInfo({ info: { id: resource.id.toString(), type, txt } }));
+    this.memberStore.shareInfo.set({ id: resource.id.toString(), type, txt });
   }
 
   private makeTxt(type: string, name: string, makeBy: Singer[]): string {

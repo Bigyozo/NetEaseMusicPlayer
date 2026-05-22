@@ -1,33 +1,38 @@
 <div
+  class="modal-mask"
+  [hidden]="showModal() === 'hide'"
+  (click)="hide()"
+></div>
+<div
   class="m-layer"
   #modalContainer
-  [@showHide]="showModal"
+  [@showHide]="showModal()"
   cdkDrag
   cdkDragBoundary=".cdk-overlay-container"
 >
   <div class="zbar" cdkDragHandle>
-    <div class="zttl f-thide">{{ modalTitle[currentModalType] }}</div>
+    <div class="zttl f-thide">{{ modalTitle[currentModalType()] }}</div>
   </div>
-  <ng-container [ngSwitch]="currentModalType">
-    <ng-container *ngSwitchCase="'loginByPhone'">
-      <ng-content select="[name=phoneLogin]"></ng-content>
-    </ng-container>
-    <ng-container *ngSwitchCase="'loginByEmail'">
-      <ng-content select="[name=emailLogin]"></ng-content>
-    </ng-container>
-    <ng-container *ngSwitchCase="'register'">
-      <ng-content select="[name=register]"></ng-content>
-    </ng-container>
-    <ng-container *ngSwitchCase="'like'">
-      <ng-content select="[name=like]"></ng-content>
-    </ng-container>
-    <ng-container *ngSwitchCase="'share'">
-      <ng-content select="[name=share]"></ng-content>
-    </ng-container>
-    <ng-container *ngSwitchDefault>
-      <ng-content></ng-content>
-    </ng-container>
-  </ng-container>
+  <div [style.display]="currentModalType() === 'loginByPhone' ? '' : 'none'">
+    <ng-content select="[name=phoneLogin]"></ng-content>
+  </div>
+  <div [style.display]="currentModalType() === 'loginByEmail' ? '' : 'none'">
+    <ng-content select="[name=emailLogin]"></ng-content>
+  </div>
+  <div [style.display]="currentModalType() === 'register' ? '' : 'none'">
+    <ng-content select="[name=register]"></ng-content>
+  </div>
+  <div [style.display]="currentModalType() === 'like' ? '' : 'none'">
+    <ng-content select="[name=like]"></ng-content>
+  </div>
+  <div [style.display]="currentModalType() === 'share' ? '' : 'none'">
+    <ng-content select="[name=share]"></ng-content>
+  </div>
+  <div [style.display]="currentModalType() === 'default' ? '' : 'none'">
+    <ng-content></ng-content>
+  </div>
   <div class="zcls" title="Close" (click)="hide()"></div>
-  <nz-spin nzTip="loading..." class="spin" *ngIf="showSpin"></nz-spin>
+  @if (showSpin()) {
+    <nz-spin nzTip="loading..." class="spin"></nz-spin>
+  }
 </div>

@@ -1,4 +1,4 @@
-import { ModalTypes } from 'src/app/store/reducers/member.reducer';
+import { ModalTypes } from 'src/app/store/member-store.service';
 
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ESCAPE } from '@angular/cdk/keycodes';
@@ -13,17 +13,16 @@ import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   ElementRef,
-  Inject,
-  Input,
-  OnChanges,
   OnInit,
   PLATFORM_ID,
   Renderer2,
-  SimpleChanges,
-  ViewChild
+  ViewChild,
+  computed,
+  effect,
+  inject,
+  input
 } from '@angular/core';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
@@ -50,35 +49,32 @@ interface SizeType {
     ])
   ]
 })
-export class WyLayerModalComponent implements OnInit, AfterViewInit, OnChanges {
+export class WyLayerModalComponent implements OnInit, AfterViewInit {
   modalTitle = {
-    register: '注册',
-    loginByPhone: '手机登陆',
-    loginByEmail: '邮箱登陆',
-    like: '收藏',
-    share: '分享',
+    register: '登録',
+    loginByPhone: '電話番号でログイン',
+    loginByEmail: 'メールアドレスでログイン',
+    like: 'お気に入り',
+    share: 'シェア',
     default: ''
   };
-  showModal = 'hide';
-  @Input()
-  visible = false;
-  @Input()
-  showSpin = false;
-  @Input()
-  currentModalType: ModalTypes = ModalTypes.Default;
+  visible = input(false);
+  showSpin = input(false);
+  currentModalType = input<ModalTypes>(ModalTypes.Default);
+  showModal = computed(() => this.visible() ? 'show' : 'hide');
   private overlayRef: OverlayRef;
   private scrollStrategy: BlockScrollStrategy;
   private overlayContainerEl: HTMLElement;
   @ViewChild('modalContainer', { static: false }) private modalRef: ElementRef;
 
+  private plateformId = inject<object>(PLATFORM_ID);
+  private doc = inject(DOCUMENT);
   private resizeHandler: () => void;
   private isBrowser: boolean;
+  private visibleFirstRun = true;
   constructor(
-    @Inject(PLATFORM_ID) private plateformId: object,
-    @Inject(DOCUMENT) private doc: Document,
     private overlay: Overlay,
     private overlayKeyboardDispatcher: OverlayKeyboardDispatcher,
-    private cdr: ChangeDetectorRef,
     private batchActionsService: BatchActionsService,
     private elementRef: ElementRef,
     private rd: Renderer2,
@@ -86,12 +82,11 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit, OnChanges {
   ) {
     this.scrollStrategy = this.overlay.scrollStrategies.block();
     this.isBrowser = isPlatformBrowser(this.plateformId);
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.visible && !changes.visible.firstChange) {
-      this.handleVisibleChange(this.visible);
-    }
+    effect(() => {
+      const v = this.visible();
+      if (this.visibleFirstRun) { this.visibleFirstRun = false; return; }
+      this.handleVisibleChange(v);
+    });
   }
 
   ngAfterViewInit(): void {
@@ -149,22 +144,19 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit, OnChanges {
 
   private handleVisibleChange(visible: boolean) {
     if (visible) {
-      this.showModal = 'show';
       this.scrollStrategy.enable();
       this.overlayKeyboardDispatcher.add(this.overlayRef);
       this.listenResizeToCenter();
       this.changePointerEvents('auto');
     } else {
-      this.showModal = 'hide';
       this.scrollStrategy.disable();
       this.overlayKeyboardDispatcher.remove(this.overlayRef);
-      this.resizeHandler();
+      this.resizeHandler?.();
       this.changePointerEvents('none');
     }
-    this.cdr.markForCheck();
   }
 
-  // 屏蔽点击事件
+  // クリックイベントをブロック
   private changePointerEvents(type: 'none' | 'auto') {
     if (this.overlayContainerEl) {
       this.overlayContainerEl.style.pointerEvents = type;

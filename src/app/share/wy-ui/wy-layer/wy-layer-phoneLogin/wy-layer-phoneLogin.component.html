@@ -2,19 +2,19 @@
   <div class="modal-wrap">
     <form nz-form class="login-form" [formGroup]="formModel" (ngSubmit)="onSubmit()">
       <nz-form-item>
-        <!-- 请输入正确的手机号 -->
+        <!-- 正しい電話番号を入力してください -->
         <nz-form-control nzHasFeedback [nzErrorTip]="lanRes.C00064">
           <nz-input-group nzPrefixIcon="mobile">
-            <!-- 请输入手机号 -->
+            <!-- 電話番号を入力してください -->
             <input type="tel" nz-input [placeholder]="lanRes.C00065" formControlName="phone" />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <!-- 请输入正确的密码 -->
+        <!-- 正しいパスワードを入力してください -->
         <nz-form-control nzHasFeedback [nzErrorTip]="lanRes.C00054">
           <nz-input-group nzPrefixIcon="lock">
-            <!-- 请输入密码 -->
+            <!-- パスワードを入力してください -->
             <input
               type="password"
               nz-input
@@ -29,7 +29,7 @@
           <div class="tools">
             <label nz-checkbox class="remember" formControlName="remember">
               <span>
-                <!-- 记住密码 -->
+                <!-- パスワードを記憶する -->
                 {{ lanRes.C00056 }}
               </span>
             </label>
@@ -41,7 +41,7 @@
             nzType="primary"
             nzBolck
           >
-            <!-- 登陆 -->
+            <!-- ログイン -->
             {{ lanRes.C00004 }}
           </button>
         </nz-form-control>
@@ -53,11 +53,11 @@
 <div class="m-footer clearfix">
   <a (click)="onChangeModalType.emit('default')"
     >&lt;
-    <!-- 其他登陆方式 -->
+    <!-- 他のログイン方法 -->
     {{ lanRes.C00057 }}
   </a>
   <a (click)="onChangeModalType.emit('register')">
-    <!-- 没有账号？开始注册 -->
+    <!-- アカウントをお持ちでない方？登録する -->
     {{ lanRes.C00058 }}
   </a>
 </div>

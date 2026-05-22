@@ -1,6 +1,6 @@
 import { NzCarouselComponent, NzCarouselModule } from 'ng-zorro-antd/carousel';
 import { map } from 'rxjs/operators';
-import { LANGUAGE_CH } from 'src/app/language/ch';
+import { LANGUAGE_JP } from 'src/app/language/jp';
 import {
     Banner, HotTag, LanguageRes, Singer, SongSheet
 } from 'src/app/services/data.types/common.types';
@@ -8,21 +8,19 @@ import { User } from 'src/app/services/data.types/member.type';
 import { LanguageService } from 'src/app/services/language.service';
 import { MemberService } from 'src/app/services/member.service';
 import { SheetService } from 'src/app/services/sheet.service';
-import { MemberState, ModalTypes } from 'src/app/store/reducers/member.reducer';
+import { ModalTypes } from 'src/app/store/member-store.service';
 import { SingleSheetComponent } from '../../share/wy-ui/single-sheet/single-sheet.component';
 import { ImgDefaultDirective } from '../../share/directives/img-default.directive';
 import { WyCarouselComponent } from './components/wy-carousel/wy-carousel.component';
 import { MemberCardComponent } from './components/member-card/member-card.component';
 
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, effect } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { createFeatureSelector, select, Store } from '@ngrx/store';
 
 import { BatchActionsService } from '../../store/batch-actions.service';
-import { AppStoreModule } from '../../store/index';
-import { getUserId } from '../../store/selectors/member.selectors';
+import { MemberStoreService } from '../../store/member-store.service';
 
 @Component({
   standalone: true,
@@ -42,7 +40,7 @@ import { getUserId } from '../../store/selectors/member.selectors';
 })
 export class HomeComponent implements OnInit {
   carouselActiveIndex = 0;
-  lanRes: LanguageRes = LANGUAGE_CH;
+  lanRes: LanguageRes = LANGUAGE_JP;
   banners: Banner[];
   hotTags: HotTag[];
   songSheetList: SongSheet[];
@@ -57,7 +55,7 @@ export class HomeComponent implements OnInit {
     private router: Router,
     private sheetService: SheetService,
     private batchActionsService: BatchActionsService,
-    private store$: Store<AppStoreModule>,
+    private memberStore: MemberStoreService,
     private memberService: MemberService,
     private languageService: LanguageService
   ) {
@@ -70,17 +68,16 @@ export class HomeComponent implements OnInit {
         this.singerList = singerList;
       });
 
-    this.store$
-      .pipe(select(createFeatureSelector<MemberState>('member')), select(getUserId))
-      .subscribe((userId) => {
-        if (userId) {
-          this.getUserDetail(userId);
-        } else {
-          this.user = null;
-        }
-      });
-    this.languageService.language$.subscribe((item) => {
-      this.lanRes = item.res;
+    effect(() => {
+      const userId = this.memberStore.userId();
+      if (userId) {
+        this.getUserDetail(userId);
+      } else {
+        this.user = null;
+      }
+    });
+    effect(() => {
+      this.lanRes = this.languageService.language().res;
     });
   }
 

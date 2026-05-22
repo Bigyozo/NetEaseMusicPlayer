@@ -4,15 +4,14 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  EventEmitter,
   forwardRef,
-  Inject,
-  Input,
   OnDestroy,
   OnInit,
-  Output,
   ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
+  inject,
+  input,
+  output
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { fromEvent, merge, Observable, Subscription } from 'rxjs';
@@ -52,36 +51,34 @@ import { WySliderHandleComponent } from './wy-slider-handle.component';
 })
 export class WySliderComponent
   implements OnInit, OnDestroy, ControlValueAccessor {
-  // 滑块是否垂直
-  @Input() wyVertical = false;
-  // 滑块起点
-  @Input() wyMin = 0;
-  // 滑块终点
-  @Input() wyMax = 100;
-  // 缓冲条
-  @Input() bufferOffset: SliderValue = 0;
+  private doc = inject(DOCUMENT);
+  // スライダーが垂直か
+  wyVertical = input(false);
+  // スライダーの最小値
+  wyMin = input(0);
+  // スライダーの最大値
+  wyMax = input(100);
+  // バッファバー
+  bufferOffset = input<SliderValue>(0);
   private slideDom: HTMLDivElement;
 
-  @Output() wyOnAfterChange = new EventEmitter<SliderValue>();
+  wyOnAfterChange = output<SliderValue>();
 
   @ViewChild('wySlider', { static: true }) private wySlider: ElementRef;
-  // 滑块是否在移动
+  // スライダーがドラッグ中か
   private isDragging = false;
-  // 父组件计算的滑块位置
+  // 親コンポーネントが計算したスライダー位置
   value: SliderValue = null;
-  // 传给子组件的滑块位置
+  // 子コンポーネントに渡すスライダー位置
   offset: SliderValue = null;
 
-  constructor(
-    @Inject(DOCUMENT) private doc: Document,
-    private cdr: ChangeDetectorRef
-  ) {}
+  constructor(private cdr: ChangeDetectorRef) {}
 
-  // 订阅事件流
+  // イベントストリームをサブスクライブ
   private dragStart$: Observable<number>;
   private dragMove$: Observable<number>;
   private dragEnd$: Observable<Event>;
-  // 订阅事件对象，用于解绑
+  // サブスクリプションオブジェクト（解除用）
   private dragStart_: Subscription | null;
   private dragMove_: Subscription | null;
   private dragEnd_: Subscription | null;
@@ -93,7 +90,7 @@ export class WySliderComponent
   }
 
   private createDraggingObservables() {
-    const orientField = this.wyVertical ? 'pageY' : 'pageX';
+    const orientField = this.wyVertical() ? 'pageY' : 'pageX';
     const mouse: SliderEventObserverConfig = {
       start: 'mousedown',
       move: 'mousemove',
@@ -127,36 +124,36 @@ export class WySliderComponent
         map((position: number) => this.findClosestValue(position))
       );
     });
-    // 手机端PC端事件合并
+    // モバイル・PC のイベントをマージ
     this.dragStart$ = merge(mouse.startPlucked$, touch.startPlucked$);
     this.dragMove$ = merge(mouse.moveResolved$, touch.moveResolved$);
     this.dragEnd$ = merge(mouse.end$, touch.end$);
   }
 
   private findClosestValue(position: number): number {
-    // 获取滑块总长
+    // スライダーの全長を取得
     const sliderLength = this.getSliderLength();
-    // 滑块（左上）端点位置
+    // スライダーの（左上）端点の位置
     const sliderStart = this.getSliderStartPosition();
     const ratio = limitNumberRange(
       (position - sliderStart) / sliderLength,
       0,
       1
     );
-    const realRatio = this.wyVertical ? 1 - ratio : ratio;
-    return realRatio * (this.wyMax - this.wyMin) + this.wyMin;
+    const realRatio = this.wyVertical() ? 1 - ratio : ratio;
+    return realRatio * (this.wyMax() - this.wyMin()) + this.wyMin();
   }
   private getSliderStartPosition() {
     const offset = getElementOffset(this.slideDom);
-    return this.wyVertical ? offset.top : offset.left;
+    return this.wyVertical() ? offset.top : offset.left;
   }
   private getSliderLength() {
-    return this.wyVertical
+    return this.wyVertical()
       ? this.slideDom.clientHeight
       : this.slideDom.clientWidth;
   }
 
-  // 订阅事件
+  // イベントをサブスクライブ
   private subscribeDrag(events: string[] = ['start', 'move', 'end']) {
     if (inArray(events, 'start') && this.dragStart$ && !this.dragStart_) {
       this.dragStart_ = this.dragStart$.subscribe(this.onDragStart.bind(this));
@@ -169,7 +166,7 @@ export class WySliderComponent
     }
   }
 
-  // 解绑事件
+  // イベントの購読解除
   private unSubscribeDrag(events: string[] = ['start', 'move', 'end']) {
     if (inArray(events, 'start') && this.dragStart_) {
       this.dragStart_.unsubscribe();
@@ -193,7 +190,7 @@ export class WySliderComponent
   private onDragMove(value: number) {
     if (this.isDragging) {
       this.setValue(value);
-      // 手动变更检测
+      // 変更検出を手動で実行
       this.cdr.markForCheck();
     }
   }
@@ -229,9 +226,9 @@ export class WySliderComponent
   private formatValue(value: SliderValue): SliderValue {
     let res = value;
     if (this.assertValueValid(value)) {
-      res = this.wyMin;
+      res = this.wyMin();
     } else {
-      res = limitNumberRange(value, this.wyMin, this.wyMax);
+      res = limitNumberRange(value, this.wyMin(), this.wyMax());
     }
     return res;
   }
@@ -246,7 +243,7 @@ export class WySliderComponent
   }
 
   private getValueToOffset(value: SliderValue): SliderValue {
-    return getPercent(value, this.wyMin, this.wyMax);
+    return getPercent(value, this.wyMin(), this.wyMax());
   }
 
   ngOnDestroy(): void {

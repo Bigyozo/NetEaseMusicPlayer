@@ -1,16 +1,14 @@
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
-import { LANGUAGE_CH } from 'src/app/language/ch';
+import { map } from 'rxjs/operators';
+import { LANGUAGE_JP } from 'src/app/language/jp';
 import { LanguageService } from 'src/app/services/language.service';
 import { SongService } from 'src/app/services/song.service';
-import { AppStoreModule } from 'src/app/store';
-import { SetShareInfo } from 'src/app/store/actions/member.action';
 import { BatchActionsService } from 'src/app/store/batch-actions.service';
-import { PlayState } from 'src/app/store/reducers/player.reducer';
+import { MemberStoreService } from 'src/app/store/member-store.service';
+import { PlayerStoreService } from 'src/app/store/player-store.service';
 import { findIndex } from 'src/app/utils/array';
 
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit, effect } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -18,11 +16,9 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { ImgDefaultDirective } from '../../../share/directives/img-default.directive';
 import { FormatTimePipe } from '../../../share/pipes/format-time.pipe';
-import { createFeatureSelector, select, Store } from '@ngrx/store';
 
 import { LanguageRes, Singer, SingerDetail, Song } from '../../../services/data.types/common.types';
 import { MemberService } from '../../../services/member.service';
-import { getCurrentSong } from '../../../store/selectors/play.selectors';
 
 @Component({
   standalone: true,
@@ -31,18 +27,18 @@ import { getCurrentSong } from '../../../store/selectors/play.selectors';
   templateUrl: './singer-detail.component.html',
   styleUrls: ['./singer-detail.component.less']
 })
-export class SingerDetailComponent implements OnInit, OnDestroy {
-  lanRes: LanguageRes = LANGUAGE_CH;
+export class SingerDetailComponent implements OnInit {
+  lanRes: LanguageRes = LANGUAGE_JP;
   singerDetail: SingerDetail;
   currentSong: Song;
   currentIndex = -1;
-  private destroy$ = new Subject<void>();
   simiSingers: Singer[];
   hasLiked = false;
 
   constructor(
     private route: ActivatedRoute,
-    private store$: Store<AppStoreModule>,
+    private playerStore: PlayerStoreService,
+    private memberStore: MemberStoreService,
     private songService: SongService,
     private batchActionsService: BatchActionsService,
     private nzMessageService: NzMessageService,
@@ -52,36 +48,22 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
     this.route.data.pipe(map((res) => res.singerDetail)).subscribe(([detail, simiSingers]) => {
       this.singerDetail = detail;
       this.simiSingers = simiSingers;
-      this.listenCurrent();
     });
-    this.languageService.language$.subscribe((item) => {
-      this.lanRes = item.res;
+    effect(() => {
+      const song = this.playerStore.currentSong();
+      this.currentSong = song;
+      if (song && this.singerDetail) {
+        this.currentIndex = findIndex(this.singerDetail.hotSongs, song);
+      } else {
+        this.currentIndex = -1;
+      }
     });
-  }
-
-  private listenCurrent() {
-    this.store$
-      .pipe(
-        select(createFeatureSelector<PlayState>('player')),
-        select(getCurrentSong),
-        takeUntil(this.destroy$)
-      )
-      .subscribe((song) => {
-        this.currentSong = song;
-        if (song) {
-          this.currentIndex = findIndex(this.singerDetail.hotSongs, song);
-        } else {
-          this.currentIndex = -1;
-        }
-      });
+    effect(() => {
+      this.lanRes = this.languageService.language().res;
+    });
   }
 
   ngOnInit() {}
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
 
   onAddSongs(songs: Song[], isPlay = false) {
     this.songService.getSongList(songs).subscribe((list) => {
@@ -111,7 +93,7 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
     this.batchActionsService.likeSong(id);
   }
 
-  // 批量收藏
+  // まとめてお気に入り
   onLikeSongs(songs: Song[]) {
     const ids = songs.map((item) => item.id).join(',');
     this.onLikeSong(ids);
@@ -141,7 +123,7 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
 
   onShareSong(resource: Song, type = 'song') {
     const txt = this.makeTxt('歌曲', resource.name, resource.ar);
-    this.store$.dispatch(SetShareInfo({ info: { id: resource.id.toString(), type, txt } }));
+    this.memberStore.shareInfo.set({ id: resource.id.toString(), type, txt });
   }
 
   private makeTxt(type: string, name: string, makeBy: Singer[]): string {

@@ -18,7 +18,7 @@ export interface HotTag {
   position: number;
 }
 
-// 单曲
+// 楽曲
 export interface Song {
   id: number;
   name: string;
@@ -28,13 +28,13 @@ export interface Song {
   dt: number;
 }
 
-// 播放地址
+// 再生URL
 export interface SongUrl {
   id: number;
   url: string;
 }
 
-// 歌单
+// プレイリスト
 export interface SongSheet {
   id: number;
   userId: number;
@@ -87,7 +87,7 @@ export interface SearchResult {
 }
 
 export interface Language {
-  code: 'ch' | 'en';
+  code: 'jp' | 'en';
   res: LanguageRes;
 }
 
