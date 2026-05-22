@@ -8,7 +8,7 @@ import { MemberStoreService } from 'src/app/store/member-store.service';
 import { PlayerStoreService } from 'src/app/store/player-store.service';
 import { findIndex } from 'src/app/utils/array';
 
-import { Component, OnInit, effect } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, effect } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -25,7 +25,8 @@ import { MemberService } from '../../../services/member.service';
   imports: [CommonModule, RouterModule, NzButtonModule, NzIconModule, NzTableModule, ImgDefaultDirective, FormatTimePipe],
   selector: 'app-singer-detail',
   templateUrl: './singer-detail.component.html',
-  styleUrls: ['./singer-detail.component.less']
+  styleUrls: ['./singer-detail.component.less'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SingerDetailComponent implements OnInit {
   lanRes: LanguageRes = LANGUAGE_JP;

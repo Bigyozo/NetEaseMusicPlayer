@@ -14,7 +14,7 @@ import { ImgDefaultDirective } from '../../share/directives/img-default.directiv
 import { WyCarouselComponent } from './components/wy-carousel/wy-carousel.component';
 import { MemberCardComponent } from './components/member-card/member-card.component';
 
-import { Component, OnInit, ViewChild, effect } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewChild, effect } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -36,7 +36,8 @@ import { MemberStoreService } from '../../store/member-store.service';
   ],
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.less']
+  styleUrls: ['./home.component.less'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent implements OnInit {
   carouselActiveIndex = 0;

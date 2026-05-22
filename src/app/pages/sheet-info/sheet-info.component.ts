@@ -5,7 +5,7 @@ import { LanguageService } from 'src/app/services/language.service';
 import { MemberStoreService } from 'src/app/store/member-store.service';
 import { PlayerStoreService } from 'src/app/store/player-store.service';
 
-import { Component, OnInit, effect } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, effect } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -26,7 +26,8 @@ import { findIndex } from '../../utils/array';
   imports: [CommonModule, RouterModule, NzButtonModule, NzIconModule, NzTagModule, NzTableModule, ImgDefaultDirective, FormatTimePipe],
   selector: 'app-sheet-info',
   templateUrl: './sheet-info.component.html',
-  styleUrls: ['./sheet-info.component.less']
+  styleUrls: ['./sheet-info.component.less'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SheetInfoComponent implements OnInit {
   lanRes: LanguageRes = LANGUAGE_JP;

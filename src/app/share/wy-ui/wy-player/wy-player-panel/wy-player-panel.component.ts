@@ -6,11 +6,14 @@ import { SongService } from 'src/app/services/song.service';
 import { findIndex } from 'src/app/utils/array';
 
 import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   OnInit,
   QueryList,
   ViewChildren,
   effect,
+  inject,
   input,
   output,
   untracked
@@ -27,9 +30,11 @@ import { ImgDefaultDirective } from '../../../directives/img-default.directive';
   standalone: true,
   imports: [CommonModule, WyScrollComponent, FormatTimePipe, ImgDefaultDirective],
   templateUrl: './wy-player-panel.component.html',
-  styleUrls: ['./wy-player-panel.component.less']
+  styleUrls: ['./wy-player-panel.component.less'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WyPlayerPanelComponent implements OnInit {
+  private cdr = inject(ChangeDetectorRef);
   lanRes: LanguageRes = LANGUAGE_JP;
   playing = input.required<boolean>();
   songList = input.required<Song[]>();
@@ -146,6 +151,7 @@ export class WyPlayerPanelComponent implements OnInit {
       }
       if (this.lyricRefs.length) {
         this.currentLineNum = lineNum;
+        this.cdr.markForCheck();
         if (lineNum > this.startLine) {
           this.scrollToCurrentLyric(300);
         } else {

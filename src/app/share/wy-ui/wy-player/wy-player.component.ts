@@ -6,7 +6,7 @@ import { LanguageService } from 'src/app/services/language.service';
 import { findIndex, shuffle } from 'src/app/utils/array';
 
 import { animate, AnimationEvent, state, style, transition, trigger } from '@angular/animations';
-import { Component, ElementRef, OnInit, ViewChild, effect } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild, effect, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -51,6 +51,7 @@ enum TipTitles {
   ],
   templateUrl: './wy-player.component.html',
   styleUrls: ['./wy-player.component.less'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('showHide', [
       state('show', style({ bottom: 0 })),
@@ -61,6 +62,7 @@ enum TipTitles {
   ]
 })
 export class WyPlayerComponent implements OnInit {
+  private cdr = inject(ChangeDetectorRef);
   lanRes: LanguageRes = LANGUAGE_JP;
   controlTooltip = {
     title: '',
@@ -139,6 +141,7 @@ export class WyPlayerComponent implements OnInit {
         title: '',
         show: false
       };
+      this.cdr.markForCheck();
     });
   }
 

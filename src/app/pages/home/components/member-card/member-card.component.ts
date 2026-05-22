@@ -5,7 +5,7 @@ import { LanguageRes } from 'src/app/services/data.types/common.types';
 import { User } from 'src/app/services/data.types/member.type';
 import { LanguageService } from 'src/app/services/language.service';
 
-import { Component, OnInit, effect, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, effect, inject, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
@@ -18,9 +18,11 @@ import { MemberService } from '../../../../services/member.service';
   imports: [CommonModule, NzButtonModule, NzTooltipModule, ImgDefaultDirective],
   selector: 'app-member-card',
   templateUrl: './member-card.component.html',
-  styleUrls: ['./member-card.component.less']
+  styleUrls: ['./member-card.component.less'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MemberCardComponent implements OnInit {
+  private cdr = inject(ChangeDetectorRef);
   tipTitle = '';
   lanRes: LanguageRes = LANGUAGE_JP;
   showTip = false;
@@ -45,7 +47,10 @@ export class MemberCardComponent implements OnInit {
         this.alertMessage('success', '签到成功');
         this.tipTitle = '积分+' + res.point;
         this.showTip = true;
-        timer(1500).subscribe(() => (this.showTip = false));
+        timer(1500).subscribe(() => {
+          this.showTip = false;
+          this.cdr.markForCheck();
+        });
       },
       (error) => {
         this.alertMessage('error', error.message || '签到失败');

@@ -8,7 +8,7 @@ import { BatchActionsService } from 'src/app/store/batch-actions.service';
 import { MemberStoreService } from 'src/app/store/member-store.service';
 import { PlayerStoreService } from 'src/app/store/player-store.service';
 
-import { Component, OnInit, effect } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, effect } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -22,7 +22,8 @@ import { BaseLyricLine, WyLyric } from '../../share/wy-ui/wy-player/wy-player-pa
   imports: [CommonModule, RouterModule, NzButtonModule, NzIconModule, ImgDefaultDirective],
   selector: 'app-song-info',
   templateUrl: './song-info.component.html',
-  styleUrls: ['./song-info.component.less']
+  styleUrls: ['./song-info.component.less'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SongInfoComponent implements OnInit {
   lanRes: LanguageRes = LANGUAGE_JP;

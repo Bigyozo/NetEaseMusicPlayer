@@ -7,7 +7,7 @@ import { isEmptyObject } from 'src/app/utils/tools';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import {
-  AfterViewInit, Component, ElementRef, OnInit, TemplateRef, ViewChild, ViewContainerRef,
+  AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit, TemplateRef, ViewChild, ViewContainerRef,
   effect, input, output
 } from '@angular/core';
 
@@ -28,7 +28,8 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
     NzIconModule
   ],
   templateUrl: './wy-search.component.html',
-  styleUrls: ['./wy-search.component.less']
+  styleUrls: ['./wy-search.component.less'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WySearchComponent implements OnInit, AfterViewInit {
   lanRes: LanguageRes = LANGUAGE_JP;

@@ -1,7 +1,7 @@
 import { LANGUAGE_JP } from 'src/app/language/jp';
 import { LanguageService } from 'src/app/services/language.service';
 
-import { Component, OnInit, effect } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, effect } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 
 import { LanguageRes, SearchResult } from '../../../../services/data.types/common.types';
@@ -12,7 +12,8 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './wy-search-panel.component.html',
-  styleUrls: ['./wy-search-panel.component.less']
+  styleUrls: ['./wy-search-panel.component.less'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WySearchPanelComponent implements OnInit {
   lanRes: LanguageRes = LANGUAGE_JP;

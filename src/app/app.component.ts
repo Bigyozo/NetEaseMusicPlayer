@@ -19,7 +19,7 @@ import { WyLayerRegisterComponent } from './share/wy-ui/wy-layer/wy-layer-regist
 import { WyLayerDefaultComponent } from './share/wy-ui/wy-layer/wy-layer-default/wy-layer-default.component';
 
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, effect } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, effect, inject } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router, RouterModule } from '@angular/router';
 
@@ -59,9 +59,11 @@ import { isEmptyObject } from './utils/tools';
   ],
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.less']
+  styleUrls: ['./app.component.less'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnDestroy {
+  private cdr = inject(ChangeDetectorRef);
   lanRes: LanguageRes = LANGUAGE_JP;
   title = 'MusicPlayer by Bigyozo';
   menu = [
@@ -182,9 +184,11 @@ export class AppComponent implements OnDestroy {
       .pipe(takeUntil(this.navEnd))
       .subscribe(() => {
         this.loadPercent = Math.max(95, ++this.loadPercent);
+        this.cdr.markForCheck();
       });
     this.navEnd.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.loadPercent = 100;
+      this.cdr.markForCheck();
     });
   }
 
